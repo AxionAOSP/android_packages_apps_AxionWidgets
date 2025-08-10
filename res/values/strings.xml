@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">Axion Widgets</string>
+
+    <!-- Settings -->
+    <string name="setup_title">QuickLook</string>
+    <string name="date_format_pattern">EEE, d MMM</string>
+    <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
+    <string name="pref_key_onboarding">onboarding</string>
+    <string name="pref_name">axion_prefs</string>
+    <string name="preview_text">Sun, 10 Aug</string>
+    <string name="loading_text">Loading...</string>
+    <string name="toast_calendar_permission_required">Calendar permission is required</string>
+    <string name="allow_notification_access">Allow notification access</string>
+    <string name="allow_calendar_access">Allow calendar access</string>
+    <string name="access_granted">Access granted</string>
+    <string name="needed_for_now_playing">Needed for now playing</string>
+    <string name="needed_for_calendar_events">Needed for calendar events</string>
+
+    <!-- Calendar -->
+    <string name="quick_look_widget_calendar_in_time">in %d min</string>
+    <string name="quick_look_widget_calendar_now">now</string>
+    <string name="quick_look_widget_calendar_tomorrow">Tomorrow</string>
+    <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
+    <string name="quick_look_widget_calendar_no_title">(No title event)</string>
+
+    <!-- Media -->
+    <string name="media_format">%1$s by %2$s</string>
+
+    <!-- Battery -->
+    <string name="charging">Charging</string>
+    <string name="minutes_left">%1$d min left</string>
+    <string name="charging_with_time">%1$s - %2$s</string>
+    <string name="battery_level_format">%1$d%%</string>
+
+    <!-- placeholder -->
+    <string name="placeholder">:)</string>
+</resources>

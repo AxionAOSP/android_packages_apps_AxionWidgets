@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<privapp-permissions>
+    <privapp-permission package="com.android.axion.widgets">
+        <permission name="android.permission.BIND_APPWIDGET" />
+        <permission name="android.permission.READ_PHONE_STATE" />
+        <permission name="android.permission.ACCESS_NETWORK_STATE" />
+        <permission name="android.permission.ACCESS_FINE_LOCATION" />
+        <permission name="android.permission.FOREGROUND_SERVICE" />
+        <permission name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
+    </privapp-permission>
+</privapp-permissions>

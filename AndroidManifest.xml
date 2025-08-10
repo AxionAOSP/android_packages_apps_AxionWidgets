@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.android.axion.widgets">
+
+    <uses-sdk android:minSdkVersion="31" android:targetSdkVersion="36" />
+
+    <uses-permission android:name="android.permission.BIND_APPWIDGET" />
+
+    <!-- Pending tiles widgets - no-op -->    
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    
+    <!-- Media events -->
+    <uses-permission android:name="android.permission.STATUS_BAR_SERVICE" />
+    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
+
+    <!-- Weather/Calendar events -->
+    <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_launcher"
+        android:hasCode="true"
+        android:allowBackup="false"
+        android:directBootAware="true"
+        android:sharedUserId="android.uid.system">
+
+        <receiver
+            android:name="com.android.axion.widgets.quicklook.QuickLookWidgetReceiver"
+            android:exported="true"
+            android:directBootAware="true"
+            android:permission="android.permission.BIND_APPWIDGET">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/axion_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".provider.MediaNotificationListenerService"
+            android:label="Media Notification Listener"
+            android:exported="true"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar" />
+
+    </application>
+
+</manifest>
