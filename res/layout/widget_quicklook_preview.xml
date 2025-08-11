@@ -11,10 +11,11 @@
         android:orientation="vertical"
         android:layout_gravity="center_vertical|start">
 
-        <TextView
-            android:id="@+id/date_text"
-            style="@style/DateTextStylePreview"
-            android:text="@string/preview_text" />
+        <TextClock
+            android:id="@+id/date"
+            style="@style/DateTextStyle"
+            android:format12Hour="EEE, d MMM"
+            android:format24Hour="EEE, d MMM" />
 
         <LinearLayout
             android:id="@+id/secondary_info"
@@ -26,7 +27,7 @@
 
             <TextView
                 android:id="@+id/primary_text_info"
-                style="@style/PrimaryTextInfoStylePreview"
+                style="@style/PrimaryTextInfoStyle"
                 android:text="@string/placeholder" />
 
             <ImageView
@@ -48,7 +49,7 @@
 
             <TextView
                 android:id="@+id/secondary_text_info"
-                style="@style/SecondaryTextInfoStylePreview" />
+                style="@style/SecondaryTextInfoStyle" />
         </LinearLayout>
 
     </LinearLayout>
