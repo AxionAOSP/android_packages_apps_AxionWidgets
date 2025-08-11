@@ -13,6 +13,7 @@
  */
 package com.android.axion.widgets.cardlab
 
+import android.app.PendingIntent
 import android.appwidget.*
 import android.content.*
 import android.graphics.*
@@ -67,8 +68,18 @@ class BatteryWidgetReceiver : AppWidgetProvider() {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val thisWidget = ComponentName(context, BatteryWidgetReceiver::class.java)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
+        val intent = Intent(Intent.ACTION_POWER_USAGE_SUMMARY).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+        val pendingIntent = PendingIntent.getActivity(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
         for (appWidgetId in appWidgetIds) {
             val views = RemoteViews(context.packageName, R.layout.widget_battery)
+            views.setOnClickPendingIntent(R.id.battery_card_root, pendingIntent)
             if (data != null) {
                 val batteryBg = createBatteryBg(context, data.level)
                 views.setImageViewBitmap(R.id.battery_bg_view, batteryBg)
