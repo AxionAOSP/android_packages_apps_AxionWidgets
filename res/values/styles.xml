@@ -52,4 +52,10 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:shadowRadius">0</item>
     </style>
+    
+    <style name="BatteryLevelTextStyle" parent="">
+        <item name="android:textSize">30sp</item>
+        <item name="lineHeight">30dp</item>
+        <item name="android:textColor">@color/battery_device_primary_color</item>
+    </style>
 </resources>

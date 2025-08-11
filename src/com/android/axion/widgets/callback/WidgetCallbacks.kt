@@ -18,3 +18,7 @@ import com.android.axion.widgets.data.*
 interface QuickLookDataCallback {
     fun onDataUpdated(data: QuickLookData)
 }
+
+interface BatteryDataCallback {
+    fun onBatteryDataUpdated(data: QuickLookData.Battery?)
+}

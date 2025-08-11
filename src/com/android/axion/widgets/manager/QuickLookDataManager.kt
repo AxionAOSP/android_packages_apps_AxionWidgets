@@ -62,16 +62,6 @@ object QuickLookDataManager {
         }
     }
 
-    private val batteryCallback = object : BatteryStatusProvider.Callback {
-        override fun onBatteryStatusChanged(battery: QuickLookData.Battery?) {
-            val batteryInfo = battery?.takeIf { it.isCharging }
-            if (latestBattery != batteryInfo) {
-                latestBattery = batteryInfo
-                notifyListeners()
-            }
-        }
-    }
-
     fun init(context: Context) {
         if (!::appContext.isInitialized) {
             appContext = context.applicationContext
@@ -82,8 +72,15 @@ object QuickLookDataManager {
             CalendarProvider.init(appContext)
             CalendarProvider.get().addCallback(calendarCallback)
 
-            batteryStatusProvider = BatteryStatusProvider(appContext)
-            batteryStatusProvider.addCallback(batteryCallback)
+            BatteryDataManager.batteryFlow(appContext)
+                .onEach { battery ->
+                    val batteryInfo = battery?.takeIf { it.isCharging }
+                    if (latestBattery != batteryInfo) {
+                        latestBattery = batteryInfo
+                        notifyListeners()
+                    }
+                }
+                .launchIn(coroutineScope)
 
             mediaProvider = MediaPlaybackProvider(appContext)
 
@@ -169,7 +166,6 @@ object QuickLookDataManager {
     fun cleanup() {
         WeatherProvider.get().removeCallback(weatherCallback)
         CalendarProvider.get().removeCallback(calendarCallback)
-        batteryStatusProvider.removeCallback(batteryCallback)
         mediaFlowJob?.cancel()
         mediaProvider.cleanup()
         listeners.clear()

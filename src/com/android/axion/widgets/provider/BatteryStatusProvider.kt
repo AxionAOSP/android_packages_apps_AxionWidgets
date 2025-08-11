@@ -60,21 +60,15 @@ class BatteryStatusProvider(private val context: Context) {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent == null) return
             when (intent.action) {
+                Intent.ACTION_BATTERY_CHANGED,
                 Intent.ACTION_POWER_DISCONNECTED -> {
-                    listenerManager.notify { it.onBatteryStatusChanged(null) }
-                }
-                Intent.ACTION_BATTERY_CHANGED -> {
                     val status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
                     val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING
                     val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
                     val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100)
                     val batteryPct = (level * 100) / scale
                     val chargeTimeRemaining = batteryManager.computeChargeTimeRemaining()
-                    val batteryData = if (isCharging && batteryPct < 100) {
-                        QuickLookData.Battery(isCharging, batteryPct, chargeTimeRemaining)
-                    } else {
-                        null
-                    }
+                    val batteryData = QuickLookData.Battery(isCharging, batteryPct, chargeTimeRemaining)
                     listenerManager.notify { it.onBatteryStatusChanged(batteryData) }
                 }
             }
