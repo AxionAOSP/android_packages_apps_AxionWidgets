@@ -36,4 +36,35 @@
 
     <!-- placeholder -->
     <string name="placeholder">:)</string>
+    
+    <!-- Photo -->
+    <string name="photo_title">Photo</string>
+    <string name="add_photos">Add Photos</string>
+    <string name="add_photos_cd">Add Photos</string>
+    <string name="display_options">Display Options</string>
+    <string name="grayscale_mode">Grayscale Mode</string>
+    <string name="shuffle_interval">Shuffle Interval</string>
+    <string name="select_interval">Select Interval</string>
+    <string name="select_shuffle_interval">Select Shuffle Interval</string>
+    <string name="cancel">Cancel</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="manage_photos">Manage Photos</string>
+    <string name="back">Back</string>
+    <string name="delete_selected">Delete Selected</string>
+    <string name="edit">Edit</string>
+    <string name="no_photos_selected">No photos selected</string>
+    <string name="photo">Photo</string>
+    <string name="confirm_delete_title">Confirm Delete</string>
+    <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
+    <string name="delete">Delete</string>
+
+    <plurals name="photos_already_exist">
+        <item quantity="one">%d photo already exists and was omitted.</item>
+        <item quantity="other">%d photos already exist and were omitted.</item>
+    </plurals>
+
+    <string name="interval_1_minute">1 minute</string>
+    <string name="interval_5_minutes">5 minutes</string>
+    <string name="interval_15_minutes">15 minutes</string>
+    <string name="interval_1_hour">1 hour</string>
 </resources>

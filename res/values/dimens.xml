@@ -6,4 +6,5 @@
     <dimen name="secondary_text_margin_end">4dp</dimen>
     <dimen name="media_icon_margin_end">6dp</dimen>
     <dimen name="secondary_container_margin_top">4dp</dimen>
+    <dimen name="photo_frame_width">10dp</dimen>
 </resources>

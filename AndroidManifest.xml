@@ -57,6 +57,43 @@
                 android:resource="@xml/axion_widget_battery_info" />
         </receiver>
 
+        <receiver android:name=".cardlab.photo.PhotoWidgetSmallReceiver" android:label="Photo" android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/axion_widget_photo_info_2x2" />
+        </receiver>
+
+        <receiver android:name=".cardlab.photo.PhotoWidgetLargeReceiver" android:label="Photo" android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/axion_widget_photo_info_4x2" />
+        </receiver>
+
+        <activity
+            android:name=".cardlab.photo.PhotoWidgetConfigureActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <service
             android:name=".provider.MediaNotificationListenerService"
             android:label="Media Notification Listener"
