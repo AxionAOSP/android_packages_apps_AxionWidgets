@@ -3,5 +3,5 @@
     <stroke
         android:width="@dimen/photo_frame_width"
         android:color="@color/photo_frame_bg"/>
-    <corners android:radius="@android:dimen/system_app_widget_inner_radius"/>
+    <corners android:radius="@android:dimen/system_app_widget_background_radius"/>
 </shape>
