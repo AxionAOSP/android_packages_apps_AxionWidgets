@@ -28,7 +28,6 @@ class BatteryStatusProvider(private val context: Context) {
     }
 
     private val batteryManager = context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager
-
     private val listenerManager = WeakListenerManager<Callback>().apply {
         setLifecycleCallbacks(
             onActive = { startListening() },
@@ -36,42 +35,52 @@ class BatteryStatusProvider(private val context: Context) {
         )
     }
 
-    fun addCallback(cb: Callback) {
-        listenerManager.addListener(cb)
-    }
+    private var isRegistered = false
 
-    fun removeCallback(cb: Callback) {
-        listenerManager.removeListener(cb)
-    }
+    fun addCallback(cb: Callback) = listenerManager.addListener(cb)
+    fun removeCallback(cb: Callback) = listenerManager.removeListener(cb)
 
     private fun startListening() {
-        val filter = IntentFilter().apply {
-            addAction(Intent.ACTION_BATTERY_CHANGED)
-            addAction(Intent.ACTION_POWER_DISCONNECTED)
+        if (!isRegistered) {
+            val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+            context.registerReceiver(batteryReceiver, filter)
+            isRegistered = true
         }
-        context.registerReceiver(batteryReceiver, filter)
     }
 
     private fun stopListening() {
-        context.unregisterReceiver(batteryReceiver)
+        if (isRegistered) {
+            context.unregisterReceiver(batteryReceiver)
+            isRegistered = false
+        }
+    }
+
+    private fun isChargingOrPlugged(intent: Intent): Boolean {
+        val status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN)
+        val plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0)
+        val charging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                       status == BatteryManager.BATTERY_STATUS_FULL
+        val pluggedIn = plugged == BatteryManager.BATTERY_PLUGGED_AC ||
+                        plugged == BatteryManager.BATTERY_PLUGGED_USB ||
+                        plugged == BatteryManager.BATTERY_PLUGGED_WIRELESS ||
+                        plugged == BatteryManager.BATTERY_PLUGGED_DOCK
+        return charging || pluggedIn
     }
 
     private val batteryReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent == null) return
-            when (intent.action) {
-                Intent.ACTION_BATTERY_CHANGED,
-                Intent.ACTION_POWER_DISCONNECTED -> {
-                    val status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1)
-                    val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING
-                    val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
-                    val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100)
-                    val batteryPct = (level * 100) / scale
-                    val chargeTimeRemaining = batteryManager.computeChargeTimeRemaining()
-                    val batteryData = QuickLookData.Battery(isCharging, batteryPct, chargeTimeRemaining)
-                    listenerManager.notify { it.onBatteryStatusChanged(batteryData) }
-                }
+            val isCharging = isChargingOrPlugged(intent)
+            val level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1)
+            val scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, 100)
+            val batteryPct = if (level >= 0 && scale > 0) {
+                (level * 100f / scale).toInt()
+            } else {
+                -1
             }
+            val chargeTimeRemaining = batteryManager.computeChargeTimeRemaining()
+            val batteryData = QuickLookData.Battery(isCharging, batteryPct, chargeTimeRemaining)
+            listenerManager.notify { it.onBatteryStatusChanged(batteryData) }
         }
     }
 }
