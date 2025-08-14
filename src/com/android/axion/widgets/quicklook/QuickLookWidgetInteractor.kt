@@ -88,30 +88,28 @@ class QuickLookWidgetInteractor(private val context: Context) {
                 }
 
                 is QuickLookData.Battery -> {
-                    val iconResId = R.drawable.ic_battery_charging
-                    val chargingStatus = context.getString(R.string.charging)
+                    val iconBitmap = ContextCompat.getDrawable(context, R.drawable.ic_battery_charging)?.toBitmap()
+                    val isFull = qlData.level == 100 && qlData.isCharging
+                    val chargingStatus = context.getString(
+                        if (isFull) R.string.full_charge else R.string.charging
+                    )
                     val chargingTime = qlData.chargingTimeRemaining?.let {
                         val minutes = (it + 59999) / 60000
                         context.getString(R.string.minutes_left, minutes)
-                    } ?: ""
-                    val secondary = if (qlData.isCharging && chargingTime.isNotEmpty()) {
-                        context.getString(
-                            R.string.charging_with_time,
-                            chargingStatus,
-                            chargingTime
-                        )
-                    } else {
-                        chargingStatus
                     }
+
+                    val secondaryText = when {
+                        !isFull && qlData.isCharging && !chargingTime.isNullOrEmpty() -> 
+                            context.getString(R.string.charging_with_time, chargingStatus, chargingTime)
+                        else -> chargingStatus
+                    }
+
                     DisplayData(
                         dateText = dateFormat.format(Date()),
-                        primaryText = context.getString(
-                            R.string.battery_level_format,
-                            qlData.level
-                        ),
-                        secondaryText = secondary,
+                        primaryText = context.getString(R.string.battery_level_format, qlData.level),
+                        secondaryText = secondaryText,
                         iconViewId = R.id.secondary_icon,
-                        iconBitmap = ContextCompat.getDrawable(context, iconResId)?.toBitmap()
+                        iconBitmap = iconBitmap
                     )
                 }
 
