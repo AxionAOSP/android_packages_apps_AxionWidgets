@@ -9,7 +9,7 @@
     <color name="battery_indicator_charging_color_bg">#d71921</color>
     <color name="battery_indicator_power_saving_color">@android:color/system_neutral1_900</color>
     <color name="battery_indicator_power_saving_color_bg">#ffc700</color>
-    <color name="battery_progressbar_color">#66c5c7c9</color>
+    <color name="battery_progressbar_color">#E0E0DE</color>
     <color name="battery_progressbar_color_low_battery_state">#d71921</color>
     <color name="photo_frame_bg">@android:color/system_neutral1_50</color>
     <color name="tile_active">#d71921</color>

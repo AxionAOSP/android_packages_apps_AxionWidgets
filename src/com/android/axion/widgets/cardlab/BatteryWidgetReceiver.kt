@@ -55,15 +55,6 @@ class BatteryWidgetReceiver : AppWidgetProvider() {
             .launchIn(coroutineScope)
     }
 
-    override fun onReceive(context: Context, intent: Intent) {
-        super.onReceive(context, intent)
-        if (intent.action == Intent.ACTION_CONFIGURATION_CHANGED) {
-            coroutineScope.launch {
-                BatteryDataManager.refresh()
-            }
-        }
-    }
-
     private fun updateWidget(context: Context, data: QuickLookData.Battery?) {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val thisWidget = ComponentName(context, BatteryWidgetReceiver::class.java)
@@ -82,12 +73,22 @@ class BatteryWidgetReceiver : AppWidgetProvider() {
             views.setOnClickPendingIntent(R.id.battery_card_root, pendingIntent)
             if (data != null) {
                 val batteryBg = createBatteryBg(context, data.level)
-                views.setImageViewBitmap(R.id.battery_bg_view, batteryBg)
+                if (data.level <= 20){
+                    views.setViewVisibility(R.id.battery_bg_view_low, View.VISIBLE)
+                    views.setImageViewBitmap(R.id.battery_bg_view_low, batteryBg)
+                    views.setViewVisibility(R.id.battery_bg_view, View.GONE)
+                    views.setImageViewBitmap(R.id.battery_bg_view, null)
+                } else {
+                    views.setViewVisibility(R.id.battery_bg_view_low, View.GONE)
+                    views.setImageViewBitmap(R.id.battery_bg_view_low, null)
+                    views.setViewVisibility(R.id.battery_bg_view, View.VISIBLE)
+                    views.setImageViewBitmap(R.id.battery_bg_view, batteryBg)
+                }
                 views.setViewVisibility(R.id.battery_percentage, View.VISIBLE)
                 if (data.isCharging) {
                     views.setViewVisibility(R.id.battery_view_bottom_left, View.VISIBLE)
                 } else {
-                    views.setViewVisibility(R.id.battery_view_bottom_left, View.INVISIBLE)
+                    views.setViewVisibility(R.id.battery_view_bottom_left, View.GONE)
                 }
                 views.setTextViewText(R.id.battery_percentage, "${data.level}%")
             } else {
@@ -110,11 +111,6 @@ class BatteryWidgetReceiver : AppWidgetProvider() {
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.FILL
             isDither = true
-            color = if (batteryLevel <= 20) {
-                context.getColor(R.color.battery_progressbar_color_low_battery_state)
-            } else {
-                context.getColor(R.color.battery_progressbar_color)
-            }
         }
         val rect = RectF(0f, 0f, px.toFloat(), px.toFloat())
         val sweepAngle = (batteryLevel / 100f) * 360f
