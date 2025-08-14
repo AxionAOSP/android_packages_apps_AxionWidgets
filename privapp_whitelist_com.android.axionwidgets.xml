@@ -7,5 +7,12 @@
         <permission name="android.permission.ACCESS_FINE_LOCATION" />
         <permission name="android.permission.FOREGROUND_SERVICE" />
         <permission name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
+        <permission name="android.permission.CHANGE_WIFI_STATE" />
+        <permission name="android.permission.ACCESS_WIFI_STATE" />
+        <permission name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+        <permission name="android.permission.BLUETOOTH" />
+        <permission name="android.permission.BLUETOOTH_ADMIN" />
+        <permission name="android.permission.MODIFY_PHONE_STATE" />
+        <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
     </privapp-permission>
 </privapp-permissions>

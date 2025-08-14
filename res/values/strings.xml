@@ -3,6 +3,11 @@
 
     <string name="app_name">Axion Widgets</string>
 
+    <!-- Manifest -->
+    <string name="label_photo">Photo</string>
+    <string name="label_tile">Tile</string>
+    <string name="label_media_notification_listener">Media Notification Listener</string>
+
     <!-- Settings -->
     <string name="setup_title">QuickLook</string>
     <string name="date_format_pattern">EEE, d MMM</string>
@@ -67,4 +72,22 @@
     <string name="interval_5_minutes">5 minutes</string>
     <string name="interval_15_minutes">15 minutes</string>
     <string name="interval_1_hour">1 hour</string>
+    
+    <!-- Tiles -->
+    <string name="wifi">Wifi</string>
+    <string name="bluetooth">Bluetooth</string>
+    <string name="airplane_mode">Airplane</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="torch">Torch</string>
+    <string name="dnd">DND</string>
+    <string name="priority">Priority</string>
+    <string name="alarms_only">Alarms Only</string>
+    <string name="total_silence">Total Silence</string>
+    <string name="auto_rotate">Auto Rotate</string>
+    <string name="ringer_normal">Ringer</string>
+    <string name="ringer_vibrate">Vibrate</string>
+    <string name="ringer_silent">Silent</string>
+    <string name="ringer_unknown">Unknown</string>
+    <string name="mobile_data">Mobile Data</string>
+    <string name="quick_settings">QuickSettings</string>
 </resources>
