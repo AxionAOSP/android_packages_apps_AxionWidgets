@@ -15,9 +15,7 @@ package com.android.axion.widgets.cardlab.photo
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.graphics.*
 import android.net.Uri
 import android.util.Log
@@ -38,11 +36,58 @@ class PhotoInteractor(internal val context: Context) {
     private val prefs: SharedPreferences
         get() = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    val tracker = PhotoTracker(this, AppWidgetManager.getInstance(context))
+    private val appWidgetManager = AppWidgetManager.getInstance(context)
+    private var photoTracker: PhotoTracker? = null
+    
+    private val allBoundWidgetIds = mutableSetOf<Int>()
 
-    fun bind(widgetIds: List<Int>) = tracker.bind(widgetIds)
+    fun bind(widgetIds: List<Int>) {
+        allBoundWidgetIds.addAll(widgetIds)
+        if (photoTracker == null) {
+            photoTracker = PhotoTracker(this)
+        }
+        photoTracker?.bind(allBoundWidgetIds.toList())
+    }
+    
+    fun unbind(widgetIds: List<Int>) {
+        allBoundWidgetIds.removeAll(widgetIds.toSet())
+        if (allBoundWidgetIds.isEmpty()) {
+            dispose()
+        } else {
+            photoTracker?.bind(allBoundWidgetIds.toList())
+        }
+    }
 
-    fun dispose() = tracker.dispose()
+    fun dispose() {
+        photoTracker?.dispose()
+        photoTracker = null
+        allBoundWidgetIds.clear()
+    }
+
+    fun getAllActiveWidgetIds(): List<Int> {
+        val smallWidgetIds = appWidgetManager.getAppWidgetIds(
+            ComponentName(context, PhotoWidgetSmallReceiver::class.java)
+        )
+        val largeWidgetIds = appWidgetManager.getAppWidgetIds(
+            ComponentName(context, PhotoWidgetLargeReceiver::class.java)
+        )
+        return (smallWidgetIds + largeWidgetIds).toList()
+    }
+
+    fun updateActiveWidgets() {
+        val activeWidgetIds = getAllActiveWidgetIds()
+        allBoundWidgetIds.clear()
+        allBoundWidgetIds.addAll(activeWidgetIds)
+        
+        if (activeWidgetIds.isNotEmpty()) {
+            if (photoTracker == null) {
+                photoTracker = PhotoTracker(this)
+            }
+            photoTracker?.bind(activeWidgetIds)
+        } else {
+            dispose()
+        }
+    }
 
     fun saveImageUris(appWidgetId: Int, uris: List<Uri>) {
         val allUris = prefs.getStringSet(PREF_KEY_WIDGET_URIS, mutableSetOf())!!.toMutableSet()

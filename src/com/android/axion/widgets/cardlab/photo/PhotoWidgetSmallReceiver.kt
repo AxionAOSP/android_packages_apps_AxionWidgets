@@ -15,35 +15,29 @@ package com.android.axion.widgets.cardlab.photo
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
-import android.content.ComponentName
 import android.content.Context
 
 class PhotoWidgetSmallReceiver : AppWidgetProvider() {
 
-    private var interactor: PhotoInteractor? = null
-
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        if (interactor == null) {
-            interactor = PhotoInteractor(context.applicationContext)
-        }
-        interactor?.bind(appWidgetIds.toList())
+        val interactor = PhotoWidgetManager.getInteractor(context)
+        interactor.bind(appWidgetIds.toList())
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        val remainingWidgetIds = appWidgetManager.getAppWidgetIds(
-            ComponentName(context, PhotoWidgetSmallReceiver::class.java)
-        )
-        if (remainingWidgetIds.isEmpty()) {
-            interactor?.dispose()
-            interactor = null
-        } else {
-            interactor?.bind(remainingWidgetIds.toList())
+        val interactor = PhotoWidgetManager.getInteractor(context)
+        interactor.unbind(appWidgetIds.toList())
+        val activeWidgets = interactor.getAllActiveWidgetIds()
+        if (activeWidgets.isEmpty()) {
+            PhotoWidgetManager.dispose()
         }
     }
 
     override fun onDisabled(context: Context) {
-        interactor?.dispose()
-        interactor = null
+        val interactor = PhotoWidgetManager.getInteractor(context)
+        interactor.updateActiveWidgets()
+        if (interactor.getAllActiveWidgetIds().isEmpty()) {
+            PhotoWidgetManager.dispose()
+        }
     }
 }
