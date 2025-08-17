@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-    <string name="app_name">Axion Widgets</string>
+    <string name="date_format_pattern" translatable="false">EEE, d MMM</string>
+    <string name="pref_key_onboarding" translatable="false">onboarding</string>
+    <string name="pref_name" translatable="false">axion_prefs</string>
+    <string name="placeholder" translatable="false">:)</string>
+    <string name="charging_with_time" translatable="false">%1$s - %2$s</string>
+    <string name="battery_level_format" translatable="false">%1$d%%</string>
+    <string name="media_format" translatable="false">%1$s by %2$s</string>
+    <string name="quick_settings" translatable="false">QuickSettings</string>
+    <string name="setup_title" translatable="false">QuickLook</string>
+
+    <plurals name="photos_already_exist">
+        <item quantity="one">%d photo already exists and was omitted.</item>
+        <item quantity="other">%d photos already exist and were omitted.</item>
+    </plurals>
 
     <!-- Manifest -->
+    <string name="app_name">Axion Widgets</string>
     <string name="label_photo">Photo</string>
     <string name="label_tile">Tile</string>
     <string name="label_media_notification_listener">Media Notification Listener</string>
 
     <!-- Settings -->
-    <string name="setup_title">QuickLook</string>
-    <string name="date_format_pattern">EEE, d MMM</string>
     <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
-    <string name="pref_key_onboarding">onboarding</string>
-    <string name="pref_name">axion_prefs</string>
-    <string name="preview_text">Sun, 10 Aug</string>
     <string name="loading_text">Loading...</string>
     <string name="toast_calendar_permission_required">Calendar permission is required</string>
     <string name="allow_notification_access">Allow notification access</string>
@@ -30,19 +39,10 @@
     <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
     <string name="quick_look_widget_calendar_no_title">(No title event)</string>
 
-    <!-- Media -->
-    <string name="media_format">%1$s by %2$s</string>
-
     <!-- Battery -->
     <string name="full_charge">Charged</string>
     <string name="charging">Charging</string>
     <string name="minutes_left">%1$d min left</string>
-    <string name="charging_with_time">%1$s - %2$s</string>
-    <string name="battery_level_format">%1$d%%</string>
-
-    <!-- placeholder -->
-    <string name="placeholder">:)</string>
-    
     <!-- Photo -->
     <string name="photo_title">Photo</string>
     <string name="add_photos">Add Photos</string>
@@ -63,11 +63,6 @@
     <string name="confirm_delete_title">Confirm Delete</string>
     <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
     <string name="delete">Delete</string>
-
-    <plurals name="photos_already_exist">
-        <item quantity="one">%d photo already exists and was omitted.</item>
-        <item quantity="other">%d photos already exist and were omitted.</item>
-    </plurals>
 
     <string name="interval_1_minute">1 minute</string>
     <string name="interval_5_minutes">5 minutes</string>
@@ -90,5 +85,4 @@
     <string name="ringer_silent">Silent</string>
     <string name="ringer_unknown">Unknown</string>
     <string name="mobile_data">Mobile Data</string>
-    <string name="quick_settings">QuickSettings</string>
 </resources>

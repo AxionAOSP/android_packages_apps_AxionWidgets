@@ -63,7 +63,7 @@ class TileConfigs(private val context: Context) {
 
         tiles.add(
             TileConfig.from(
-                context.getString(R.string.wifi),
+                getTileType(R.string.wifi),
                 { wifiManager.isWifiEnabled },
                 {
                     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
@@ -74,7 +74,7 @@ class TileConfigs(private val context: Context) {
                     if (wifiManager.isWifiEnabled) {
                         wifiManager.connectionInfo.ssid.removePrefix("\"").removeSuffix("\"")
                     } else {
-                        context.getString(R.string.wifi)
+                        getTileType(R.string.wifi)
                     }
                 },
                 spec = "wifi"
@@ -83,7 +83,7 @@ class TileConfigs(private val context: Context) {
 
         tiles.add(
             TileConfig.from(
-                context.getString(R.string.bluetooth),
+                getTileType(R.string.bluetooth),
                 { btAdapter?.isEnabled == true },
                 {
                     if (btAdapter?.isEnabled == true) btAdapter.disable() else btAdapter?.enable()
@@ -94,7 +94,7 @@ class TileConfigs(private val context: Context) {
                     if (btAdapter?.isEnabled == true) {
                         btAdapter.bondedDevices.joinToString(", ") { it.name }
                     } else {
-                        context.getString(R.string.bluetooth)
+                        getTileType(R.string.bluetooth)
                     }
                 },
                 spec = "bluetooth"
@@ -103,7 +103,7 @@ class TileConfigs(private val context: Context) {
 
         tiles.add(
             TileConfig.from(
-                context.getString(R.string.airplane_mode),
+                getTileType(R.string.airplane_mode),
                 { Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) == 1 },
                 {
                     val state = Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 1
@@ -118,7 +118,7 @@ class TileConfigs(private val context: Context) {
 
         tiles.add(
             TileConfig.from(
-                context.getString(R.string.dark_theme),
+                getTileType(R.string.dark_theme),
                 { uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES },
                 {
                     uiModeManager.nightMode = if (uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES)
@@ -132,7 +132,7 @@ class TileConfigs(private val context: Context) {
 
         tiles.add(
             TileConfig.from(
-                context.getString(R.string.torch),
+                getTileType(R.string.torch),
                 { isTorchActive() },
                 { toggleTorch() },
                 context,
@@ -142,7 +142,7 @@ class TileConfigs(private val context: Context) {
 
         tiles.add(
             TileConfig.from(
-                context.getString(R.string.dnd),
+                getTileType(R.string.dnd),
                 {
                     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     notificationManager.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_ALL
@@ -163,11 +163,11 @@ class TileConfigs(private val context: Context) {
                 labelProvider = {
                     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     when (notificationManager.currentInterruptionFilter) {
-                        NotificationManager.INTERRUPTION_FILTER_ALL -> context.getString(R.string.dnd)
-                        NotificationManager.INTERRUPTION_FILTER_PRIORITY -> context.getString(R.string.priority)
-                        NotificationManager.INTERRUPTION_FILTER_ALARMS -> context.getString(R.string.alarms_only)
-                        NotificationManager.INTERRUPTION_FILTER_NONE -> context.getString(R.string.total_silence)
-                        else -> context.getString(R.string.dnd)
+                        NotificationManager.INTERRUPTION_FILTER_ALL -> getTileType(R.string.dnd)
+                        NotificationManager.INTERRUPTION_FILTER_PRIORITY -> getTileType(R.string.priority)
+                        NotificationManager.INTERRUPTION_FILTER_ALARMS -> getTileType(R.string.alarms_only)
+                        NotificationManager.INTERRUPTION_FILTER_NONE -> getTileType(R.string.total_silence)
+                        else -> getTileType(R.string.dnd)
                     }
                 },
                 spec = "dnd"
@@ -176,7 +176,7 @@ class TileConfigs(private val context: Context) {
 
         tiles.add(
             TileConfig.from(
-                context.getString(R.string.auto_rotate),
+                getTileType(R.string.auto_rotate),
                 { Settings.System.getInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, 0) == 1 },
                 {
                     val newState = Settings.System.getInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, 0) != 1
@@ -190,7 +190,7 @@ class TileConfigs(private val context: Context) {
 
         tiles.add(
             TileConfig.from(
-                context.getString(R.string.ringer_normal),
+                getTileType(R.string.ringer_normal),
                 {
                     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
                     audioManager.ringerMode != AudioManager.RINGER_MODE_NORMAL
@@ -210,10 +210,10 @@ class TileConfigs(private val context: Context) {
                 labelProvider = {
                     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
                     when (audioManager.ringerMode) {
-                        AudioManager.RINGER_MODE_NORMAL -> context.getString(R.string.ringer_normal)
-                        AudioManager.RINGER_MODE_VIBRATE -> context.getString(R.string.ringer_vibrate)
-                        AudioManager.RINGER_MODE_SILENT -> context.getString(R.string.ringer_silent)
-                        else -> context.getString(R.string.ringer_unknown)
+                        AudioManager.RINGER_MODE_NORMAL -> getTileType(R.string.ringer_normal)
+                        AudioManager.RINGER_MODE_VIBRATE -> getTileType(R.string.ringer_vibrate)
+                        AudioManager.RINGER_MODE_SILENT -> getTileType(R.string.ringer_silent)
+                        else -> getTileType(R.string.ringer_unknown)
                     }
                 },
                 spec = "ringer"
@@ -223,7 +223,7 @@ class TileConfigs(private val context: Context) {
         if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
             tiles.add(
                 TileConfig.from(
-                    context.getString(R.string.mobile_data),
+                    getTileType(R.string.mobile_data),
                     { telephonyManager.isDataEnabled },
                     {
                         try { telephonyManager.setDataEnabled(!telephonyManager.isDataEnabled) } catch (_: Exception) {}
@@ -232,9 +232,9 @@ class TileConfigs(private val context: Context) {
                     context,
                     labelProvider = {
                         if (!telephonyManager.isDataEnabled) {
-                            context.getString(R.string.mobile_data)
+                            getTileType(R.string.mobile_data)
                         } else {
-                            telephonyManager.networkOperatorName ?: context.getString(R.string.mobile_data)
+                            telephonyManager.networkOperatorName ?: getTileType(R.string.mobile_data)
                         }
                     },
                     spec = "mobile_data"
@@ -243,5 +243,15 @@ class TileConfigs(private val context: Context) {
         }
 
         tiles
+    }
+    
+    private fun getTileType(resId: Int): String {
+        val config = context.resources.configuration
+        val locale = java.util.Locale.ENGLISH
+        val newConfig = android.content.res.Configuration(config)
+        newConfig.setLocale(locale)
+        return context.createConfigurationContext(newConfig)
+            .resources
+            .getString(resId)
     }
 }
