@@ -1,0 +1,18 @@
+<resources>
+    <dimen name="date_text_size">34.3dp</dimen>
+    <dimen name="secondary_text_size">25.7dp</dimen>
+    <dimen name="quicklook_icon_size">28.6dp</dimen>
+    <dimen name="secondary_text_margin_end">5.7dp</dimen>
+    <dimen name="media_icon_margin_end">8.6dp</dimen>
+    <dimen name="secondary_container_margin_top">5.7dp</dimen>
+    <dimen name="photo_frame_width">14.3dp</dimen>
+    <dimen name="pill_widget_height">97.1dp</dimen>
+    <dimen name="pill_widget_width">244.3dp</dimen>
+    <dimen name="widget_pill_padding_start">31.4dp</dimen>
+    <dimen name="widget_pill_icon_size">31.4dp</dimen>
+    <dimen name="widget_label_frame_margin_start">17.1dp</dimen>
+    <dimen name="widget_pill_label_padding_end">34.3dp</dimen>
+    <dimen name="pill_tile_text_size">20.0dp</dimen>
+    <dimen name="pill_widget_padding_vertical">4.3dp</dimen>
+    <dimen name="pill_widget_padding_horizontal">8.6dp</dimen>
+</resources>

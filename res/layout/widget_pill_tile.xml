@@ -1,48 +1,47 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tile_view_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="@dimen/pill_widget_height"
+    android:paddingHorizontal="@dimen/pill_widget_padding_horizontal">
     <View
         android:id="@+id/tile_bg"
-        android:layout_width="171dp"
-        android:layout_height="74dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@drawable/bg_widget_tile"
-        android:layout_gravity="center"
+        android:layout_gravity="start|center_vertical"
         android:clickable="false"
         android:focusable="false" />
     <View
         android:id="@+id/overlay_active_tile_view"
-        android:layout_width="171dp"
-        android:layout_height="74dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="gone"
         android:background="@drawable/bg_widget_tile"
         android:backgroundTint="@color/tile_active"
-        android:layout_gravity="center"
+        android:layout_gravity="start|center_vertical"
         android:clickable="false"
         android:focusable="false" />
     <LinearLayout
         android:id="@+id/tile_content"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start|center_vertical"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="28dp">
+        android:gravity="start|center_vertical"
+        android:paddingStart="@dimen/widget_pill_padding_start">
         <ImageView
             android:id="@+id/tile_view"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="@dimen/widget_pill_icon_size"
+            android:layout_height="@dimen/widget_pill_icon_size"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_wifi_off"
             android:tint="@color/battery_device_primary_color"
             android:clickable="false"
             android:focusable="false" />
         <ImageView
             android:id="@+id/tile_active_view"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="@dimen/widget_pill_icon_size"
+            android:layout_height="@dimen/widget_pill_icon_size"
             android:scaleType="centerInside"
-            android:src="@drawable/ic_wifi_off"
             android:tint="@android:color/white"
             android:visibility="gone"
             android:clickable="false"
@@ -50,14 +49,14 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp">
+            android:layout_marginStart="@dimen/widget_label_frame_margin_start">
             <TextView
                 android:id="@+id/tile_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Loading..."
-                android:paddingEnd="24dp"
-                android:textSize="16sp"
+                android:paddingEnd="@dimen/widget_pill_label_padding_end"
+                android:textSize="@dimen/pill_tile_text_size"
                 android:textColor="@color/battery_device_primary_color"
                 android:ellipsize="end"
                 android:singleLine="true"
@@ -68,8 +67,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Loading..."
-                android:paddingEnd="24dp"
-                android:textSize="16sp"
+                android:paddingEnd="@dimen/widget_pill_label_padding_end"
+                android:textSize="@dimen/pill_tile_text_size"
                 android:textColor="@*android:color/white"
                 android:ellipsize="end"
                 android:singleLine="true"
