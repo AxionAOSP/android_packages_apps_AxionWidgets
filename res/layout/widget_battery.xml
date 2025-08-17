@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:layout_marginHorizontal="@dimen/card_padding_horizontal"
+    android:layout_marginVertical="@dimen/card_padding_vertical"
     android:orientation="vertical"
     android:background="@drawable/bg_widget_card">
     <RelativeLayout
@@ -16,23 +18,23 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp">
+            android:layout_marginStart="@dimen/battery_margin"
+            android:layout_marginTop="@dimen/battery_margin">
             <ImageView
                 android:id="@+id/battery_bg_view"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
+                android:layout_width="@dimen/battery_bg_arc_size"
+                android:layout_height="@dimen/battery_bg_arc_size"
                 android:scaleType="fitCenter"
                 android:tint="@color/battery_progressbar_color" />
             <ImageView
                 android:id="@+id/battery_bg_view_low"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
+                android:layout_width="@dimen/battery_bg_arc_size"
+                android:layout_height="@dimen/battery_bg_arc_size"
                 android:scaleType="fitCenter"
                 android:tint="@color/battery_progressbar_color_low_battery_state" />
             <LinearLayout
-                android:layout_width="72dp"
-                android:layout_height="72dp"
+                android:layout_width="@dimen/battery_bg_arc_size"
+                android:layout_height="@dimen/battery_bg_arc_size"
                 android:orientation="vertical"
                 android:gravity="center">
                 <ImageView
@@ -50,7 +52,7 @@
                     android:background="@drawable/battery_bg_color"
                     android:padding="0.5dp"
                     android:layout_gravity="center"
-                    android:translationY="6dp" />
+                    android:translationY="@dimen/battery_charge_y" />
             </LinearLayout>
         </FrameLayout>
         <TextView
@@ -59,8 +61,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="@dimen/battery_margin"
+            android:layout_marginEnd="@dimen/battery_margin"
             android:maxLines="1"
             android:includeFontPadding="false"
             android:textAlignment="textEnd"

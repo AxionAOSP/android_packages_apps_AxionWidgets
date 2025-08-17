@@ -37,8 +37,8 @@
     </style>
     
     <style name="BatteryLevelTextStyle" parent="">
-        <item name="android:textSize">30sp</item>
-        <item name="lineHeight">30dp</item>
+        <item name="android:textSize">@dimen/battery_text_size</item>
+        <item name="lineHeight">@dimen/battery_text_size</item>
         <item name="android:textColor">@color/battery_device_primary_color</item>
     </style>
 </resources>

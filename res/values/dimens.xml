@@ -16,4 +16,10 @@
     <dimen name="pill_tile_text_size">14dp</dimen>
     <dimen name="pill_widget_padding_vertical">3dp</dimen>
     <dimen name="pill_widget_padding_horizontal">6dp</dimen>
+    <dimen name="battery_margin">16dp</dimen>
+    <dimen name="battery_text_size">30dp</dimen>
+    <dimen name="battery_bg_arc_size">72dp</dimen>
+    <dimen name="battery_charge_y">6dp</dimen>
+    <dimen name="card_padding_vertical">3dp</dimen>
+    <dimen name="card_padding_horizontal">9dp</dimen>
 </resources>

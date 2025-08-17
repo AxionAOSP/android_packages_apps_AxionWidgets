@@ -9,10 +9,16 @@
     <dimen name="pill_widget_height">64.8dp</dimen>
     <dimen name="pill_widget_width">162.9dp</dimen>
     <dimen name="widget_pill_padding_start">21.0dp</dimen>
-    <dimen name="widget_pill_icon_size">21.0dp</dimen>
+    <dimen name="widget_pill_icon_size">19.0dp</dimen>
     <dimen name="widget_label_frame_margin_start">11.4dp</dimen>
     <dimen name="widget_pill_label_padding_end">22.9dp</dimen>
     <dimen name="pill_tile_text_size">13.3dp</dimen>
     <dimen name="pill_widget_padding_vertical">2.9dp</dimen>
     <dimen name="pill_widget_padding_horizontal">5.7dp</dimen>
+    <dimen name="battery_margin">15.2dp</dimen>
+    <dimen name="battery_text_size">28.6dp</dimen>
+    <dimen name="battery_bg_arc_size">68.6dp</dimen>
+    <dimen name="battery_charge_y">5.7dp</dimen>
+    <dimen name="card_padding_vertical">2.9dp</dimen>
+    <dimen name="card_padding_horizontal">8.6dp</dimen>
 </resources>
