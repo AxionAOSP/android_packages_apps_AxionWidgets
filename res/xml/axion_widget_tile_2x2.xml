@@ -1,8 +1,4 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="@dimen/pill_widget_width"
-    android:minHeight="@dimen/pill_widget_height"
-    android:maxResizeWidth="@dimen/pill_widget_width"
-    android:maxResizeHeight="@dimen/pill_widget_height"
     android:targetCellWidth="2"
     android:targetCellHeight="1"
     android:updatePeriodMillis="0"
