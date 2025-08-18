@@ -20,6 +20,7 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.compose.setContent
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.content.ContextCompat
@@ -46,9 +47,8 @@ class TileConfigureActivity : ComponentActivity() {
     private var widgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-
-        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         widgetId = intent.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
