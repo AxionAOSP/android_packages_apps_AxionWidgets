@@ -22,4 +22,5 @@
     <dimen name="battery_charge_y">6dp</dimen>
     <dimen name="card_padding_vertical">3dp</dimen>
     <dimen name="card_padding_horizontal">9dp</dimen>
+    <dimen name="card_radius">16dp</dimen>
 </resources>
