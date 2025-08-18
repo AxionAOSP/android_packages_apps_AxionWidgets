@@ -22,7 +22,8 @@ data class TileConfig(
     val observeState: suspend () -> Boolean,
     val toggle: suspend () -> Boolean,
     val getIcon: (Boolean) -> Int,
-    val getLabel: (() -> String)? = null
+    val getLabel: (() -> String)? = null,
+    val spec: String
 ) {
     companion object {
         fun from(
@@ -31,7 +32,7 @@ data class TileConfig(
             setter: (() -> Boolean)? = null,
             context: Context,
             labelProvider: (() -> String)? = null,
-            spec: String? = null
+            spec: String
         ): TileConfig {
             val observeState: suspend () -> Boolean = { getter() }
             val toggle: suspend () -> Boolean = { setter?.invoke() ?: !getter() }
@@ -41,7 +42,7 @@ data class TileConfig(
                 context.resources.getIdentifier(resName, "drawable", context.packageName).takeIf { it != 0 }
                     ?: context.resources.getIdentifier("ic_foreground", "drawable", context.packageName)
             }
-            return TileConfig(type, observeState, toggle, getIcon, labelProvider)
+            return TileConfig(type, observeState, toggle, getIcon, labelProvider, spec)
         }
     }
 }

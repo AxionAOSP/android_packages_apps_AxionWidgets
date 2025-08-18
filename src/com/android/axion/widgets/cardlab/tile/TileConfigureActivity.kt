@@ -145,7 +145,7 @@ fun WidgetConfigScreen(widgetId: Int, onTileSelected: (String) -> Unit) {
                 items(tiles) { tile ->
                     TileRow(
                         tileType = tile.type,
-                        icon = tileIcon(tile.type),
+                        icon = tileIcon(tile.spec),
                         isSelected = false,
                         onClick = { onTileSelected(tile.type) }
                     )
@@ -157,21 +157,21 @@ fun WidgetConfigScreen(widgetId: Int, onTileSelected: (String) -> Unit) {
 }
 
 val tileIcons = mapOf(
-    "WIFI" to Icons.Filled.Wifi,
-    "BLUETOOTH" to Icons.Filled.Bluetooth,
-    "AIRPLANE" to Icons.Filled.AirplanemodeActive,
-    "MOBILE_DATA" to Icons.Filled.NetworkCell,
-    "DARK_THEME" to Icons.Filled.DarkMode,
-    "TORCH" to Icons.Filled.FlashlightOn,
-    "DND" to Icons.Filled.DoNotDisturb,
-    "AUTO_ROTATE" to Icons.Filled.ScreenRotation,
-    "RINGER" to Icons.Filled.VolumeUp
+    "wifi" to Icons.Filled.Wifi,
+    "bluetooth" to Icons.Filled.Bluetooth,
+    "airplane" to Icons.Filled.AirplanemodeActive,
+    "mobile_data" to Icons.Filled.NetworkCell,
+    "dark_theme" to Icons.Filled.DarkMode,
+    "torch" to Icons.Filled.FlashlightOn,
+    "dnd" to Icons.Filled.DoNotDisturb,
+    "auto_rotate" to Icons.Filled.ScreenRotation,
+    "ringer" to Icons.Filled.VolumeUp
 )
 
 @Composable
-fun tileIcon(tileType: String): @Composable () -> Unit = {
-    val icon = tileIcons[tileType.uppercase()] ?: Icons.Filled.Settings
-    Icon(icon, contentDescription = tileType)
+fun tileIcon(spec: String): @Composable () -> Unit = {
+    val icon = tileIcons[spec] ?: Icons.Filled.Settings
+    Icon(icon, contentDescription = spec)
 }
 
 @Composable
