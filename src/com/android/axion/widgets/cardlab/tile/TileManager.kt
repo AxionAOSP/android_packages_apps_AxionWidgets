@@ -14,12 +14,13 @@
 package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
+import com.android.axion.widgets.R
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import com.android.axion.widgets.R
 import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.android.axion.widgets.WidgetLifecycleManager
 
 data class TileData(
     val type: String,
@@ -32,19 +33,24 @@ data class TileData(
 @Singleton
 class TileManager @Inject constructor(
     private val context: Context,
-    private val repository: TileRepository
+    private val repository: TileRepository,
+    private val lifecycleManager: WidgetLifecycleManager
 ) {
 
     private val bgDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val scope = CoroutineScope(SupervisorJob() + bgDispatcher)
 
-    private val consumers = mutableSetOf<Any>()
-
     private val _tilesFlow = MutableStateFlow<Map<Int, TileData>>(emptyMap())
     val tilesFlow: StateFlow<Map<Int, TileData>> = _tilesFlow.asStateFlow()
 
+    private val consumers = mutableSetOf<Any>()
+
     init {
-        observeRepository()
+        scope.launch {
+            lifecycleManager.widgetsActive.collect { active ->
+                if (active) start() else pause()
+            }
+        }
     }
 
     fun addConsumer(consumer: Any) {
@@ -58,8 +64,12 @@ class TileManager @Inject constructor(
         }
     }
 
-    private fun observeRepository() {
-        scope.launch {
+    private var repoJob: Job? = null
+
+    private fun start() {
+        if (repoJob?.isActive == true) return
+
+        repoJob = scope.launch {
             combine(repository.tileStates, snapshotWidgetIds()) { states, ids ->
                 ids.mapNotNull { id ->
                     val type = WidgetPrefs.getWidgetAction(context, id) ?: return@mapNotNull null
@@ -84,6 +94,11 @@ class TileManager @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun pause() {
+        repoJob?.cancel()
+        repoJob = null
     }
 
     private fun snapshotWidgetIds(): Flow<List<Int>> = flow {
@@ -112,12 +127,6 @@ class TileManager @Inject constructor(
         }
     }
 
-    private fun dispose() {
-        scope.cancel()
-        bgDispatcher.close()
-        repository.dispose()
-    }
-
     fun getIconForTile(type: String, active: Boolean): Int {
         return repository.tilesRegistry.firstOrNull { it.type == type }?.getIcon?.invoke(active)
             ?: R.drawable.ic_wifi_off
@@ -135,5 +144,12 @@ class TileManager @Inject constructor(
         )
         _tilesFlow.value = _tilesFlow.value + (widgetId to data)
         context.updateWidget(widgetId, data)
+    }
+
+    fun dispose() {
+        pause()
+        scope.cancel()
+        bgDispatcher.close()
+        repository.dispose()
     }
 }

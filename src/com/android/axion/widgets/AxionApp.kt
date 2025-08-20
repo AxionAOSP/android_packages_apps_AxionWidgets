@@ -22,6 +22,6 @@ import android.util.Log
 class AxionApp : Hilt_AxionApp() {
     override fun onCreate() {
         super.onCreate()
-        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver())
+        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver(this))
     }
 }

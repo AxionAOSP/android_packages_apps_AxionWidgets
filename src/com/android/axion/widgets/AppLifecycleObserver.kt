@@ -13,12 +13,21 @@
  */
 package com.android.axion.widgets
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import com.android.axion.widgets.cardlab.tile.TileRepository
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import com.android.axion.widgets.di.WidgetLifecycleManagerEntryPoint
 
-class AppLifecycleObserver : DefaultLifecycleObserver {
+class AppLifecycleObserver(private val context: Context) : DefaultLifecycleObserver {
+
+    private val lifecycleManager: WidgetLifecycleManager by lazy {
+        EntryPointAccessors.fromApplication(context, WidgetLifecycleManagerEntryPoint::class.java)
+            .widgetLifecycleManager()
+    }
 
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
@@ -34,5 +43,6 @@ class AppLifecycleObserver : DefaultLifecycleObserver {
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
+        lifecycleManager.dispose()
     }
 }

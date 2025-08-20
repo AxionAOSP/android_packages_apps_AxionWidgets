@@ -20,6 +20,7 @@ import android.service.notification.StatusBarNotification
 import com.android.axion.widgets.callback.*
 import com.android.axion.widgets.data.*
 import com.android.axion.widgets.provider.*
+import com.android.axion.widgets.WidgetLifecycleManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -32,7 +33,8 @@ class QuickLookDataManager @Inject constructor(
     private val mediaProvider: MediaPlaybackProvider,
     private val weatherProvider: WeatherProvider,
     private val calendarProvider: CalendarProvider,
-    private val batteryDataManager: BatteryDataManager
+    private val batteryDataManager: BatteryDataManager,
+    private val lifecycleManager: WidgetLifecycleManager
 ) {
 
     private val listeners = mutableSetOf<QuickLookDataCallback>()
@@ -44,7 +46,7 @@ class QuickLookDataManager @Inject constructor(
     private var latestBattery: QuickLookData.Battery? = null
 
     private var mediaFlowJob: Job? = null
-
+    private var notificationFlowJob: Job? = null
     private var notificationListenerStarted = false
 
     private val weatherCallback = object : WeatherProvider.Callback {
@@ -69,8 +71,17 @@ class QuickLookDataManager @Inject constructor(
     }
 
     init {
+        coroutineScope.launch {
+            lifecycleManager.widgetsActive.collect { active ->
+                if (active) start() else pause()
+            }
+        }
+    }
+
+    private fun start() {
         weatherProvider.addCallback(weatherCallback)
         calendarProvider.addCallback(calendarCallback)
+
         batteryDataManager.batteryFlow
             .onEach { battery ->
                 val batteryInfo = battery?.takeIf { it.isCharging }
@@ -80,6 +91,7 @@ class QuickLookDataManager @Inject constructor(
                 }
             }
             .launchIn(coroutineScope)
+
         mediaFlowJob?.cancel()
         mediaFlowJob = mediaProvider.mediaFlow
             .onEach { media ->
@@ -87,8 +99,17 @@ class QuickLookDataManager @Inject constructor(
                 notifyListeners()
             }
             .launchIn(coroutineScope)
+
         startNotificationListener()
         observeNotificationFlow()
+    }
+
+    private fun pause() {
+        weatherProvider.removeCallback(weatherCallback)
+        calendarProvider.removeCallback(calendarCallback)
+        mediaFlowJob?.cancel()
+        notificationFlowJob?.cancel()
+        mediaProvider.cleanup()
     }
 
     private fun startNotificationListener() {
@@ -99,21 +120,15 @@ class QuickLookDataManager @Inject constructor(
                 context, componentName, Process.myUid()
             )
             notificationListenerStarted = true
-        } catch (e: Exception) {
-        }
+        } catch (_: Exception) {}
     }
 
     private fun observeNotificationFlow() {
         val service = MediaNotificationListenerService.getInstance() ?: return
-        service.notificationsFlow
-            .onEach { notifications ->
-                updateNotifications(notifications)
-            }
+        notificationFlowJob?.cancel()
+        notificationFlowJob = service.notificationsFlow
+            .onEach { notifications -> updateNotifications(notifications) }
             .launchIn(coroutineScope)
-    }
-
-    fun updateNotifications(notifications: List<StatusBarNotification>) {
-        mediaProvider.updateNotifications(notifications)
     }
 
     fun addListener(listener: QuickLookDataCallback) {
@@ -123,10 +138,15 @@ class QuickLookDataManager @Inject constructor(
 
     fun removeListener(listener: QuickLookDataCallback) {
         listeners.remove(listener)
+        if (listeners.isEmpty()) dispose()
     }
 
     fun notifyListeners() {
         listeners.forEach { it.onDataUpdated() }
+    }
+
+    fun updateNotifications(notifications: List<StatusBarNotification>) {
+        mediaProvider.updateNotifications(notifications)
     }
 
     fun getQuickLookData(): QuickLookData {
@@ -156,13 +176,10 @@ class QuickLookDataManager @Inject constructor(
         } ?: false
     }
 
-    fun cleanup() {
-        weatherProvider.removeCallback(weatherCallback)
-        calendarProvider.removeCallback(calendarCallback)
-        mediaFlowJob?.cancel()
-        mediaProvider.cleanup()
+    fun dispose() {
+        pause()
         listeners.clear()
     }
 
-    fun getcontext(): Context = context
+    fun getContext(): Context = context
 }

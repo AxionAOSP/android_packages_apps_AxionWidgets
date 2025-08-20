@@ -13,13 +13,7 @@
  */
 package com.android.axion.widgets.cardlab.tile
 
-import android.app.ActivityTaskManager
-import android.app.TaskStackListener
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.os.RemoteException
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.util.concurrent.Executors
@@ -27,91 +21,38 @@ import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.android.axion.widgets.WidgetLifecycleManager
 
 data class TileStates(val states: Map<String, Boolean> = emptyMap())
 
 @Singleton
 class TileRepository @Inject constructor(
-    private val context: Context
+    private val context: Context,
+    private val lifecycleManager: WidgetLifecycleManager
 ) {
 
-    private var tileConfigs: TileConfigs? = null
-    private var isScreenOn = true
-    private var isUserPresent = true
-
+    private val tileConfigs = TileConfigs(context)
     private val pollingBuffer = mutableMapOf<String, Boolean>()
     private val _tileStates = MutableStateFlow(TileStates())
     val tileStates: StateFlow<TileStates> = _tileStates.asStateFlow()
 
-    val tilesRegistry get() = tileConfigs?.tilesRegistry ?: emptyList()
+    val tilesRegistry get() = tileConfigs.tilesRegistry
 
     private val pollingExecutor = Executors.newSingleThreadScheduledExecutor()
     private var pollingFuture: ScheduledFuture<*>? = null
 
-    private val debounceScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    private var debounceJob: Job? = null
-
-    private val taskListener = object : TaskStackListener() {
-        override fun onTaskStackChanged() {
-            debounceCheckFocusedTask()
-        }
-    }
-
-    private val screenReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                Intent.ACTION_SCREEN_OFF -> {
-                    isScreenOn = false
-                    stopPolling()
-                }
-                Intent.ACTION_SCREEN_ON -> {
-                    isScreenOn = true
-                    checkFocusedTask()
-                }
-                Intent.ACTION_USER_PRESENT -> {
-                    isUserPresent = true
-                    checkFocusedTask()
-                }
-            }
-        }
-    }
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     init {
-        tileConfigs = TileConfigs(context)
-        val initialStates = tileConfigs!!.tilesRegistry.associate { tile ->
+        val initialStates = tilesRegistry.associate { tile ->
             tile.type to runCatching { tile.observeState() }.getOrDefault(false)
         }
         _tileStates.value = TileStates(initialStates)
         pollingBuffer.putAll(initialStates)
-
-        try {
-            ActivityTaskManager.getService().registerTaskStackListener(taskListener)
-        } catch (_: RemoteException) { }
-
-        val filter = IntentFilter().apply {
-            addAction(Intent.ACTION_SCREEN_ON)
-            addAction(Intent.ACTION_SCREEN_OFF)
-            addAction(Intent.ACTION_USER_PRESENT)
-        }
-        context.registerReceiver(screenReceiver, filter)
-
-        checkFocusedTask()
-    }
-
-    private fun debounceCheckFocusedTask(delayMs: Long = 800L) {
-        debounceJob?.cancel()
-        debounceJob = debounceScope.launch {
-            delay(delayMs)
-            checkFocusedTask()
-        }
-    }
-
-    private fun checkFocusedTask() {
-        val topPackage = getFocusedRootTaskPackage()
-        if (topPackage == "com.android.launcher3" && isScreenOn && isUserPresent) {
-            startPolling()
-        } else {
-            stopPolling()
+        coroutineScope.launch {
+            lifecycleManager.widgetsActive.collect { active ->
+                if (active) startPolling() else stopPolling()
+            }
         }
     }
 
@@ -138,15 +79,6 @@ class TileRepository @Inject constructor(
         pollingFuture = null
     }
 
-    private fun getFocusedRootTaskPackage(): String? {
-        return try {
-            ActivityTaskManager.getService().getFocusedRootTaskInfo()?.topActivity?.packageName
-        } catch (e: RemoteException) {
-            e.printStackTrace()
-            null
-        }
-    }
-
     suspend fun updateState(type: String): Boolean {
         val tile = tilesRegistry.firstOrNull { it.type == type } ?: return false
         val newState = withContext(Dispatchers.Default) { tile.toggle() }
@@ -156,16 +88,7 @@ class TileRepository @Inject constructor(
 
     fun dispose() {
         stopPolling()
-        debounceJob?.cancel()
-        debounceJob = null
-        debounceScope.cancel()
-        pollingExecutor.shutdownNow()
-        context.unregisterReceiver(screenReceiver)
+        coroutineScope.cancel()
         _tileStates.value = TileStates()
-        try {
-            ActivityTaskManager.getService().unregisterTaskStackListener(taskListener)
-        } catch (e: RemoteException) {
-            e.printStackTrace()
-        }
     }
 }

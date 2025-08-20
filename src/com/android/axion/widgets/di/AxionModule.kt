@@ -18,6 +18,7 @@ import com.android.axion.widgets.cardlab.tile.*
 import com.android.axion.widgets.manager.*
 import com.android.axion.widgets.quicklook.QuickLookWidgetInteractor
 import com.android.axion.widgets.provider.*
+import com.android.axion.widgets.WidgetLifecycleManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -68,9 +69,10 @@ object AxionModule {
         mediaProvider: MediaPlaybackProvider,
         weatherProvider: WeatherProvider,
         calendarProvider: CalendarProvider,
-        batteryDataManager: BatteryDataManager
+        batteryDataManager: BatteryDataManager,
+        lifecycleManager: WidgetLifecycleManager
     ): QuickLookDataManager {
-        return QuickLookDataManager(context, mediaProvider, weatherProvider, calendarProvider, batteryDataManager)
+        return QuickLookDataManager(context, mediaProvider, weatherProvider, calendarProvider, batteryDataManager, lifecycleManager)
     }
 
     @Provides
@@ -81,6 +83,14 @@ object AxionModule {
     ): QuickLookWidgetInteractor {
         return QuickLookWidgetInteractor(context, dataManager)
     }
+
+    @Provides
+    @Singleton
+    fun provideWidgetLifecycleManager(
+        @ApplicationContext context: Context
+    ): WidgetLifecycleManager {
+        return WidgetLifecycleManager(context)
+    }
 }
 
 @Module
@@ -89,17 +99,18 @@ object TileModule {
 
     @Provides
     @Singleton
-    fun provideTileRepository(@ApplicationContext context: Context): TileRepository {
-        return TileRepository(context)
+    fun provideTileRepository(@ApplicationContext context: Context, lifecycleManager: WidgetLifecycleManager): TileRepository {
+        return TileRepository(context, lifecycleManager)
     }
 
     @Provides
     @Singleton
     fun provideTileManager(
         @ApplicationContext context: Context,
-        repository: TileRepository
+        repository: TileRepository,
+        lifecycleManager: WidgetLifecycleManager
     ): TileManager {
-        return TileManager(context, repository)
+        return TileManager(context, repository, lifecycleManager)
     }
 }
 
@@ -121,4 +132,10 @@ interface BatteryWidgetEntryPoint {
 interface TileWidgetEntryPoint {
     fun tileRepository(): TileRepository
     fun tileManager(): TileManager
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface WidgetLifecycleManagerEntryPoint {
+    fun widgetLifecycleManager(): WidgetLifecycleManager
 }
