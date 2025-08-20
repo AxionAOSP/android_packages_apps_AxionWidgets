@@ -18,6 +18,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import com.android.axion.widgets.R
 import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Singleton
 
 data class TileData(
     val type: String,
@@ -27,9 +29,11 @@ data class TileData(
     val label: String? = null,
 )
 
-object TileManager {
-
-    private var appContext: Context? = null
+@Singleton
+class TileManager @Inject constructor(
+    private val context: Context,
+    private val repository: TileRepository
+) {
 
     private val bgDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val scope = CoroutineScope(SupervisorJob() + bgDispatcher)
@@ -39,11 +43,12 @@ object TileManager {
     private val _tilesFlow = MutableStateFlow<Map<Int, TileData>>(emptyMap())
     val tilesFlow: StateFlow<Map<Int, TileData>> = _tilesFlow.asStateFlow()
 
+    init {
+        observeRepository()
+    }
+
     fun addConsumer(consumer: Any) {
         consumers.add(consumer)
-        if (consumers.size == 1) {
-            appContext?.let { TileRepository.bind(it) }
-        }
     }
 
     fun removeConsumer(consumer: Any) {
@@ -53,22 +58,13 @@ object TileManager {
         }
     }
 
-    fun bind(context: Context) {
-        if (appContext != null) return
-        appContext = context.applicationContext
-        if (consumers.isNotEmpty()) {
-            TileRepository.bind(appContext!!)
-        }
-        observeRepository()
-    }
-
     private fun observeRepository() {
         scope.launch {
-            combine(TileRepository.tileStates, snapshotWidgetIds()) { states, ids ->
+            combine(repository.tileStates, snapshotWidgetIds()) { states, ids ->
                 ids.mapNotNull { id ->
-                    val type = WidgetPrefs.getWidgetAction(appContext!!, id) ?: return@mapNotNull null
+                    val type = WidgetPrefs.getWidgetAction(context, id) ?: return@mapNotNull null
                     val isActive = states.states[type] ?: false
-                    val tileConfig = TileRepository.tilesRegistry.firstOrNull { it.type == type }
+                    val tileConfig = repository.tilesRegistry.firstOrNull { it.type == type }
                     id to TileData(
                         type,
                         isActive,
@@ -83,7 +79,7 @@ object TileManager {
                 _tilesFlow.value = updated
                 withContext(Dispatchers.Main) {
                     updated.values.forEach { data ->
-                        appContext?.updateWidget(data.widgetId, data)
+                        context.updateWidget(data.widgetId, data)
                     }
                 }
             }
@@ -92,16 +88,16 @@ object TileManager {
 
     private fun snapshotWidgetIds(): Flow<List<Int>> = flow {
         while (currentCoroutineContext().isActive) {
-            emit(WidgetPrefs.getAllWidgetIds(appContext!!))
+            emit(WidgetPrefs.getAllWidgetIds(context))
             delay(1000)
         }
     }.flowOn(bgDispatcher)
 
     fun updateState(widgetId: Int) {
-        val type = WidgetPrefs.getWidgetAction(appContext!!, widgetId) ?: return
+        val type = WidgetPrefs.getWidgetAction(context, widgetId) ?: return
         scope.launch {
-            val newState = TileRepository.updateState(type)
-            val tileConfig = TileRepository.tilesRegistry.firstOrNull { it.type == type }
+            val newState = repository.updateState(type)
+            val tileConfig = repository.tilesRegistry.firstOrNull { it.type == type }
             withContext(Dispatchers.Main) {
                 val data = TileData(
                     type,
@@ -111,7 +107,7 @@ object TileManager {
                     tileConfig?.getLabel?.invoke()
                 )
                 _tilesFlow.value = _tilesFlow.value + (widgetId to data)
-                appContext?.updateWidget(widgetId, data)
+                context.updateWidget(widgetId, data)
             }
         }
     }
@@ -119,19 +115,17 @@ object TileManager {
     private fun dispose() {
         scope.cancel()
         bgDispatcher.close()
-        TileRepository.dispose()
-        appContext = null
+        repository.dispose()
     }
 
     fun getIconForTile(type: String, active: Boolean): Int {
-        return TileRepository.tilesRegistry.firstOrNull { it.type == type }?.getIcon?.invoke(active)
+        return repository.tilesRegistry.firstOrNull { it.type == type }?.getIcon?.invoke(active)
             ?: R.drawable.ic_wifi_off
     }
 
     fun setTileForWidget(widgetId: Int, type: String) {
-        if (appContext == null) return
         val isActive = false
-        val tileConfig = TileRepository.tilesRegistry.firstOrNull { it.type == type }
+        val tileConfig = repository.tilesRegistry.firstOrNull { it.type == type }
         val data = TileData(
             type,
             isActive,
@@ -140,6 +134,6 @@ object TileManager {
             tileConfig?.getLabel?.invoke()
         )
         _tilesFlow.value = _tilesFlow.value + (widgetId to data)
-        appContext?.updateWidget(widgetId, data)
+        context.updateWidget(widgetId, data)
     }
 }

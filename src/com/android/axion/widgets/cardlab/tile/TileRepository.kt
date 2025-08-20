@@ -25,21 +25,21 @@ import kotlinx.coroutines.flow.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+import javax.inject.Singleton
 
 data class TileStates(val states: Map<String, Boolean> = emptyMap())
 
-object TileRepository {
+@Singleton
+class TileRepository @Inject constructor(
+    private val context: Context
+) {
 
-    private var context: Context? = null
     private var tileConfigs: TileConfigs? = null
-
     private var isScreenOn = true
     private var isUserPresent = true
 
     private val pollingBuffer = mutableMapOf<String, Boolean>()
-    private var pollingThread: Thread? = null
-    private var pollingActive = false
-
     private val _tileStates = MutableStateFlow(TileStates())
     val tileStates: StateFlow<TileStates> = _tileStates.asStateFlow()
 
@@ -76,11 +76,8 @@ object TileRepository {
         }
     }
 
-    fun bind(appContext: Context) {
-        if (context != null) return
-        context = appContext.applicationContext
-        tileConfigs = TileConfigs(context!!)
-
+    init {
+        tileConfigs = TileConfigs(context)
         val initialStates = tileConfigs!!.tilesRegistry.associate { tile ->
             tile.type to runCatching { tile.observeState() }.getOrDefault(false)
         }
@@ -96,7 +93,7 @@ object TileRepository {
             addAction(Intent.ACTION_SCREEN_OFF)
             addAction(Intent.ACTION_USER_PRESENT)
         }
-        context!!.registerReceiver(screenReceiver, filter)
+        context.registerReceiver(screenReceiver, filter)
 
         checkFocusedTask()
     }
@@ -163,11 +160,8 @@ object TileRepository {
         debounceJob = null
         debounceScope.cancel()
         pollingExecutor.shutdownNow()
-        context?.unregisterReceiver(screenReceiver)
-        context = null
-        tileConfigs = null
+        context.unregisterReceiver(screenReceiver)
         _tileStates.value = TileStates()
-
         try {
             ActivityTaskManager.getService().unregisterTaskStackListener(taskListener)
         } catch (e: RemoteException) {

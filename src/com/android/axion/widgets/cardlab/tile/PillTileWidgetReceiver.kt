@@ -15,44 +15,65 @@ package com.android.axion.widgets.cardlab.tile
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import com.android.axion.widgets.di.TileWidgetEntryPoint
+import dagger.hilt.android.EntryPointAccessors
+import java.util.concurrent.Executors
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collectLatest
 
 class PillTileWidgetReceiver : AppWidgetProvider() {
 
+    private lateinit var tileManager: TileManager
+    private val executor = Executors.newSingleThreadExecutor()
+    private val dispatcher = executor.asCoroutineDispatcher()
+    private val scope = CoroutineScope(SupervisorJob() + dispatcher)
     private var job: Job? = null
     private var listening = false
 
+    private fun initDependencies(context: Context) {
+        if (::tileManager.isInitialized) return
+        val entryPoint = EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            TileWidgetEntryPoint::class.java
+        )
+        tileManager = entryPoint.tileManager()
+    }
+
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
+        initDependencies(context)
+
         if (intent.action == ACTION_TILE_CLICK) {
             val widgetId = intent.getIntExtra(EXTRA_WIDGET_ID, -1)
             if (widgetId != -1) {
-                TileManager.updateState(widgetId)
+                scope.launch {
+                    tileManager.updateState(widgetId)
+                }
             }
         }
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
+        initDependencies(context)
         bind(context)
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        super.onDeleted(context, appWidgetIds)
         appWidgetIds.forEach { WidgetPrefs.removeWidget(context, it) }
     }
 
     override fun onDisabled(context: Context) {
-        job?.cancel()
+        dispose()
+        executor.shutdownNow()
     }
 
     private fun startFlow(context: Context) {
         job?.cancel()
-        job = CoroutineScope(Dispatchers.Main).launch {
-            TileManager.tilesFlow.collectLatest { tiles ->
+        job = scope.launch {
+            tileManager.tilesFlow.collect { tiles ->
                 tiles.values.forEach { data ->
                     context.updateWidget(data.widgetId, data)
                 }
@@ -62,8 +83,7 @@ class PillTileWidgetReceiver : AppWidgetProvider() {
 
     fun bind(context: Context) {
         if (listening) return
-        TileManager.bind(context)
-        TileManager.addConsumer(this)
+        tileManager.addConsumer(this)
         startFlow(context)
         listening = true
     }
@@ -71,7 +91,7 @@ class PillTileWidgetReceiver : AppWidgetProvider() {
     fun dispose() {
         if (!listening) return
         job?.cancel()
-        TileManager.removeConsumer(this)
+        tileManager.removeConsumer(this)
         listening = false
     }
 }

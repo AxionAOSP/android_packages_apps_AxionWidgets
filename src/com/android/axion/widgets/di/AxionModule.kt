@@ -14,6 +14,7 @@
 package com.android.axion.widgets.di
 
 import android.content.Context
+import com.android.axion.widgets.cardlab.tile.*
 import com.android.axion.widgets.manager.*
 import com.android.axion.widgets.quicklook.QuickLookWidgetInteractor
 import com.android.axion.widgets.provider.*
@@ -82,6 +83,26 @@ object AxionModule {
     }
 }
 
+@Module
+@InstallIn(SingletonComponent::class)
+object TileModule {
+
+    @Provides
+    @Singleton
+    fun provideTileRepository(@ApplicationContext context: Context): TileRepository {
+        return TileRepository(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTileManager(
+        @ApplicationContext context: Context,
+        repository: TileRepository
+    ): TileManager {
+        return TileManager(context, repository)
+    }
+}
+
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface QuickLookWidgetEntryPoint {
@@ -93,4 +114,11 @@ interface QuickLookWidgetEntryPoint {
 @InstallIn(SingletonComponent::class)
 interface BatteryWidgetEntryPoint {
     fun batteryDataManager(): BatteryDataManager
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface TileWidgetEntryPoint {
+    fun tileRepository(): TileRepository
+    fun tileManager(): TileManager
 }

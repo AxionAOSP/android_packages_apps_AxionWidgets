@@ -41,10 +41,24 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.*
 import androidx.core.view.WindowCompat
 import com.android.axion.widgets.R
+import com.android.axion.widgets.di.TileWidgetEntryPoint
+import dagger.hilt.android.EntryPointAccessors
 
 class TileConfigureActivity : ComponentActivity() {
 
     private var widgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+    private lateinit var tileManager: TileManager
+    private lateinit var tileRepository: TileRepository
+
+    private fun initDependencies(context: Context) {
+        if (::tileManager.isInitialized && ::tileRepository.isInitialized) return
+        val entryPoint = EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            TileWidgetEntryPoint::class.java
+        )
+        tileManager = entryPoint.tileManager()
+        tileRepository = entryPoint.tileRepository()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -60,19 +74,18 @@ class TileConfigureActivity : ComponentActivity() {
             return
         }
 
-        TileRepository.bind(this)
+        initDependencies(this)
 
         setContent {
             TileConfigureTheme {
-                WidgetConfigScreen(widgetId) { selectedTile ->
+                WidgetConfigScreen(widgetId, tileRepository) { selectedTile ->
                     val currentTile = WidgetPrefs.getWidgetAction(this, widgetId)
                     if (currentTile == selectedTile) {
                         finish()
                         return@WidgetConfigScreen
                     }
                     WidgetPrefs.setWidgetAction(this, widgetId, selectedTile)
-                    TileManager.bind(this)
-                    TileManager.setTileForWidget(widgetId, selectedTile)
+                    tileManager.setTileForWidget(widgetId, selectedTile)
                     val resultIntent = Intent().apply {
                         putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
                     }
@@ -107,8 +120,12 @@ fun TileConfigureTheme(content: @Composable () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WidgetConfigScreen(widgetId: Int, onTileSelected: (String) -> Unit) {
-    val tiles = TileRepository.tilesRegistry
+fun WidgetConfigScreen(
+    widgetId: Int,
+    tileRepository: TileRepository,
+    onTileSelected: (String) -> Unit
+) {
+    val tiles = tileRepository.tilesRegistry
     val context = LocalContext.current
 
     Scaffold(
