@@ -17,64 +17,69 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
-import android.view.View
-import android.widget.RemoteViews
 import com.android.axion.widgets.callback.QuickLookDataCallback
 import com.android.axion.widgets.data.QuickLookData
+import com.android.axion.widgets.di.QuickLookWidgetEntryPoint
 import com.android.axion.widgets.manager.QuickLookDataManager
-import java.text.SimpleDateFormat
-import java.util.*
+import com.android.axion.widgets.quicklook.QuickLookWidgetInteractor
+import dagger.hilt.android.EntryPointAccessors
 
 class QuickLookWidgetReceiver : AppWidgetProvider(), QuickLookDataCallback {
 
-    private var interactor: QuickLookWidgetInteractor? = null
+    private lateinit var interactor: QuickLookWidgetInteractor
+    private lateinit var dataManager: QuickLookDataManager
     private var listening = false
 
-    private fun getInteractor(context: Context): QuickLookWidgetInteractor {
-        if (interactor == null) {
-            interactor = QuickLookWidgetInteractor(context)
-        }
-        return interactor!!
+    private fun initDependencies(context: Context) {
+        if (::interactor.isInitialized && ::dataManager.isInitialized) return
+        val entryPoint = EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            QuickLookWidgetEntryPoint::class.java
+        )
+        interactor = entryPoint.quickLookWidgetInteractor()
+        dataManager = entryPoint.quickLookDataManager()
     }
-    
+
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        init(context)
-        QuickLookDataManager.notifyListeners()
+        initDependencies(context)
+        startListening()
+        refreshWidgets()
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         super.onDeleted(context, appWidgetIds)
-        cleanup()
+        stopListening()
     }
 
     override fun onDisabled(context: Context) {
         super.onDisabled(context)
-        cleanup()
+        stopListening()
     }
-    
-    fun init(context: Context) {
+
+    private fun startListening() {
         if (listening) return
-        QuickLookDataManager.init(context)
-        QuickLookDataManager.addListener(this)
+        dataManager.addListener(this)
         listening = true
     }
-    
-    fun cleanup() {
+
+    private fun stopListening() {
         if (!listening) return
-        QuickLookDataManager.removeListener(this)
-        QuickLookDataManager.cleanup()
+        dataManager.removeListener(this)
         listening = false
     }
 
-    override fun onDataUpdated(data: QuickLookData) {
-        val context = QuickLookDataManager.getAppContext()
+    private fun refreshWidgets() {
+        val context = interactor.context
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val thisWidget = ComponentName(context, QuickLookWidgetReceiver::class.java)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
-        val interactor = getInteractor(context)
         for (appWidgetId in appWidgetIds) {
-            val views = interactor.updateRemoteViews(data)
+            val views = interactor.updateRemoteViews()
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
+    }
+
+    override fun onDataUpdated() {
+        refreshWidgets()
     }
 }

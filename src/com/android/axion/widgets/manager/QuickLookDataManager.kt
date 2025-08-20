@@ -20,13 +20,22 @@ import android.service.notification.StatusBarNotification
 import com.android.axion.widgets.callback.*
 import com.android.axion.widgets.data.*
 import com.android.axion.widgets.provider.*
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object QuickLookDataManager {
+@Singleton
+class QuickLookDataManager @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val mediaProvider: MediaPlaybackProvider,
+    private val weatherProvider: WeatherProvider,
+    private val calendarProvider: CalendarProvider,
+    private val batteryDataManager: BatteryDataManager
+) {
 
     private val listeners = mutableSetOf<QuickLookDataCallback>()
-    private lateinit var appContext: Context
     private val coroutineScope: CoroutineScope = MainScope()
 
     private var latestWeather: QuickLookData.Weather? = null
@@ -34,10 +43,7 @@ object QuickLookDataManager {
     private var latestCalendar: QuickLookData.CalendarEvent? = null
     private var latestBattery: QuickLookData.Battery? = null
 
-    private lateinit var mediaProvider: MediaPlaybackProvider
     private var mediaFlowJob: Job? = null
-
-    private lateinit var batteryStatusProvider: BatteryStatusProvider
 
     private var notificationListenerStarted = false
 
@@ -62,47 +68,35 @@ object QuickLookDataManager {
         }
     }
 
-    fun init(context: Context) {
-        if (!::appContext.isInitialized) {
-            appContext = context.applicationContext
-
-            WeatherProvider.init(appContext)
-            WeatherProvider.get().addCallback(weatherCallback)
-
-            CalendarProvider.init(appContext)
-            CalendarProvider.get().addCallback(calendarCallback)
-
-            BatteryDataManager.batteryFlow(appContext)
-                .onEach { battery ->
-                    val batteryInfo = battery?.takeIf { it.isCharging }
-                    if (latestBattery != batteryInfo) {
-                        latestBattery = batteryInfo
-                        notifyListeners()
-                    }
-                }
-                .launchIn(coroutineScope)
-
-            mediaProvider = MediaPlaybackProvider(appContext)
-
-            mediaFlowJob?.cancel()
-            mediaFlowJob = mediaProvider.mediaFlow
-                .onEach { media ->
-                    latestMedia = media
+    init {
+        weatherProvider.addCallback(weatherCallback)
+        calendarProvider.addCallback(calendarCallback)
+        batteryDataManager.batteryFlow
+            .onEach { battery ->
+                val batteryInfo = battery?.takeIf { it.isCharging }
+                if (latestBattery != batteryInfo) {
+                    latestBattery = batteryInfo
                     notifyListeners()
                 }
-                .launchIn(coroutineScope)
-
-            startNotificationListener()
-            observeNotificationFlow()
-        }
+            }
+            .launchIn(coroutineScope)
+        mediaFlowJob?.cancel()
+        mediaFlowJob = mediaProvider.mediaFlow
+            .onEach { media ->
+                latestMedia = media
+                notifyListeners()
+            }
+            .launchIn(coroutineScope)
+        startNotificationListener()
+        observeNotificationFlow()
     }
 
     private fun startNotificationListener() {
         if (notificationListenerStarted) return
         try {
-            val componentName = ComponentName(appContext, MediaNotificationListenerService::class.java)
+            val componentName = ComponentName(context, MediaNotificationListenerService::class.java)
             MediaNotificationListenerService().registerAsSystemService(
-                appContext, componentName, Process.myUid()
+                context, componentName, Process.myUid()
             )
             notificationListenerStarted = true
         } catch (e: Exception) {
@@ -119,13 +113,12 @@ object QuickLookDataManager {
     }
 
     fun updateNotifications(notifications: List<StatusBarNotification>) {
-        if (!::mediaProvider.isInitialized) return
         mediaProvider.updateNotifications(notifications)
     }
 
     fun addListener(listener: QuickLookDataCallback) {
         listeners.add(listener)
-        listener.onDataUpdated(getQuickLookData())
+        listener.onDataUpdated()
     }
 
     fun removeListener(listener: QuickLookDataCallback) {
@@ -133,10 +126,10 @@ object QuickLookDataManager {
     }
 
     fun notifyListeners() {
-        listeners.forEach { it.onDataUpdated(getQuickLookData()) }
+        listeners.forEach { it.onDataUpdated() }
     }
 
-    private fun getQuickLookData(): QuickLookData {
+    fun getQuickLookData(): QuickLookData {
         latestCalendar = latestCalendar?.takeIf { isEventValid(it) }
         return latestCalendar
             ?: latestMedia
@@ -148,7 +141,7 @@ object QuickLookDataManager {
     private fun isEventValid(event: QuickLookData.CalendarEvent): Boolean {
         val now = System.currentTimeMillis()
         if (event.endTime <= now) return false
-        return appContext.contentResolver.query(
+        return context.contentResolver.query(
             CalendarContract.Events.CONTENT_URI,
             arrayOf("deleted"),
             "_id = ?",
@@ -164,12 +157,12 @@ object QuickLookDataManager {
     }
 
     fun cleanup() {
-        WeatherProvider.get().removeCallback(weatherCallback)
-        CalendarProvider.get().removeCallback(calendarCallback)
+        weatherProvider.removeCallback(weatherCallback)
+        calendarProvider.removeCallback(calendarCallback)
         mediaFlowJob?.cancel()
         mediaProvider.cleanup()
         listeners.clear()
     }
 
-    fun getAppContext(): Context = appContext
+    fun getcontext(): Context = context
 }

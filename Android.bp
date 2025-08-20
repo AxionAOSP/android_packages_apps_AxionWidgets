@@ -33,6 +33,7 @@ android_app {
         "androidx.compose.ui_ui",
         "kotlinx-coroutines-core",
         "gson-prebuilt-jar-2.9.1",
+        "hilt_android",
     ],
 
     kotlincflags: [

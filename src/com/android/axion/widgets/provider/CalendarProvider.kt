@@ -19,30 +19,21 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.provider.*
+import android.provider.CalendarContract
+import android.provider.Settings
 import com.android.axion.widgets.data.CalendarSimpleData
 import com.android.axion.widgets.utils.WeakListenerManager
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CalendarProvider private constructor() {
+@Singleton
+class CalendarProvider @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
 
     interface Callback {
         fun onCalendarDataChanged(data: CalendarSimpleData?)
-    }
-
-    companion object {
-        @Volatile
-        private var INSTANCE: CalendarProvider? = null
-        private lateinit var appContext: Context
-
-        fun init(context: Context) {
-            appContext = context.applicationContext
-            get()
-        }
-
-        fun get(): CalendarProvider =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: CalendarProvider().also { INSTANCE = it }
-            }
     }
 
     private val handler = Handler(Looper.getMainLooper())
@@ -70,7 +61,7 @@ class CalendarProvider private constructor() {
     fun addCallback(callback: Callback) {
         callbacks.addListener(callback)
         if (isQuicklookEnabled()) {
-            handler.post { 
+            handler.post {
                 try {
                     queryCalendar()
                 } catch (e: SecurityException) {
@@ -105,7 +96,7 @@ class CalendarProvider private constructor() {
             }
         }.also { observer ->
             try {
-                val resolver = appContext.contentResolver
+                val resolver = context.contentResolver
                 val uris = listOf(
                     CalendarContract.Instances.CONTENT_URI,
                     CalendarContract.Events.CONTENT_URI,
@@ -126,7 +117,7 @@ class CalendarProvider private constructor() {
 
     private fun stopCalendarListening() {
         calendarObserver?.let {
-            appContext.contentResolver.unregisterContentObserver(it)
+            context.contentResolver.unregisterContentObserver(it)
             calendarObserver = null
         }
         isCalendarListening = false
@@ -143,7 +134,7 @@ class CalendarProvider private constructor() {
                 ContentUris.appendId(this, end)
             }.build()
 
-            val visibleEvent = appContext.contentResolver.query(
+            val visibleEvent = context.contentResolver.query(
                 uri,
                 arrayOf("event_id", "title", "begin", "end", "eventLocation"),
                 "visible = 1 AND allDay = 0 AND end > ?",
@@ -166,7 +157,7 @@ class CalendarProvider private constructor() {
     }
 
     private fun isEventValid(event: CalendarSimpleData): Boolean {
-        return appContext.contentResolver.query(
+        return context.contentResolver.query(
             CalendarContract.Events.CONTENT_URI,
             arrayOf("_id", "deleted"),
             "_id = ?",
@@ -188,7 +179,7 @@ class CalendarProvider private constructor() {
 
     private fun isQuicklookEnabled(): Boolean {
         return Settings.Secure.getInt(
-            appContext.contentResolver,
+            context.contentResolver,
             "nt_quicklook_events",
             1
         ) == 1

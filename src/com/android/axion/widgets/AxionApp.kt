@@ -11,14 +11,17 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-package com.android.axion.widgets.callback
+package com.android.axion.widgets
 
-import com.android.axion.widgets.data.*
+import android.app.Application
+import androidx.lifecycle.ProcessLifecycleOwner
+import dagger.hilt.android.HiltAndroidApp
+import android.util.Log
 
-interface QuickLookDataCallback {
-    fun onDataUpdated()
-}
-
-interface BatteryDataCallback {
-    fun onBatteryDataUpdated(data: QuickLookData.Battery?)
+@HiltAndroidApp(Application::class)
+class AxionApp : Hilt_AxionApp() {
+    override fun onCreate() {
+        super.onCreate()
+        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver())
+    }
 }

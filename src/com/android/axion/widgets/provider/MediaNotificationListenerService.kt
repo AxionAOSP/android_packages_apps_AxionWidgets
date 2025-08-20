@@ -15,6 +15,7 @@ package com.android.axion.widgets.provider
 
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import com.android.axion.widgets.di.QuickLookWidgetEntryPoint
 import com.android.axion.widgets.manager.QuickLookDataManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import dagger.hilt.android.EntryPointAccessors
 
 class MediaNotificationListenerService : NotificationListenerService() {
 
@@ -30,6 +32,13 @@ class MediaNotificationListenerService : NotificationListenerService() {
     private val notificationsMap = mutableMapOf<String, StatusBarNotification>()
     private val _notificationsFlow = MutableStateFlow<List<StatusBarNotification>>(emptyList())
     val notificationsFlow = _notificationsFlow.asStateFlow()
+
+    private val dataManager: QuickLookDataManager by lazy {
+        EntryPointAccessors.fromApplication(
+            applicationContext,
+            QuickLookWidgetEntryPoint::class.java
+        ).quickLookDataManager()
+    }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
@@ -47,7 +56,7 @@ class MediaNotificationListenerService : NotificationListenerService() {
         val currentNotifications = notificationsMap.values.toList()
         _notificationsFlow.value = currentNotifications
         try {
-            QuickLookDataManager.updateNotifications(currentNotifications)
+            dataManager.updateNotifications(currentNotifications)
         } catch (_: Exception) {}
     }
 

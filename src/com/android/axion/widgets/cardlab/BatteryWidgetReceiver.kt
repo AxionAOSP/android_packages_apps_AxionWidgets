@@ -25,6 +25,8 @@ import com.android.axion.widgets.data.*
 import com.android.axion.widgets.manager.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import com.android.axion.widgets.di.BatteryWidgetEntryPoint
+import dagger.hilt.android.EntryPointAccessors
 
 class BatteryWidgetReceiver : AppWidgetProvider() {
 
@@ -48,7 +50,12 @@ class BatteryWidgetReceiver : AppWidgetProvider() {
     fun init(context: Context) {
         if (listening) return
         listening = true
-        BatteryDataManager.batteryFlow(context)
+        val entryPoint = EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            BatteryWidgetEntryPoint::class.java
+        )
+        val batteryManager = entryPoint.batteryDataManager()
+        batteryManager.batteryFlow
             .onEach { batteryData ->
                 updateWidget(context, batteryData)
             }

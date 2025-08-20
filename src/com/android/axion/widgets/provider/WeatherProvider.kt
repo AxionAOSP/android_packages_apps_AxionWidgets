@@ -14,34 +14,23 @@
 package com.android.axion.widgets.provider
 
 import android.content.Context
-import android.net.Uri
+import android.provider.Settings
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import com.android.internal.util.android.OmniJawsClient
-import com.android.axion.widgets.data.*
-import com.android.axion.widgets.utils.*
+import com.android.axion.widgets.data.NTWeatherData
+import com.android.axion.widgets.utils.WeakListenerManager
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class WeatherProvider private constructor() : OmniJawsClient.OmniJawsObserver {
+@Singleton
+class WeatherProvider @Inject constructor(
+    @ApplicationContext private val context: Context
+) : OmniJawsClient.OmniJawsObserver {
 
     interface Callback {
         fun onWeatherUpdated(data: NTWeatherData)
-    }
-
-    companion object {
-        @Volatile
-        private var INSTANCE: WeatherProvider? = null
-        private lateinit var appContext: Context
-
-        fun init(context: Context) {
-            appContext = context.applicationContext
-            get()
-        }
-
-        fun get(): WeatherProvider =
-            INSTANCE ?: synchronized(this) {
-                INSTANCE ?: WeatherProvider().also { INSTANCE = it }
-            }
     }
 
     private val handler = Handler(Looper.getMainLooper())
@@ -87,25 +76,25 @@ class WeatherProvider private constructor() : OmniJawsClient.OmniJawsObserver {
 
     private fun startWeatherListening() {
         if (isObservingWeather) return
-        if (!OmniJawsClient.get().isOmniJawsEnabled(appContext)) return
+        if (!OmniJawsClient.get().isOmniJawsEnabled(context)) return
 
-        OmniJawsClient.get().addObserver(appContext, this)
+        OmniJawsClient.get().addObserver(context, this)
         isObservingWeather = true
     }
 
     private fun stopWeatherListening() {
         if (!isObservingWeather) return
-        OmniJawsClient.get().removeObserver(appContext, this)
+        OmniJawsClient.get().removeObserver(context, this)
         isObservingWeather = false
     }
 
     private fun queryWeather() {
-        if (!isQuicklookEnabled() || !OmniJawsClient.get().isOmniJawsEnabled(appContext)) {
+        if (!isQuicklookEnabled() || !OmniJawsClient.get().isOmniJawsEnabled(context)) {
             notifyCallbacks(NTWeatherData.EMPTY)
             return
         }
 
-        OmniJawsClient.get().queryWeather(appContext)
+        OmniJawsClient.get().queryWeather(context)
         val info = OmniJawsClient.get().weatherInfo
 
         val data = info?.run {
@@ -132,17 +121,16 @@ class WeatherProvider private constructor() : OmniJawsClient.OmniJawsObserver {
 
     private fun isQuicklookEnabled(): Boolean {
         return Settings.Secure.getInt(
-            appContext.contentResolver,
+            context.contentResolver,
             "nt_quicklook_weather",
             1
         ) == 1
     }
 
     override fun weatherUpdated() {
-        if (!isQuicklookEnabled() || !OmniJawsClient.get().isOmniJawsEnabled(appContext)) return
+        if (!isQuicklookEnabled() || !OmniJawsClient.get().isOmniJawsEnabled(context)) return
         queryWeather()
     }
 
-    override fun weatherError(errorReason: Int) {
-    }
+    override fun weatherError(errorReason: Int) {}
 }
