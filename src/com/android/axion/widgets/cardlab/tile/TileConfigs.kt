@@ -24,6 +24,7 @@ import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.net.wifi.WifiManager
 import android.provider.Settings
+import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import com.android.axion.widgets.R
 
@@ -34,6 +35,9 @@ class TileConfigs(private val context: Context) {
     private val uiModeManager by lazy { context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager }
     private val telephonyManager by lazy { context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager }
     private val cameraManager by lazy { context.getSystemService(Context.CAMERA_SERVICE) as CameraManager }
+
+    private val defaultDataSubId: Int
+        get() = SubscriptionManager.getDefaultDataSubscriptionId()
 
     private val torchStates = mutableMapOf<String, Boolean>()
 
@@ -224,27 +228,39 @@ class TileConfigs(private val context: Context) {
             tiles.add(
                 TileConfig.from(
                     getTileType(R.string.mobile_data),
-                    { telephonyManager.isDataEnabled },
                     {
-                        try { telephonyManager.setDataEnabled(!telephonyManager.isDataEnabled) } catch (_: Exception) {}
-                        telephonyManager.isDataEnabled
+                        val subId = defaultDataSubId
+                        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+                            telephonyManager.createForSubscriptionId(subId).isDataEnabled
+                        } else false
+                    },
+                    {
+                        val subId = defaultDataSubId
+                        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+                            val subTm = telephonyManager.createForSubscriptionId(subId)
+                            try {
+                                subTm.setDataEnabled(!subTm.isDataEnabled)
+                            } catch (_: Exception) {}
+                            subTm.isDataEnabled
+                        } else false
                     },
                     context,
                     labelProvider = {
-                        if (!telephonyManager.isDataEnabled) {
-                            getTileType(R.string.mobile_data)
+                        val subId = defaultDataSubId
+                        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+                            val subInfo = SubscriptionManager.from(context).getActiveSubscriptionInfo(subId)
+                            subInfo?.carrierName?.toString() ?: getTileType(R.string.mobile_data)
                         } else {
-                            telephonyManager.networkOperatorName ?: getTileType(R.string.mobile_data)
+                            getTileType(R.string.mobile_data)
                         }
                     },
                     spec = "mobile_data"
                 )
             )
         }
-
         tiles
     }
-    
+
     private fun getTileType(resId: Int): String {
         val config = context.resources.configuration
         val locale = java.util.Locale.ENGLISH
