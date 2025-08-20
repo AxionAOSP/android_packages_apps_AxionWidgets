@@ -19,8 +19,8 @@ import kotlinx.coroutines.withContext
 
 data class TileConfig(
     val type: String,
-    val observeState: suspend () -> Boolean,
-    val toggle: suspend () -> Boolean,
+    val observeState: () -> Boolean,
+    val toggle: () -> Boolean,
     val getIcon: (Boolean) -> Int,
     val getLabel: (() -> String)? = null,
     val spec: String
@@ -34,8 +34,8 @@ data class TileConfig(
             labelProvider: (() -> String)? = null,
             spec: String
         ): TileConfig {
-            val observeState: suspend () -> Boolean = { getter() }
-            val toggle: suspend () -> Boolean = { setter?.invoke() ?: !getter() }
+            val observeState: () -> Boolean = getter
+            val toggle: () -> Boolean = { setter?.invoke() ?: !getter() }
             val getIcon: (Boolean) -> Int = { active ->
                 val baseName = spec ?: type.lowercase().replace(" ", "_")
                 val resName = "ic_${baseName}_${if (active) "on" else "off"}"
