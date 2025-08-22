@@ -14,14 +14,22 @@
 package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
+import com.android.axion.widgets.WidgetLifecycleManager
+import com.android.axion.widgets.R
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import java.util.concurrent.Executors
-import java.util.concurrent.ScheduledFuture
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.selects.onTimeout
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.selects.select
+import java.util.concurrent.*
 import javax.inject.Inject
 import javax.inject.Singleton
-import com.android.axion.widgets.WidgetLifecycleManager
 
 data class TileStates(val states: Map<String, Boolean> = emptyMap())
 
@@ -32,63 +40,102 @@ class TileRepository @Inject constructor(
 ) {
 
     private val tileConfigs = TileConfigs(context)
-    private val pollingBuffer = mutableMapOf<String, Boolean>()
     private val _tileStates = MutableStateFlow(TileStates())
+
     val tileStates: StateFlow<TileStates> = _tileStates.asStateFlow()
-
     val tilesRegistry get() = tileConfigs.tilesRegistry
+    
+    private val trigger = Channel<Unit>(Channel.CONFLATED)
+    private val buffer = mutableMapOf<String, Boolean>()
 
-    private val pollingExecutor = Executors.newSingleThreadScheduledExecutor()
-    private var pollingFuture: ScheduledFuture<*>? = null
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private var job: Job? = null
 
-    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    val activeTilesFlow: Flow<Map<Int, TileData>> = tileStates
+        .map { statesSnapshot ->
+            val widgetIds = WidgetPrefs.getAllWidgetIds(context)
+            val result = mutableMapOf<Int, TileData>()
+            for (widgetId in widgetIds) {
+                val type = WidgetPrefs.getWidgetAction(context, widgetId) ?: continue
+                val isActive = statesSnapshot.states[type] ?: continue
+                val tileConfig = tilesRegistry.firstOrNull { it.type == type } ?: continue
+                result[widgetId] = TileData(
+                    type,
+                    isActive,
+                    tileConfig.getIcon?.invoke(isActive) ?: R.drawable.ic_wifi_off,
+                    widgetId,
+                    tileConfig.getLabel?.invoke()
+                )
+            }
+            result
+        }
+        .distinctUntilChanged()
 
     init {
         val initialStates = tilesRegistry.associate { tile ->
             tile.type to runCatching { tile.observeState() }.getOrDefault(false)
         }
         _tileStates.value = TileStates(initialStates)
-        pollingBuffer.putAll(initialStates)
-        coroutineScope.launch {
+        buffer.putAll(initialStates)
+
+        scope.launch {
             lifecycleManager.widgetsActive.collect { active ->
-                if (active) startPolling() else stopPolling()
+                if (active) start() else pause()
             }
         }
     }
 
-    private fun startPolling() {
-        if (pollingFuture?.isDone == false) return
-        pollingFuture = pollingExecutor.scheduleWithFixedDelay({
-            val currentStates = mutableMapOf<String, Boolean>()
-            var hasChange = false
-            for (tile in tilesRegistry) {
-                val newState = runCatching { tile.observeState() }.getOrDefault(false)
-                currentStates[tile.type] = newState
-                if (pollingBuffer[tile.type] != newState) hasChange = true
+    private fun start() {
+        if (job?.isActive == true) return
+        job = scope.launch {
+            while (isActive) {
+                select<Unit> {
+                    onTimeout(3000L) {
+                        updateTiles()
+                    }
+                    trigger.onReceive {
+                        updateTiles()
+                    }
+                }
             }
-            if (hasChange) {
-                pollingBuffer.clear()
-                pollingBuffer.putAll(currentStates)
-                _tileStates.value = TileStates(pollingBuffer.toMap())
-            }
-        }, 0, 500L, TimeUnit.MILLISECONDS)
+        }
     }
 
-    private fun stopPolling() {
-        pollingFuture?.cancel(false)
-        pollingFuture = null
+    private fun pause() {
+        job?.cancel()
+        job = null
     }
 
     suspend fun updateState(type: String): Boolean {
         val tile = tilesRegistry.firstOrNull { it.type == type } ?: return false
         val newState = withContext(Dispatchers.Default) { tile.toggle() }
-        _tileStates.update { it.copy(states = it.states + (type to newState)) }
+        buffer[type] = newState
+        trigger.trySend(Unit)
         return newState
     }
 
+    private fun updateTiles() {
+        val activeWidgetIds = WidgetPrefs.getAllWidgetIds(context)
+        val activeTypes = activeWidgetIds.mapNotNull { WidgetPrefs.getWidgetAction(context, it) }.toSet()
+        var hasChange = false
+        for (tile in tilesRegistry) {
+            if (tile.type !in activeTypes) continue
+            val newState = runCatching { tile.observeState() }.getOrDefault(false)
+            if (buffer[tile.type] != newState) {
+                buffer[tile.type] = newState
+                hasChange = true
+            }
+        }
+        if (hasChange) {
+            _tileStates.value = TileStates(buffer.toMap())
+        } else {
+            _tileStates.value = TileStates(buffer.toMap())
+        }
+    }
+
     fun dispose() {
-        stopPolling()
-        coroutineScope.cancel()
+        pause()
+        scope.cancel()
         _tileStates.value = TileStates()
     }
 }
