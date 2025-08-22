@@ -17,18 +17,16 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import com.android.axion.widgets.di.QuickLookWidgetEntryPoint
 import com.android.axion.widgets.manager.QuickLookDataManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
+import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import dagger.hilt.android.EntryPointAccessors
+import java.util.concurrent.Executors
 
 class MediaNotificationListenerService : NotificationListenerService() {
 
-    private val coroutineScope: CoroutineScope = MainScope()
+    private val coroutineScope = MainScope()
+    private val backgroundExecutor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val notificationsMap = mutableMapOf<String, StatusBarNotification>()
     private val _notificationsFlow = MutableStateFlow<List<StatusBarNotification>>(emptyList())
     val notificationsFlow = _notificationsFlow.asStateFlow()
@@ -42,34 +40,39 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        notificationsMap[sbn.key] = sbn
-        updateNotifications()
+        coroutineScope.launch(backgroundExecutor) {
+            notificationsMap[sbn.key] = sbn
+            updateNotifications()
+        }
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
-        notificationsMap.remove(sbn.key)
-        updateNotifications()
+        coroutineScope.launch(backgroundExecutor) {
+            notificationsMap.remove(sbn.key)
+            updateNotifications()
+        }
     }
 
-    private fun updateNotifications() {
+    private suspend fun updateNotifications() {
         val currentNotifications = notificationsMap.values.toList()
-        _notificationsFlow.value = currentNotifications
         try {
             dataManager.updateNotifications(currentNotifications)
         } catch (_: Exception) {}
+        withContext(Dispatchers.Main) {
+            _notificationsFlow.value = currentNotifications
+        }
     }
 
     private fun refreshNotificationsFromSystem() {
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch(backgroundExecutor) {
             val activeMap = runCatching {
                 activeNotifications?.associateBy { it.key }
             }.getOrNull() ?: emptyMap()
-            withContext(Dispatchers.Main) {
-                notificationsMap.clear()
-                notificationsMap.putAll(activeMap)
-                updateNotifications()
-            }
+
+            notificationsMap.clear()
+            notificationsMap.putAll(activeMap)
+            updateNotifications()
         }
     }
 

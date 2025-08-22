@@ -47,7 +47,21 @@ class QuickLookDataManager @Inject constructor(
 
     private var mediaFlowJob: Job? = null
     private var notificationFlowJob: Job? = null
-    private var notificationListenerStarted = false
+
+    private var notificationListenerStarted: Boolean = false
+        set(value) {
+            if (field == value) return
+            field = value
+            try {
+                val componentName = ComponentName(context, MediaNotificationListenerService::class.java)
+                val service = MediaNotificationListenerService()
+                if (value) {
+                    service.registerAsSystemService(context, componentName, Process.myUid())
+                } else {
+                    service.unregisterAsSystemService()
+                }
+            } catch (_: Exception) {}
+        }
 
     private val weatherCallback = object : WeatherProvider.Callback {
         override fun onWeatherUpdated(data: NTWeatherData) {
@@ -100,7 +114,7 @@ class QuickLookDataManager @Inject constructor(
             }
             .launchIn(coroutineScope)
 
-        startNotificationListener()
+        notificationListenerStarted = true
         observeNotificationFlow()
     }
 
@@ -110,17 +124,7 @@ class QuickLookDataManager @Inject constructor(
         mediaFlowJob?.cancel()
         notificationFlowJob?.cancel()
         mediaProvider.cleanup()
-    }
-
-    private fun startNotificationListener() {
-        if (notificationListenerStarted) return
-        try {
-            val componentName = ComponentName(context, MediaNotificationListenerService::class.java)
-            MediaNotificationListenerService().registerAsSystemService(
-                context, componentName, Process.myUid()
-            )
-            notificationListenerStarted = true
-        } catch (_: Exception) {}
+        notificationListenerStarted = false
     }
 
     private fun observeNotificationFlow() {
@@ -180,6 +184,4 @@ class QuickLookDataManager @Inject constructor(
         pause()
         listeners.clear()
     }
-
-    fun getContext(): Context = context
 }
