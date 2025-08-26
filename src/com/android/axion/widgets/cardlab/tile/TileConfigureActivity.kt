@@ -41,8 +41,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.*
 import androidx.core.view.WindowCompat
 import com.android.axion.widgets.R
-import com.android.axion.widgets.di.TileWidgetEntryPoint
-import dagger.hilt.android.EntryPointAccessors
 
 class TileConfigureActivity : ComponentActivity() {
 
@@ -52,12 +50,8 @@ class TileConfigureActivity : ComponentActivity() {
 
     private fun initDependencies(context: Context) {
         if (::tileManager.isInitialized && ::tileRepository.isInitialized) return
-        val entryPoint = EntryPointAccessors.fromApplication(
-            context.applicationContext,
-            TileWidgetEntryPoint::class.java
-        )
-        tileManager = entryPoint.tileManager()
-        tileRepository = entryPoint.tileRepository()
+        tileManager = TileManager.get(context.applicationContext)
+        tileRepository = TileRepository.get(context.applicationContext)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

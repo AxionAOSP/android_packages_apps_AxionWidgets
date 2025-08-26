@@ -18,6 +18,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.WidgetLifecycleManager
 import com.android.axion.widgets.R
 import java.util.concurrent.Executors
@@ -122,5 +123,12 @@ class TileManager @Inject constructor(
         scope.cancel()
         bgDispatcher.close()
         repository.dispose()
+    }
+    
+    companion object {
+        fun get(context: Context): TileManager {
+            val app = context.applicationContext as AxionApp
+            return app.appComponent.tileManager()
+        }
     }
 }

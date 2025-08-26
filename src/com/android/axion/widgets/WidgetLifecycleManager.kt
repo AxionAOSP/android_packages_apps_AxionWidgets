@@ -112,4 +112,11 @@ class WidgetLifecycleManager @Inject constructor(
             e.printStackTrace()
         }
     }
+    
+    companion object {
+        fun get(context: Context): WidgetLifecycleManager {
+            val app = context.applicationContext as AxionApp
+            return app.appComponent.lifecycleManager()
+        }
+    }
 }

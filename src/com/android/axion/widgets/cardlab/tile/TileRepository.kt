@@ -14,6 +14,7 @@
 package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
+import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.WidgetLifecycleManager
 import com.android.axion.widgets.R
 import kotlinx.coroutines.*
@@ -94,7 +95,7 @@ class TileRepository @Inject constructor(
                         updateTiles()
                     }
                     trigger.onReceive {
-                        updateTiles()
+                        updateTiles(force = true)
                     }
                 }
             }
@@ -114,10 +115,11 @@ class TileRepository @Inject constructor(
         return newState
     }
 
-    private fun updateTiles() {
+    private fun updateTiles(force: Boolean = false) {
         val activeWidgetIds = WidgetPrefs.getAllWidgetIds(context)
         val activeTypes = activeWidgetIds.mapNotNull { WidgetPrefs.getWidgetAction(context, it) }.toSet()
         var hasChange = false
+
         for (tile in tilesRegistry) {
             if (tile.type !in activeTypes) continue
             val newState = runCatching { tile.observeState() }.getOrDefault(false)
@@ -126,9 +128,8 @@ class TileRepository @Inject constructor(
                 hasChange = true
             }
         }
-        if (hasChange) {
-            _tileStates.value = TileStates(buffer.toMap())
-        } else {
+
+        if (hasChange || force) {
             _tileStates.value = TileStates(buffer.toMap())
         }
     }
@@ -137,5 +138,12 @@ class TileRepository @Inject constructor(
         pause()
         scope.cancel()
         _tileStates.value = TileStates()
+    }
+    
+    companion object {
+        fun get(context: Context): TileRepository {
+            val app = context.applicationContext as AxionApp
+            return app.appComponent.tileRepository()
+        }
     }
 }

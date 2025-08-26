@@ -15,13 +15,19 @@ package com.android.axion.widgets
 
 import android.app.Application
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.android.axion.widgets.di.AxionAppComponent
+import com.android.axion.widgets.di.DaggerAxionAppComponent
 import dagger.hilt.android.HiltAndroidApp
-import android.util.Log
 
 @HiltAndroidApp(Application::class)
 class AxionApp : Hilt_AxionApp() {
+
+    lateinit var appComponent: AxionAppComponent
+        private set
+
     override fun onCreate() {
         super.onCreate()
+        appComponent = DaggerAxionAppComponent.factory().create(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver(this))
     }
 }

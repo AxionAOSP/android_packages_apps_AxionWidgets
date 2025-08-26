@@ -17,6 +17,7 @@ import android.content.*
 import android.os.Process
 import android.provider.CalendarContract
 import android.service.notification.StatusBarNotification
+import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.callback.*
 import com.android.axion.widgets.data.*
 import com.android.axion.widgets.provider.*
@@ -47,6 +48,7 @@ class QuickLookDataManager @Inject constructor(
 
     private var mediaFlowJob: Job? = null
     private var notificationFlowJob: Job? = null
+    private var batteyFlowJob: Job? = null
 
     private var notificationListenerStarted: Boolean = false
         set(value) {
@@ -96,7 +98,8 @@ class QuickLookDataManager @Inject constructor(
         weatherProvider.addCallback(weatherCallback)
         calendarProvider.addCallback(calendarCallback)
 
-        batteryDataManager.batteryFlow
+        batteyFlowJob?.cancel()
+        batteyFlowJob = batteryDataManager.batteryFlow
             .onEach { battery ->
                 val batteryInfo = battery?.takeIf { it.isCharging }
                 if (latestBattery != batteryInfo) {
@@ -122,6 +125,7 @@ class QuickLookDataManager @Inject constructor(
         weatherProvider.removeCallback(weatherCallback)
         calendarProvider.removeCallback(calendarCallback)
         mediaFlowJob?.cancel()
+        batteyFlowJob?.cancel()
         notificationFlowJob?.cancel()
         mediaProvider.cleanup()
         notificationListenerStarted = false
@@ -183,5 +187,12 @@ class QuickLookDataManager @Inject constructor(
     fun dispose() {
         pause()
         listeners.clear()
+    }
+    
+    companion object {
+        fun get(context: Context): QuickLookDataManager {
+            val app = context.applicationContext as AxionApp
+            return app.appComponent.quickLookDataManager()
+        }
     }
 }

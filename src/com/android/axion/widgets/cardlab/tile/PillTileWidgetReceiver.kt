@@ -17,27 +17,15 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import com.android.axion.widgets.di.TileWidgetEntryPoint
-import dagger.hilt.android.EntryPointAccessors
-import java.util.concurrent.Executors
-import kotlinx.coroutines.*
 
 class PillTileWidgetReceiver : AppWidgetProvider() {
 
     private lateinit var tileManager: TileManager
-    private val executor = Executors.newSingleThreadExecutor()
-    private val dispatcher = executor.asCoroutineDispatcher()
-    private val scope = CoroutineScope(SupervisorJob() + dispatcher)
-    private var job: Job? = null
     private var listening = false
 
     private fun initDependencies(context: Context) {
         if (::tileManager.isInitialized) return
-        val entryPoint = EntryPointAccessors.fromApplication(
-            context.applicationContext,
-            TileWidgetEntryPoint::class.java
-        )
-        tileManager = entryPoint.tileManager()
+        tileManager = TileManager.get(context)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -47,17 +35,19 @@ class PillTileWidgetReceiver : AppWidgetProvider() {
         if (intent.action == ACTION_TILE_CLICK) {
             val widgetId = intent.getIntExtra(EXTRA_WIDGET_ID, -1)
             if (widgetId != -1) {
-                scope.launch {
-                    tileManager.updateState(widgetId)
-                }
+                tileManager.updateState(widgetId)
             }
         }
     }
 
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         initDependencies(context)
-        bind(context)
+        bind()
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
@@ -67,30 +57,16 @@ class PillTileWidgetReceiver : AppWidgetProvider() {
 
     override fun onDisabled(context: Context) {
         dispose()
-        executor.shutdownNow()
     }
 
-    private fun startFlow(context: Context) {
-        job?.cancel()
-        job = scope.launch {
-            tileManager.tilesFlow.collect { tiles ->
-                tiles.values.forEach { data ->
-                    context.updateWidget(data.widgetId, data)
-                }
-            }
-        }
-    }
-
-    fun bind(context: Context) {
+    private fun bind() {
         if (listening) return
         tileManager.addConsumer(this)
-        startFlow(context)
         listening = true
     }
 
-    fun dispose() {
+    private fun dispose() {
         if (!listening) return
-        job?.cancel()
         tileManager.removeConsumer(this)
         listening = false
     }

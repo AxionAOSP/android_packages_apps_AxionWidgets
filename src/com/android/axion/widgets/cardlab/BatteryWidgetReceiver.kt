@@ -14,58 +14,54 @@
 package com.android.axion.widgets.cardlab
 
 import android.app.PendingIntent
-import android.appwidget.*
-import android.content.*
+import android.appwidget.AppWidgetManager
+import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import com.android.axion.widgets.R
-import com.android.axion.widgets.data.*
-import com.android.axion.widgets.manager.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import com.android.axion.widgets.di.BatteryWidgetEntryPoint
-import dagger.hilt.android.EntryPointAccessors
+import com.android.axion.widgets.data.QuickLookData
+import com.android.axion.widgets.manager.BatteryWidgetManager
 
-class BatteryWidgetReceiver : AppWidgetProvider() {
+class BatteryWidgetReceiver : AppWidgetProvider(), BatteryWidgetManager.Callback {
 
-    private var listening = false
-    private val coroutineScope = MainScope()
+    private lateinit var batteryWidgetManager: BatteryWidgetManager
+    private lateinit var appContext: Context
 
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
         init(context)
     }
 
-    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        super.onDeleted(context, appWidgetIds)
-        cleanup()
-    }
-
     override fun onDisabled(context: Context) {
-        super.onDisabled(context)
-        cleanup()
+        if (::batteryWidgetManager.isInitialized) {
+            batteryWidgetManager.removeListener(this)
+        }
     }
 
-    fun init(context: Context) {
-        if (listening) return
-        listening = true
-        val entryPoint = EntryPointAccessors.fromApplication(
-            context.applicationContext,
-            BatteryWidgetEntryPoint::class.java
-        )
-        val batteryManager = entryPoint.batteryDataManager()
-        batteryManager.batteryFlow
-            .onEach { batteryData ->
-                updateWidget(context, batteryData)
-            }
-            .launchIn(coroutineScope)
+    private fun init(context: Context) {
+        if (::batteryWidgetManager.isInitialized) return
+        appContext = context.applicationContext
+        batteryWidgetManager = BatteryWidgetManager.get(context)
+        batteryWidgetManager.addListener(this)
+    }
+
+    override fun onBatteryUpdated(data: QuickLookData.Battery?) {
+        updateWidget(appContext, data)
     }
 
     private fun updateWidget(context: Context, data: QuickLookData.Battery?) {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val thisWidget = ComponentName(context, BatteryWidgetReceiver::class.java)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
+
         val intent = Intent(Intent.ACTION_POWER_USAGE_SUMMARY).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
@@ -75,32 +71,35 @@ class BatteryWidgetReceiver : AppWidgetProvider() {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        for (appWidgetId in appWidgetIds) {
-            val views = RemoteViews(context.packageName, R.layout.widget_battery)
-            views.setOnClickPendingIntent(R.id.battery_card_root, pendingIntent)
-            if (data != null) {
-                val batteryBg = createBatteryBg(context, data.level)
-                if (data.level <= 20){
-                    views.setViewVisibility(R.id.battery_bg_view_low, View.VISIBLE)
-                    views.setImageViewBitmap(R.id.battery_bg_view_low, batteryBg)
-                    views.setViewVisibility(R.id.battery_bg_view, View.GONE)
-                    views.setImageViewBitmap(R.id.battery_bg_view, null)
+
+        appWidgetIds.forEach { appWidgetId ->
+            val views = RemoteViews(context.packageName, R.layout.widget_battery).apply {
+                setOnClickPendingIntent(R.id.battery_card_root, pendingIntent)
+
+                if (data != null) {
+                    val batteryBg = createBatteryBg(context, data.level)
+                    if (data.level <= 20) {
+                        setViewVisibility(R.id.battery_bg_view_low, View.VISIBLE)
+                        setImageViewBitmap(R.id.battery_bg_view_low, batteryBg)
+                        setViewVisibility(R.id.battery_bg_view, View.GONE)
+                        setImageViewBitmap(R.id.battery_bg_view, null)
+                    } else {
+                        setViewVisibility(R.id.battery_bg_view_low, View.GONE)
+                        setImageViewBitmap(R.id.battery_bg_view_low, null)
+                        setViewVisibility(R.id.battery_bg_view, View.VISIBLE)
+                        setImageViewBitmap(R.id.battery_bg_view, batteryBg)
+                    }
+
+                    setViewVisibility(R.id.battery_percentage, View.VISIBLE)
+                    setTextViewText(R.id.battery_percentage, "${data.level}%")
+                    setViewVisibility(
+                        R.id.battery_view_bottom_left,
+                        if (data.isCharging) View.VISIBLE else View.GONE
+                    )
                 } else {
-                    views.setViewVisibility(R.id.battery_bg_view_low, View.GONE)
-                    views.setImageViewBitmap(R.id.battery_bg_view_low, null)
-                    views.setViewVisibility(R.id.battery_bg_view, View.VISIBLE)
-                    views.setImageViewBitmap(R.id.battery_bg_view, batteryBg)
+                    setTextViewText(R.id.battery_percentage, "100%")
+                    setViewVisibility(R.id.battery_view_bottom_left, View.INVISIBLE)
                 }
-                views.setViewVisibility(R.id.battery_percentage, View.VISIBLE)
-                if (data.isCharging) {
-                    views.setViewVisibility(R.id.battery_view_bottom_left, View.VISIBLE)
-                } else {
-                    views.setViewVisibility(R.id.battery_view_bottom_left, View.GONE)
-                }
-                views.setTextViewText(R.id.battery_percentage, "${data.level}%")
-            } else {
-                views.setTextViewText(R.id.battery_percentage, "100%")
-                views.setViewVisibility(R.id.battery_view_bottom_left, View.INVISIBLE)
             }
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
@@ -113,21 +112,16 @@ class BatteryWidgetReceiver : AppWidgetProvider() {
             sizeDp.toFloat(),
             context.resources.displayMetrics
         ).toInt()
-        val bitmap = Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            style = Paint.Style.FILL
-            isDither = true
-        }
-        val rect = RectF(0f, 0f, px.toFloat(), px.toFloat())
-        val sweepAngle = (batteryLevel / 100f) * 360f
-        canvas.drawArc(rect, -90f, sweepAngle, true, paint)
-        return bitmap
-    }
 
-    fun cleanup() {
-        if (!listening) return
-        listening = false
-        coroutineScope.cancel()
+        return Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888).apply {
+            val canvas = Canvas(this)
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                style = Paint.Style.FILL
+                isDither = true
+            }
+            val rect = RectF(0f, 0f, px.toFloat(), px.toFloat())
+            val sweepAngle = (batteryLevel / 100f) * 360f
+            canvas.drawArc(rect, -90f, sweepAngle, true, paint)
+        }
     }
 }

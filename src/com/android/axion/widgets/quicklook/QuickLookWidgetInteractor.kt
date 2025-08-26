@@ -18,6 +18,7 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
+import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.R
 import com.android.axion.widgets.data.*
 import com.android.axion.widgets.manager.QuickLookDataManager
@@ -78,7 +79,9 @@ class QuickLookWidgetInteractor @Inject constructor(
                 val iconBitmap = ContextCompat.getDrawable(context, R.drawable.ic_battery_charging)?.toBitmap()
                 val isFull = qlData.level == 100 && qlData.isCharging
                 val chargingStatus = context.getString(if (isFull) R.string.full_charge else R.string.charging)
-                val chargingTime = qlData.chargingTimeRemaining?.let { (it + 59999) / 60000 }
+                val chargingTime = qlData.chargingTimeRemaining
+                    ?.let { (it + 59999) / 60000 }
+                    ?.takeIf { it > 0 }
                     ?.let { context.getString(R.string.minutes_left, it) }
 
                 val secondaryText = when {
@@ -110,5 +113,12 @@ class QuickLookWidgetInteractor @Inject constructor(
         QuickLookActions.getDateClickPendingIntent(context)?.let { views.setOnClickPendingIntent(R.id.date_text, it) }
 
         return views
+    }
+    
+    companion object {
+        fun get(context: Context): QuickLookWidgetInteractor {
+            val app = context.applicationContext as AxionApp
+            return app.appComponent.quickLookWidgetInteractor()
+        }
     }
 }

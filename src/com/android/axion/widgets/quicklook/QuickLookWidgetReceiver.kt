@@ -18,11 +18,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import com.android.axion.widgets.callback.QuickLookDataCallback
-import com.android.axion.widgets.data.QuickLookData
-import com.android.axion.widgets.di.QuickLookWidgetEntryPoint
 import com.android.axion.widgets.manager.QuickLookDataManager
-import com.android.axion.widgets.quicklook.QuickLookWidgetInteractor
-import dagger.hilt.android.EntryPointAccessors
 
 class QuickLookWidgetReceiver : AppWidgetProvider(), QuickLookDataCallback {
 
@@ -32,27 +28,21 @@ class QuickLookWidgetReceiver : AppWidgetProvider(), QuickLookDataCallback {
 
     private fun initDependencies(context: Context) {
         if (::interactor.isInitialized && ::dataManager.isInitialized) return
-        val entryPoint = EntryPointAccessors.fromApplication(
-            context.applicationContext,
-            QuickLookWidgetEntryPoint::class.java
-        )
-        interactor = entryPoint.quickLookWidgetInteractor()
-        dataManager = entryPoint.quickLookDataManager()
+        interactor = QuickLookWidgetInteractor.get(context)
+        dataManager = QuickLookDataManager.get(context)
     }
 
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
         initDependencies(context)
         startListening()
         refreshWidgets()
     }
 
-    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        super.onDeleted(context, appWidgetIds)
-        stopListening()
-    }
-
     override fun onDisabled(context: Context) {
-        super.onDisabled(context)
         stopListening()
     }
 
@@ -73,7 +63,8 @@ class QuickLookWidgetReceiver : AppWidgetProvider(), QuickLookDataCallback {
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val thisWidget = ComponentName(context, QuickLookWidgetReceiver::class.java)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
-        for (appWidgetId in appWidgetIds) {
+
+        appWidgetIds.forEach { appWidgetId ->
             val views = interactor.updateRemoteViews()
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }

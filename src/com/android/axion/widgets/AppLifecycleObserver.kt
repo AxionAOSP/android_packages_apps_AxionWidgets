@@ -20,13 +20,11 @@ import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
-import com.android.axion.widgets.di.WidgetLifecycleManagerEntryPoint
 
 class AppLifecycleObserver(private val context: Context) : DefaultLifecycleObserver {
 
     private val lifecycleManager: WidgetLifecycleManager by lazy {
-        EntryPointAccessors.fromApplication(context, WidgetLifecycleManagerEntryPoint::class.java)
-            .widgetLifecycleManager()
+        WidgetLifecycleManager.get(context)
     }
 
     override fun onCreate(owner: LifecycleOwner) {

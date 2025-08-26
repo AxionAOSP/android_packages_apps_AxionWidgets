@@ -14,18 +14,24 @@
 package com.android.axion.widgets.di
 
 import android.content.Context
-import com.android.axion.widgets.cardlab.tile.*
-import com.android.axion.widgets.manager.*
-import com.android.axion.widgets.quicklook.QuickLookWidgetInteractor
-import com.android.axion.widgets.provider.*
 import com.android.axion.widgets.WidgetLifecycleManager
+import com.android.axion.widgets.cardlab.tile.TileManager
+import com.android.axion.widgets.cardlab.tile.TileRepository
+import com.android.axion.widgets.manager.BatteryDataManager
+import com.android.axion.widgets.manager.BatteryWidgetManager
+import com.android.axion.widgets.manager.QuickLookDataManager
+import com.android.axion.widgets.provider.BatteryStatusProvider
+import com.android.axion.widgets.provider.CalendarProvider
+import com.android.axion.widgets.provider.MediaPlaybackProvider
+import com.android.axion.widgets.provider.WeatherProvider
+import com.android.axion.widgets.quicklook.QuickLookWidgetInteractor
+import dagger.BindsInstance
+import dagger.Component
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.EntryPoint
-import dagger.hilt.EntryPoints
-import dagger.hilt.components.SingletonComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
@@ -34,33 +40,48 @@ object AxionModule {
 
     @Provides
     @Singleton
-    fun provideBatteryDataManager(@ApplicationContext context: Context, batteryStatusProvider: BatteryStatusProvider): BatteryDataManager {
-        return BatteryDataManager(context, batteryStatusProvider)
-    }
+    fun provideBatteryDataManager(
+        @ApplicationContext context: Context,
+        batteryStatusProvider: BatteryStatusProvider
+    ): BatteryDataManager =
+        BatteryDataManager(context, batteryStatusProvider)
 
     @Provides
     @Singleton
-    fun provideBatteryStatusProvider(@ApplicationContext context: Context): BatteryStatusProvider {
-        return BatteryStatusProvider(context)
-    }
+    fun provideBatteryWidgetManager(
+        @ApplicationContext context: Context,
+        batteryDataManager: BatteryDataManager,
+        lifecycleManager: WidgetLifecycleManager
+    ): BatteryWidgetManager =
+        BatteryWidgetManager(context, batteryDataManager, lifecycleManager)
 
     @Provides
     @Singleton
-    fun provideWeatherProvider(@ApplicationContext context: Context): WeatherProvider {
-        return WeatherProvider(context)
-    }
+    fun provideBatteryStatusProvider(
+        @ApplicationContext context: Context
+    ): BatteryStatusProvider =
+        BatteryStatusProvider(context)
 
     @Provides
     @Singleton
-    fun provideCalendarProvider(@ApplicationContext context: Context): CalendarProvider {
-        return CalendarProvider(context)
-    }
+    fun provideWeatherProvider(
+        @ApplicationContext context: Context
+    ): WeatherProvider =
+        WeatherProvider(context)
 
     @Provides
     @Singleton
-    fun provideMediaPlaybackProvider(@ApplicationContext context: Context): MediaPlaybackProvider {
-        return MediaPlaybackProvider(context)
-    }
+    fun provideCalendarProvider(
+        @ApplicationContext context: Context
+    ): CalendarProvider =
+        CalendarProvider(context)
+
+    @Provides
+    @Singleton
+    fun provideMediaPlaybackProvider(
+        @ApplicationContext context: Context
+    ): MediaPlaybackProvider =
+        MediaPlaybackProvider(context)
 
     @Provides
     @Singleton
@@ -71,26 +92,30 @@ object AxionModule {
         calendarProvider: CalendarProvider,
         batteryDataManager: BatteryDataManager,
         lifecycleManager: WidgetLifecycleManager
-    ): QuickLookDataManager {
-        return QuickLookDataManager(context, mediaProvider, weatherProvider, calendarProvider, batteryDataManager, lifecycleManager)
-    }
+    ): QuickLookDataManager =
+        QuickLookDataManager(
+            context,
+            mediaProvider,
+            weatherProvider,
+            calendarProvider,
+            batteryDataManager,
+            lifecycleManager
+        )
 
     @Provides
     @Singleton
     fun provideQuickLookWidgetInteractor(
         @ApplicationContext context: Context,
         dataManager: QuickLookDataManager
-    ): QuickLookWidgetInteractor {
-        return QuickLookWidgetInteractor(context, dataManager)
-    }
+    ): QuickLookWidgetInteractor =
+        QuickLookWidgetInteractor(context, dataManager)
 
     @Provides
     @Singleton
     fun provideWidgetLifecycleManager(
         @ApplicationContext context: Context
-    ): WidgetLifecycleManager {
-        return WidgetLifecycleManager(context)
-    }
+    ): WidgetLifecycleManager =
+        WidgetLifecycleManager(context)
 }
 
 @Module
@@ -99,9 +124,11 @@ object TileModule {
 
     @Provides
     @Singleton
-    fun provideTileRepository(@ApplicationContext context: Context, lifecycleManager: WidgetLifecycleManager): TileRepository {
-        return TileRepository(context, lifecycleManager)
-    }
+    fun provideTileRepository(
+        @ApplicationContext context: Context,
+        lifecycleManager: WidgetLifecycleManager
+    ): TileRepository =
+        TileRepository(context, lifecycleManager)
 
     @Provides
     @Singleton
@@ -109,33 +136,31 @@ object TileModule {
         @ApplicationContext context: Context,
         repository: TileRepository,
         lifecycleManager: WidgetLifecycleManager
-    ): TileManager {
-        return TileManager(context, repository, lifecycleManager)
-    }
+    ): TileManager =
+        TileManager(context, repository, lifecycleManager)
 }
 
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface QuickLookWidgetEntryPoint {
+@Singleton
+@Component(
+    modules = [
+        AxionModule::class,
+        TileModule::class
+    ]
+)
+interface AxionAppComponent {
+
     fun quickLookWidgetInteractor(): QuickLookWidgetInteractor
     fun quickLookDataManager(): QuickLookDataManager
-}
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface BatteryWidgetEntryPoint {
     fun batteryDataManager(): BatteryDataManager
-}
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface TileWidgetEntryPoint {
+    fun batteryWidgetManager(): BatteryWidgetManager
     fun tileRepository(): TileRepository
     fun tileManager(): TileManager
-}
+    fun lifecycleManager(): WidgetLifecycleManager
 
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface WidgetLifecycleManagerEntryPoint {
-    fun widgetLifecycleManager(): WidgetLifecycleManager
+    @Component.Factory
+    interface Factory {
+        fun create(
+            @BindsInstance @ApplicationContext context: Context
+        ): AxionAppComponent
+    }
 }
