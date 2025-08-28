@@ -38,7 +38,9 @@ class BatteryWidgetManager @Inject constructor(
     private val listeners = mutableSetOf<Callback>()
     private val coroutineScope: CoroutineScope = MainScope()
 
-    private var latestBattery: QuickLookData.Battery? = null
+    private val _batteryState = MutableStateFlow<QuickLookData.Battery?>(null)
+    val batteryState: StateFlow<QuickLookData.Battery?> = _batteryState.asStateFlow()
+
     private var batteryFlowJob: Job? = null
 
     init {
@@ -50,24 +52,23 @@ class BatteryWidgetManager @Inject constructor(
     }
 
     private fun start() {
-        batteryFlowJob?.cancel()
+        if (batteryFlowJob?.isActive == true) return
         batteryFlowJob = batteryDataManager.batteryFlow
             .onEach { battery ->
-                if (latestBattery != battery) {
-                    latestBattery = battery
-                    notifyListeners()
-                }
+                _batteryState.value = battery
+                listeners.forEach { it.onBatteryUpdated(battery) }
             }
             .launchIn(coroutineScope)
     }
 
     private fun pause() {
         batteryFlowJob?.cancel()
+        batteryFlowJob = null
     }
 
     fun addListener(listener: Callback) {
         listeners.add(listener)
-        listener.onBatteryUpdated(latestBattery)
+        listener.onBatteryUpdated(_batteryState.value)
     }
 
     fun removeListener(listener: Callback) {
@@ -75,17 +76,13 @@ class BatteryWidgetManager @Inject constructor(
         if (listeners.isEmpty()) dispose()
     }
 
-    private fun notifyListeners() {
-        listeners.forEach { it.onBatteryUpdated(latestBattery) }
-    }
-
-    fun getBatteryData(): QuickLookData.Battery? = latestBattery
+    fun getBatteryData(): QuickLookData.Battery? = _batteryState.value
 
     fun dispose() {
         pause()
         listeners.clear()
     }
-    
+
     companion object {
         fun get(context: Context): BatteryWidgetManager {
             val app = context.applicationContext as AxionApp

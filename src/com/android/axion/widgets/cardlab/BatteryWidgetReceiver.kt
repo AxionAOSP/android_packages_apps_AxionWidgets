@@ -97,7 +97,7 @@ class BatteryWidgetReceiver : AppWidgetProvider(), BatteryWidgetManager.Callback
                         if (data.isCharging) View.VISIBLE else View.GONE
                     )
                 } else {
-                    setTextViewText(R.id.battery_percentage, "100%")
+                    setTextViewText(R.id.battery_percentage, "")
                     setViewVisibility(R.id.battery_view_bottom_left, View.INVISIBLE)
                 }
             }
