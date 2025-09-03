@@ -28,6 +28,5 @@ class AxionApp : Hilt_AxionApp() {
     override fun onCreate() {
         super.onCreate()
         appComponent = DaggerAxionAppComponent.factory().create(this)
-        ProcessLifecycleOwner.get().lifecycle.addObserver(AppLifecycleObserver(this))
     }
 }

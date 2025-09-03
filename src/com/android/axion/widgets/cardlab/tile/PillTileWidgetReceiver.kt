@@ -20,22 +20,17 @@ import android.content.Intent
 
 class PillTileWidgetReceiver : AppWidgetProvider() {
 
-    private lateinit var tileManager: TileManager
-    private var listening = false
+    private val Context.tm: TileManager
+        get() = TileManager.get(this)
 
-    private fun initDependencies(context: Context) {
-        if (::tileManager.isInitialized) return
-        tileManager = TileManager.get(context)
-    }
+    private var initialized = false
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        initDependencies(context)
-
         if (intent.action == ACTION_TILE_CLICK) {
             val widgetId = intent.getIntExtra(EXTRA_WIDGET_ID, -1)
             if (widgetId != -1) {
-                tileManager.updateState(widgetId)
+                context.tm.updateState(widgetId)
             }
         }
     }
@@ -46,8 +41,7 @@ class PillTileWidgetReceiver : AppWidgetProvider() {
         appWidgetIds: IntArray
     ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
-        initDependencies(context)
-        bind()
+        if (!initialized) init(context)
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
@@ -56,18 +50,12 @@ class PillTileWidgetReceiver : AppWidgetProvider() {
     }
 
     override fun onDisabled(context: Context) {
-        dispose()
+        context.tm.dispose()
+        initialized = false
     }
 
-    private fun bind() {
-        if (listening) return
-        tileManager.addConsumer(this)
-        listening = true
-    }
-
-    private fun dispose() {
-        if (!listening) return
-        tileManager.removeConsumer(this)
-        listening = false
+    private fun init(context: Context) {
+        context.tm.init()
+        initialized = true
     }
 }

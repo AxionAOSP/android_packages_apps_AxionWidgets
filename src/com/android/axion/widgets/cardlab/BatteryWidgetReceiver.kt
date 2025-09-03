@@ -29,55 +29,57 @@ import com.android.axion.widgets.manager.BatteryWidgetManager
 
 class BatteryWidgetReceiver : AppWidgetProvider(), BatteryWidgetManager.Callback {
 
-    private lateinit var batteryWidgetManager: BatteryWidgetManager
+    private val Context.bm: BatteryWidgetManager
+        get() = BatteryWidgetManager.get(this)
+
     private lateinit var appContext: Context
+    private var initialized = false
 
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        init(context)
+        if (!initialized) init(context)
     }
 
     override fun onDisabled(context: Context) {
-        if (::batteryWidgetManager.isInitialized) {
-            batteryWidgetManager.removeListener(this)
-        }
+        context.bm.dispose()
+        initialized = false
     }
 
     private fun init(context: Context) {
-        if (::batteryWidgetManager.isInitialized) return
         appContext = context.applicationContext
-        batteryWidgetManager = BatteryWidgetManager.get(context)
-        batteryWidgetManager.addListener(this)
+        context.bm.init()
+        context.bm.addListener(this)
+        initialized = true
     }
 
     override fun onBatteryUpdated(data: QuickLookData.Battery?) {
-        updateWidget(appContext, data)
+        updateWidget(data)
     }
 
-    private fun updateWidget(context: Context, data: QuickLookData.Battery?) {
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        val thisWidget = ComponentName(context, BatteryWidgetReceiver::class.java)
+    private fun updateWidget(data: QuickLookData.Battery?) {
+        val appWidgetManager = AppWidgetManager.getInstance(appContext)
+        val thisWidget = ComponentName(appContext, BatteryWidgetReceiver::class.java)
         val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
 
         val intent = Intent(Intent.ACTION_POWER_USAGE_SUMMARY).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
         val pendingIntent = PendingIntent.getActivity(
-            context,
+            appContext,
             0,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         appWidgetIds.forEach { appWidgetId ->
-            val views = RemoteViews(context.packageName, R.layout.widget_battery).apply {
+            val views = RemoteViews(appContext.packageName, R.layout.widget_battery).apply {
                 setOnClickPendingIntent(R.id.battery_card_root, pendingIntent)
 
                 if (data != null) {
-                    val batteryBg = createBatteryBg(context, data.level)
+                    val batteryBg = createBatteryBg(data.level)
                     if (data.level <= 20) {
                         setViewVisibility(R.id.battery_bg_view_low, View.VISIBLE)
                         setImageViewBitmap(R.id.battery_bg_view_low, batteryBg)
@@ -105,12 +107,12 @@ class BatteryWidgetReceiver : AppWidgetProvider(), BatteryWidgetManager.Callback
         }
     }
 
-    private fun createBatteryBg(context: Context, batteryLevel: Int): Bitmap {
+    private fun createBatteryBg(batteryLevel: Int): Bitmap {
         val sizeDp = 48
         val px = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             sizeDp.toFloat(),
-            context.resources.displayMetrics
+            appContext.resources.displayMetrics
         ).toInt()
 
         return Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888).apply {

@@ -86,12 +86,14 @@ class QuickLookDataManager @Inject constructor(
         }
     }
 
-    init {
+    fun init() {
         coroutineScope.launch {
+            lifecycleManager.addListener(this)
             lifecycleManager.widgetsActive.collect { active ->
                 if (active) start() else pause()
             }
         }
+        start()
     }
 
     private fun start() {
@@ -144,11 +146,6 @@ class QuickLookDataManager @Inject constructor(
         listener.onDataUpdated()
     }
 
-    fun removeListener(listener: QuickLookDataCallback) {
-        listeners.remove(listener)
-        if (listeners.isEmpty()) dispose()
-    }
-
     fun notifyListeners() {
         listeners.forEach { it.onDataUpdated() }
     }
@@ -187,6 +184,7 @@ class QuickLookDataManager @Inject constructor(
     fun dispose() {
         pause()
         listeners.clear()
+        lifecycleManager.removeListener(this)
     }
     
     companion object {

@@ -58,17 +58,17 @@ class MediaPlaybackProvider(
     }
 
     fun cleanup() {
+        mediaControllers.toList().forEach { it.unregister() }
+        mediaControllers.clear()
         activeController?.unregister()
         activeController = null
-        mediaControllers.forEach { it.unregister() }
-        mediaControllers.clear()
         lastPlaybackState = null
         lastMedia = null
         _mediaFlow.value = null
     }
 
     fun updateNotifications(notifs: List<StatusBarNotification>) {
-        mediaControllers.forEach { it.unregister() }
+        mediaControllers.toList().forEach { it.unregister() }
         mediaControllers.clear()
         notifs.forEach { sbn ->
             val token = sbn.notification.extras.getParcelable<MediaSession.Token>("android.mediaSession")

@@ -44,21 +44,17 @@ class TileManager @Inject constructor(
     private val _tilesFlow = MutableStateFlow<Map<Int, TileData>>(emptyMap())
     val tilesFlow: StateFlow<Map<Int, TileData>> = _tilesFlow.asStateFlow()
 
-    private val consumers = mutableSetOf<Any>()
     private var repoJob: Job? = null
 
-    init {
+    fun init() {
         scope.launch {
+            lifecycleManager.addListener(this)
             lifecycleManager.widgetsActive.collect { active ->
                 if (active) start() else pause()
             }
         }
-    }
-
-    fun addConsumer(consumer: Any) = consumers.add(consumer)
-    fun removeConsumer(consumer: Any) {
-        consumers.remove(consumer)
-        if (consumers.isEmpty()) dispose()
+        repository.init()
+        start()
     }
 
     private fun start() {
@@ -89,7 +85,7 @@ class TileManager @Inject constructor(
                 val data = TileData(
                     type,
                     newState,
-                    tileConfig?.getIcon?.invoke(newState) ?: R.drawable.ic_wifi_off,
+                    tileConfig?.getIcon?.invoke(newState) ?: R.drawable.ic_unknown,
                     widgetId,
                     tileConfig?.getLabel?.invoke()
                 )
@@ -101,7 +97,7 @@ class TileManager @Inject constructor(
 
     fun getIconForTile(type: String, active: Boolean): Int {
         return repository.tilesRegistry.firstOrNull { it.type == type }?.getIcon?.invoke(active)
-            ?: R.drawable.ic_wifi_off
+            ?: R.drawable.ic_unknown
     }
 
     fun setTileForWidget(widgetId: Int, type: String) {
@@ -120,9 +116,8 @@ class TileManager @Inject constructor(
 
     fun dispose() {
         pause()
-        scope.cancel()
-        bgDispatcher.close()
         repository.dispose()
+        lifecycleManager.removeListener(this)
     }
     
     companion object {

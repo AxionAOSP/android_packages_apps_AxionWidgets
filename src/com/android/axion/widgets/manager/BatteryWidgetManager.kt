@@ -43,16 +43,18 @@ class BatteryWidgetManager @Inject constructor(
 
     private var batteryFlowJob: Job? = null
 
-    init {
+    fun init() {
         coroutineScope.launch {
+            lifecycleManager.addListener(this)
             lifecycleManager.widgetsActive.collect { active ->
                 if (active) start() else pause()
             }
         }
+        start()
     }
 
     private fun start() {
-        if (batteryFlowJob?.isActive == true) return
+        batteryFlowJob?.cancel()
         batteryFlowJob = batteryDataManager.batteryFlow
             .onEach { battery ->
                 _batteryState.value = battery
@@ -71,16 +73,12 @@ class BatteryWidgetManager @Inject constructor(
         listener.onBatteryUpdated(_batteryState.value)
     }
 
-    fun removeListener(listener: Callback) {
-        listeners.remove(listener)
-        if (listeners.isEmpty()) dispose()
-    }
-
     fun getBatteryData(): QuickLookData.Battery? = _batteryState.value
 
     fun dispose() {
         pause()
         listeners.clear()
+        lifecycleManager.removeListener(this)
     }
 
     companion object {

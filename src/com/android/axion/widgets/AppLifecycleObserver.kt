@@ -23,10 +23,6 @@ import dagger.hilt.components.SingletonComponent
 
 class AppLifecycleObserver(private val context: Context) : DefaultLifecycleObserver {
 
-    private val lifecycleManager: WidgetLifecycleManager by lazy {
-        WidgetLifecycleManager.get(context)
-    }
-
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
     }
@@ -41,6 +37,5 @@ class AppLifecycleObserver(private val context: Context) : DefaultLifecycleObser
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)
-        lifecycleManager.dispose()
     }
 }

@@ -26,25 +26,23 @@ import javax.inject.Singleton
 @Singleton
 class BatteryDataManager @Inject constructor(
     @ApplicationContext private val context: Context,
-    batteryStatusProvider: BatteryStatusProvider
+    private val batteryStatusProvider: BatteryStatusProvider
 ) {
 
     private val coroutineScope: CoroutineScope = MainScope()
 
-    private val batteryStatusProvider: BatteryStatusProvider by lazy {
-        BatteryStatusProvider(context).also {
-            it.addCallback(batteryCallback)
-        }
-    }
-
     private val _batteryFlow = MutableStateFlow<QuickLookData.Battery?>(null)
 
     val batteryFlow: StateFlow<QuickLookData.Battery?> = _batteryFlow
-        .onSubscription { startIfNeeded() }
-        .onCompletion { stopIfUnused() }
+        .onSubscription {
+            startIfNeeded()
+        }
+        .onCompletion {
+            stopIfUnused()
+        }
         .stateIn(
             scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5000),
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
             initialValue = _batteryFlow.value
         )
 
@@ -52,6 +50,10 @@ class BatteryDataManager @Inject constructor(
         override fun onBatteryStatusChanged(battery: QuickLookData.Battery?) {
             _batteryFlow.value = battery
         }
+    }
+
+    init {
+        batteryStatusProvider.addCallback(batteryCallback)
     }
 
     private fun startIfNeeded() {
@@ -65,7 +67,8 @@ class BatteryDataManager @Inject constructor(
     }
 
     fun refresh() {
-        _batteryFlow.value = _batteryFlow.value
+        val snapshot = batteryStatusProvider.getBatteryDataSnapshot()
+        _batteryFlow.value = snapshot
     }
 
     fun cleanup() {

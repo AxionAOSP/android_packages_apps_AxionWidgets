@@ -35,6 +35,7 @@
             android:layout_height="@dimen/widget_pill_icon_size"
             android:scaleType="centerInside"
             android:tint="@color/battery_device_primary_color"
+            android:src="@drawable/ic_unknown"
             android:clickable="false"
             android:focusable="false" />
         <ImageView

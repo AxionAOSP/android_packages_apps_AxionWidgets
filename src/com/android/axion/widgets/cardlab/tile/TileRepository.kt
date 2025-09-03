@@ -63,7 +63,7 @@ class TileRepository @Inject constructor(
                 result[widgetId] = TileData(
                     type,
                     isActive,
-                    tileConfig.getIcon?.invoke(isActive) ?: R.drawable.ic_wifi_off,
+                    tileConfig.getIcon?.invoke(isActive) ?: R.drawable.ic_unknown,
                     widgetId,
                     tileConfig.getLabel?.invoke()
                 )
@@ -78,12 +78,16 @@ class TileRepository @Inject constructor(
         }
         _tileStates.value = TileStates(initialStates)
         buffer.putAll(initialStates)
-
+    }
+    
+    fun init() {
         scope.launch {
+            lifecycleManager.addListener(this)
             lifecycleManager.widgetsActive.collect { active ->
                 if (active) start() else pause()
             }
         }
+        start()
     }
 
     private fun start() {
@@ -136,8 +140,7 @@ class TileRepository @Inject constructor(
 
     fun dispose() {
         pause()
-        scope.cancel()
-        _tileStates.value = TileStates()
+        lifecycleManager.removeListener(this)
     }
     
     companion object {
