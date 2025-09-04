@@ -73,7 +73,7 @@ class TileConfigs(private val context: Context) {
                     wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
                     wifiManager.isWifiEnabled
                 },
-                context,
+                iconProvider = { if (wifiManager.isWifiEnabled) R.drawable.ic_wifi_on else R.drawable.ic_wifi_off },
                 labelProvider = {
                     if (wifiManager.isWifiEnabled) {
                         wifiManager.connectionInfo.ssid.removePrefix("\"").removeSuffix("\"")
@@ -93,7 +93,7 @@ class TileConfigs(private val context: Context) {
                     if (btAdapter?.isEnabled == true) btAdapter.disable() else btAdapter?.enable()
                     btAdapter?.isEnabled == true
                 },
-                context,
+                iconProvider = { if (btAdapter?.isEnabled == true) R.drawable.ic_bluetooth_on else R.drawable.ic_bluetooth_off },
                 labelProvider = {
                     if (btAdapter?.isEnabled == true) {
                         btAdapter.bondedDevices.joinToString(", ") { it.name }
@@ -115,7 +115,10 @@ class TileConfigs(private val context: Context) {
                     context.sendBroadcast(Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED).apply { putExtra("state", state) })
                     state
                 },
-                context,
+                iconProvider = { 
+                    if (Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) == 1)
+                        R.drawable.ic_airplane_on else R.drawable.ic_airplane_off 
+                },
                 spec = "airplane"
             )
         )
@@ -129,7 +132,7 @@ class TileConfigs(private val context: Context) {
                         UiModeManager.MODE_NIGHT_NO else UiModeManager.MODE_NIGHT_YES
                     uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES
                 },
-                context,
+                iconProvider = { if (uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES) R.drawable.ic_dark_theme_on else R.drawable.ic_dark_theme_off },
                 spec = "dark_theme"
             )
         )
@@ -139,7 +142,7 @@ class TileConfigs(private val context: Context) {
                 getTileType(R.string.torch),
                 { isTorchActive() },
                 { toggleTorch() },
-                context,
+                iconProvider = { if (isTorchActive()) R.drawable.ic_torch_on else R.drawable.ic_torch_off },
                 spec = "torch"
             )
         )
@@ -163,7 +166,16 @@ class TileConfigs(private val context: Context) {
                     notificationManager.setInterruptionFilter(nextFilter)
                     nextFilter != NotificationManager.INTERRUPTION_FILTER_ALL
                 },
-                context,
+                iconProvider = { 
+                    val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    when (nm.currentInterruptionFilter) {
+                        NotificationManager.INTERRUPTION_FILTER_ALL -> R.drawable.ic_dnd_off
+                        NotificationManager.INTERRUPTION_FILTER_PRIORITY -> R.drawable.ic_dnd_on
+                        NotificationManager.INTERRUPTION_FILTER_ALARMS -> R.drawable.ic_alarm
+                        NotificationManager.INTERRUPTION_FILTER_NONE -> R.drawable.ic_dnd_total_silence
+                        else -> R.drawable.ic_dnd_off
+                    }
+                },
                 labelProvider = {
                     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     when (notificationManager.currentInterruptionFilter) {
@@ -187,7 +199,7 @@ class TileConfigs(private val context: Context) {
                     Settings.System.putInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, if (newState) 1 else 0)
                     newState
                 },
-                context,
+                iconProvider = { if (Settings.System.getInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, 0) == 1) R.drawable.ic_auto_rotate_on else R.drawable.ic_auto_rotate_off },
                 spec = "auto_rotate"
             )
         )
@@ -210,14 +222,22 @@ class TileConfigs(private val context: Context) {
                     audioManager.ringerMode = nextMode
                     nextMode != AudioManager.RINGER_MODE_NORMAL
                 },
-                context,
+                iconProvider = { 
+                    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    when (audioManager.ringerMode) {
+                        AudioManager.RINGER_MODE_NORMAL -> R.drawable.ic_ringer_off
+                        AudioManager.RINGER_MODE_VIBRATE -> R.drawable.ic_ringer_vibrate
+                        AudioManager.RINGER_MODE_SILENT -> R.drawable.ic_ringer_silent
+                        else -> R.drawable.ic_ringer_off
+                    }
+                },
                 labelProvider = {
                     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
                     when (audioManager.ringerMode) {
                         AudioManager.RINGER_MODE_NORMAL -> getTileType(R.string.ringer_normal)
                         AudioManager.RINGER_MODE_VIBRATE -> getTileType(R.string.ringer_vibrate)
                         AudioManager.RINGER_MODE_SILENT -> getTileType(R.string.ringer_silent)
-                        else -> getTileType(R.string.ringer_unknown)
+                        else -> getTileType(R.string.ringer_normal)
                     }
                 },
                 spec = "ringer"
@@ -244,7 +264,13 @@ class TileConfigs(private val context: Context) {
                             subTm.isDataEnabled
                         } else false
                     },
-                    context,
+                    iconProvider = { 
+                        val subId = defaultDataSubId
+                        val enabled = if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
+                            telephonyManager.createForSubscriptionId(subId).isDataEnabled
+                        } else false
+                        if (enabled) R.drawable.ic_mobile_data_on else R.drawable.ic_mobile_data_off
+                    },
                     labelProvider = {
                         val subId = defaultDataSubId
                         if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {

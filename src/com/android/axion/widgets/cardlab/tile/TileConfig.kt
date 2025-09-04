@@ -13,9 +13,7 @@
  */
 package com.android.axion.widgets.cardlab.tile
 
-import android.content.Context
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import com.android.axion.widgets.R
 
 data class TileConfig(
     val type: String,
@@ -30,18 +28,17 @@ data class TileConfig(
             type: String,
             getter: () -> Boolean,
             setter: (() -> Boolean)? = null,
-            context: Context,
+            iconProvider: ((Boolean) -> Int)? = null,
             labelProvider: (() -> String)? = null,
             spec: String
         ): TileConfig {
             val observeState: () -> Boolean = getter
             val toggle: () -> Boolean = { setter?.invoke() ?: !getter() }
-            val getIcon: (Boolean) -> Int = { active ->
-                val baseName = spec ?: type.lowercase().replace(" ", "_")
-                val resName = "ic_${baseName}_${if (active) "on" else "off"}"
-                context.resources.getIdentifier(resName, "drawable", context.packageName).takeIf { it != 0 }
-                    ?: context.resources.getIdentifier("ic_foreground", "drawable", context.packageName)
+
+            val getIcon: (Boolean) -> Int = iconProvider ?: { active ->
+                R.drawable.ic_unknown
             }
+
             return TileConfig(type, observeState, toggle, getIcon, labelProvider, spec)
         }
     }
