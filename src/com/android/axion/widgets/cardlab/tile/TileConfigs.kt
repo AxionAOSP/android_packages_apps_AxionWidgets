@@ -24,276 +24,208 @@ import android.hardware.camera2.CameraManager
 import android.media.AudioManager
 import android.net.wifi.WifiManager
 import android.provider.Settings
+import android.provider.Settings.Global.AIRPLANE_MODE_ON
+import android.provider.Settings.System.ACCELEROMETER_ROTATION
 import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import com.android.axion.widgets.R
+import com.android.axion.widgets.data.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class TileConfigs(private val context: Context) {
+@Singleton
+class TileConfigs @Inject constructor(private val ctx: Context) {
 
-    private val wifiManager by lazy { context.getSystemService(Context.WIFI_SERVICE) as WifiManager }
-    private val btAdapter by lazy { BluetoothAdapter.getDefaultAdapter() }
-    private val uiModeManager by lazy { context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager }
-    private val telephonyManager by lazy { context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager }
-    private val cameraManager by lazy { context.getSystemService(Context.CAMERA_SERVICE) as CameraManager }
+    private val wm by lazy { ctx.getSystemService(Context.WIFI_SERVICE) as WifiManager }
+    private val bt by lazy { BluetoothAdapter.getDefaultAdapter() }
+    private val um by lazy { ctx.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager }
+    private val tm by lazy { ctx.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager }
+    private val cm by lazy { ctx.getSystemService(Context.CAMERA_SERVICE) as CameraManager }
+    private val nm by lazy { ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
+    private val am by lazy { ctx.getSystemService(Context.AUDIO_SERVICE) as AudioManager }
 
-    private val defaultDataSubId: Int
-        get() = SubscriptionManager.getDefaultDataSubscriptionId()
-
+    private val subId: Int get() = SubscriptionManager.getDefaultDataSubscriptionId()
+    private val subTm get() = tm.createForSubscriptionId(subId)
+    private val validSub get() = subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID
     private val torchStates = mutableMapOf<String, Boolean>()
+    
+    private val resolver = ctx.contentResolver
+
+    val DND_ALL = NotificationManager.INTERRUPTION_FILTER_ALL
+    val dndModes = listOf(
+        DndMode(DND_ALL, R.drawable.ic_dnd_off, R.string.dnd),
+        DndMode(NotificationManager.INTERRUPTION_FILTER_PRIORITY, R.drawable.ic_dnd_on, R.string.priority),
+        DndMode(NotificationManager.INTERRUPTION_FILTER_ALARMS, R.drawable.ic_alarm, R.string.alarms_only),
+        DndMode(NotificationManager.INTERRUPTION_FILTER_NONE, R.drawable.ic_dnd_total_silence, R.string.total_silence)
+    )
+
+    val ringerModes = listOf(
+        RingerModeInfo(AudioManager.RINGER_MODE_NORMAL, R.drawable.ic_ringer_off, string(R.string.ringer_normal)),
+        RingerModeInfo(AudioManager.RINGER_MODE_VIBRATE, R.drawable.ic_ringer_vibrate, string(R.string.ringer_vibrate)),
+        RingerModeInfo(AudioManager.RINGER_MODE_SILENT, R.drawable.ic_ringer_silent, string(R.string.ringer_silent))
+    )
 
     init {
-        cameraManager.registerTorchCallback(object : CameraManager.TorchCallback() {
+        cm.registerTorchCallback(object : CameraManager.TorchCallback() {
             override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
                 torchStates[cameraId] = enabled
             }
         }, null)
     }
 
-    private fun isTorchActive(): Boolean = torchStates.values.any { it }
+    private fun isTorchActive() = torchStates.values.any { it }
 
     private fun toggleTorch(): Boolean {
-        val cameraId = cameraManager.cameraIdList.firstOrNull { id ->
-            cameraManager.getCameraCharacteristics(id)
+        val cameraId = cm.cameraIdList.firstOrNull { id ->
+            cm.getCameraCharacteristics(id)
                 .get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
         } ?: return false
         val newState = !(torchStates[cameraId] ?: false)
-        cameraManager.setTorchMode(cameraId, newState)
+        cm.setTorchMode(cameraId, newState)
         torchStates[cameraId] = newState
         return newState
+    }
+
+    private fun string(resId: Int) = ctx.getString(resId)
+    private fun putGlobal(key: String, value: Int) = Settings.Global.putInt(resolver, key, value)
+    private fun putSystem(key: String, value: Int) = Settings.System.putInt(resolver, key, value)
+    private fun getGlobal(key: String, def: Int): Int = Settings.Global.getInt(resolver, key, def)
+    private fun getSystem(key: String, def: Int): Int = Settings.System.getInt(resolver, key, def)
+    private fun <T> nextMode(current: T, modes: List<T>): T {
+        val index = modes.indexOfFirst { it == current }
+        return modes[(index + 1) % modes.size]
     }
 
     val tilesRegistry: List<TileConfig> by lazy {
         val tiles = mutableListOf<TileConfig>()
 
-        tiles.add(
-            TileConfig.from(
-                getTileType(R.string.wifi),
-                { wifiManager.isWifiEnabled },
-                {
-                    wifiManager.isWifiEnabled = !wifiManager.isWifiEnabled
-                    wifiManager.isWifiEnabled
+        tiles += TileConfig.from(
+            type = "Wifi",
+            getter = { wm.isWifiEnabled },
+            setter = { wm.isWifiEnabled = !wm.isWifiEnabled; wm.isWifiEnabled },
+            iconActive = R.drawable.ic_wifi_on,
+            iconInactive = R.drawable.ic_wifi_off,
+            labelProvider = { wm.connectionInfo.ssid.trim('"') },
+            spec = "wifi"
+        )
+
+        tiles += TileConfig.from(
+            type = "Bluetooth",
+            getter = { bt?.isEnabled == true },
+            setter = { if (bt?.isEnabled == true) bt.disable() else bt?.enable(); bt?.isEnabled == true },
+            iconActive = R.drawable.ic_bluetooth_on,
+            iconInactive = R.drawable.ic_bluetooth_off,
+            labelProvider = { bt?.bondedDevices?.joinToString(", ") { it.name } ?: string(R.string.bluetooth) },
+            spec = "bluetooth"
+        )
+
+        tiles += TileConfig.from(
+            type = "Airplane",
+            getter = { getGlobal(AIRPLANE_MODE_ON, 0) == 1 },
+            setter = {
+                val current = getGlobal(AIRPLANE_MODE_ON, 0) == 1
+                val newState = !current
+                putGlobal(AIRPLANE_MODE_ON, if (newState) 1 else 0)
+                ctx.sendBroadcast(Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED).apply { putExtra("state", newState) })
+                newState
+            },
+            iconActive = R.drawable.ic_airplane_on,
+            iconInactive = R.drawable.ic_airplane_off,
+            spec = "airplane"
+        )
+
+        tiles += TileConfig.from(
+            type = "Dark Theme",
+            getter = { um.nightMode == UiModeManager.MODE_NIGHT_YES },
+            setter = {
+                um.nightMode = if (um.nightMode == UiModeManager.MODE_NIGHT_YES) UiModeManager.MODE_NIGHT_NO
+                    else UiModeManager.MODE_NIGHT_YES
+                um.nightMode == UiModeManager.MODE_NIGHT_YES
+            },
+            iconActive = R.drawable.ic_dark_theme_on,
+            iconInactive = R.drawable.ic_dark_theme_off,
+            spec = "dark_theme"
+        )
+
+        tiles += TileConfig.from(
+            type = "Torch",
+            getter = { isTorchActive() },
+            setter = { toggleTorch() },
+            iconActive = R.drawable.ic_torch_on,
+            iconInactive = R.drawable.ic_torch_off,
+            spec = "torch"
+        )
+
+        tiles += TileConfig.from(
+            type = "DND",
+            getter = { nm.currentInterruptionFilter != DND_ALL },
+            setter = {
+                val next = nextMode(dndModes.first { it.filter == nm.currentInterruptionFilter }, dndModes)
+                nm.setInterruptionFilter(next.filter)
+                next.filter != DND_ALL
+            },
+            iconProvider = { dndModes.first { it.filter == nm.currentInterruptionFilter }.iconRes },
+            labelProvider = { string(dndModes.first { it.filter == nm.currentInterruptionFilter }.labelRes) },
+            spec = "dnd"
+        )
+
+        tiles += TileConfig.from(
+            type = "Auto Rotate",
+            getter = { getSystem(ACCELEROMETER_ROTATION, 0) == 1 },
+            setter = {
+                val enabled = getSystem(ACCELEROMETER_ROTATION, 0) == 1
+                val newState = !enabled
+                putSystem(ACCELEROMETER_ROTATION, if (newState) 1 else 0)
+                newState
+            },
+            iconActive = R.drawable.ic_auto_rotate_on,
+            iconInactive = R.drawable.ic_auto_rotate_off,
+            spec = "auto_rotate"
+        )
+
+        tiles += TileConfig.from(
+            type = "Ringer",
+            getter = { am.ringerMode != AudioManager.RINGER_MODE_NORMAL },
+            setter = {
+                val next = nextMode(ringerModes.first { it.mode == am.ringerMode }, ringerModes)
+                am.ringerMode = next.mode
+                next.mode != AudioManager.RINGER_MODE_NORMAL
+            },
+            iconProvider = { ringerModes.first { it.mode == am.ringerMode }.icon },
+            labelProvider = { ringerModes.first { it.mode == am.ringerMode }.label },
+            spec = "ringer"
+        )
+
+        if (ctx.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
+            tiles += TileConfig.from(
+                type = "Mobile Data",
+                getter = { validSub && subTm.isDataEnabled },
+                setter = {
+                    if (validSub) runCatching { subTm.setDataEnabled(!subTm.isDataEnabled) }
+                    validSub && subTm.isDataEnabled
                 },
-                iconProvider = { if (wifiManager.isWifiEnabled) R.drawable.ic_wifi_on else R.drawable.ic_wifi_off },
+                iconActive = R.drawable.ic_mobile_data_on,
+                iconInactive = R.drawable.ic_mobile_data_off,
                 labelProvider = {
-                    if (wifiManager.isWifiEnabled) {
-                        wifiManager.connectionInfo.ssid.removePrefix("\"").removeSuffix("\"")
-                    } else {
-                        getTileType(R.string.wifi)
-                    }
+                    if (validSub)
+                        SubscriptionManager.from(ctx).getActiveSubscriptionInfo(subId)?.carrierName?.toString()
+                            ?: string(R.string.mobile_data)
+                    else string(R.string.mobile_data)
                 },
-                spec = "wifi"
-            )
-        )
-
-        tiles.add(
-            TileConfig.from(
-                getTileType(R.string.bluetooth),
-                { btAdapter?.isEnabled == true },
-                {
-                    if (btAdapter?.isEnabled == true) btAdapter.disable() else btAdapter?.enable()
-                    btAdapter?.isEnabled == true
-                },
-                iconProvider = { if (btAdapter?.isEnabled == true) R.drawable.ic_bluetooth_on else R.drawable.ic_bluetooth_off },
-                labelProvider = {
-                    if (btAdapter?.isEnabled == true) {
-                        btAdapter.bondedDevices.joinToString(", ") { it.name }
-                    } else {
-                        getTileType(R.string.bluetooth)
-                    }
-                },
-                spec = "bluetooth"
-            )
-        )
-
-        tiles.add(
-            TileConfig.from(
-                getTileType(R.string.airplane_mode),
-                { Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) == 1 },
-                {
-                    val state = Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) != 1
-                    Settings.Global.putInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, if (state) 1 else 0)
-                    context.sendBroadcast(Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED).apply { putExtra("state", state) })
-                    state
-                },
-                iconProvider = { 
-                    if (Settings.Global.getInt(context.contentResolver, Settings.Global.AIRPLANE_MODE_ON, 0) == 1)
-                        R.drawable.ic_airplane_on else R.drawable.ic_airplane_off 
-                },
-                spec = "airplane"
-            )
-        )
-
-        tiles.add(
-            TileConfig.from(
-                getTileType(R.string.dark_theme),
-                { uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES },
-                {
-                    uiModeManager.nightMode = if (uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES)
-                        UiModeManager.MODE_NIGHT_NO else UiModeManager.MODE_NIGHT_YES
-                    uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES
-                },
-                iconProvider = { if (uiModeManager.nightMode == UiModeManager.MODE_NIGHT_YES) R.drawable.ic_dark_theme_on else R.drawable.ic_dark_theme_off },
-                spec = "dark_theme"
-            )
-        )
-
-        tiles.add(
-            TileConfig.from(
-                getTileType(R.string.torch),
-                { isTorchActive() },
-                { toggleTorch() },
-                iconProvider = { if (isTorchActive()) R.drawable.ic_torch_on else R.drawable.ic_torch_off },
-                spec = "torch"
-            )
-        )
-
-        tiles.add(
-            TileConfig.from(
-                getTileType(R.string.dnd),
-                {
-                    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    notificationManager.currentInterruptionFilter != NotificationManager.INTERRUPTION_FILTER_ALL
-                },
-                {
-                    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    val nextFilter = when (notificationManager.currentInterruptionFilter) {
-                        NotificationManager.INTERRUPTION_FILTER_ALL -> NotificationManager.INTERRUPTION_FILTER_PRIORITY
-                        NotificationManager.INTERRUPTION_FILTER_PRIORITY -> NotificationManager.INTERRUPTION_FILTER_ALARMS
-                        NotificationManager.INTERRUPTION_FILTER_ALARMS -> NotificationManager.INTERRUPTION_FILTER_NONE
-                        NotificationManager.INTERRUPTION_FILTER_NONE -> NotificationManager.INTERRUPTION_FILTER_ALL
-                        else -> NotificationManager.INTERRUPTION_FILTER_ALL
-                    }
-                    notificationManager.setInterruptionFilter(nextFilter)
-                    nextFilter != NotificationManager.INTERRUPTION_FILTER_ALL
-                },
-                iconProvider = { 
-                    val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    when (nm.currentInterruptionFilter) {
-                        NotificationManager.INTERRUPTION_FILTER_ALL -> R.drawable.ic_dnd_off
-                        NotificationManager.INTERRUPTION_FILTER_PRIORITY -> R.drawable.ic_dnd_on
-                        NotificationManager.INTERRUPTION_FILTER_ALARMS -> R.drawable.ic_alarm
-                        NotificationManager.INTERRUPTION_FILTER_NONE -> R.drawable.ic_dnd_total_silence
-                        else -> R.drawable.ic_dnd_off
-                    }
-                },
-                labelProvider = {
-                    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    when (notificationManager.currentInterruptionFilter) {
-                        NotificationManager.INTERRUPTION_FILTER_ALL -> getTileType(R.string.dnd)
-                        NotificationManager.INTERRUPTION_FILTER_PRIORITY -> getTileType(R.string.priority)
-                        NotificationManager.INTERRUPTION_FILTER_ALARMS -> getTileType(R.string.alarms_only)
-                        NotificationManager.INTERRUPTION_FILTER_NONE -> getTileType(R.string.total_silence)
-                        else -> getTileType(R.string.dnd)
-                    }
-                },
-                spec = "dnd"
-            )
-        )
-
-        tiles.add(
-            TileConfig.from(
-                getTileType(R.string.auto_rotate),
-                { Settings.System.getInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, 0) == 1 },
-                {
-                    val newState = Settings.System.getInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, 0) != 1
-                    Settings.System.putInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, if (newState) 1 else 0)
-                    newState
-                },
-                iconProvider = { if (Settings.System.getInt(context.contentResolver, Settings.System.ACCELEROMETER_ROTATION, 0) == 1) R.drawable.ic_auto_rotate_on else R.drawable.ic_auto_rotate_off },
-                spec = "auto_rotate"
-            )
-        )
-
-        tiles.add(
-            TileConfig.from(
-                getTileType(R.string.ringer_normal),
-                {
-                    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                    audioManager.ringerMode != AudioManager.RINGER_MODE_NORMAL
-                },
-                {
-                    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                    val nextMode = when (audioManager.ringerMode) {
-                        AudioManager.RINGER_MODE_NORMAL -> AudioManager.RINGER_MODE_VIBRATE
-                        AudioManager.RINGER_MODE_VIBRATE -> AudioManager.RINGER_MODE_SILENT
-                        AudioManager.RINGER_MODE_SILENT -> AudioManager.RINGER_MODE_NORMAL
-                        else -> AudioManager.RINGER_MODE_NORMAL
-                    }
-                    audioManager.ringerMode = nextMode
-                    nextMode != AudioManager.RINGER_MODE_NORMAL
-                },
-                iconProvider = { 
-                    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                    when (audioManager.ringerMode) {
-                        AudioManager.RINGER_MODE_NORMAL -> R.drawable.ic_ringer_off
-                        AudioManager.RINGER_MODE_VIBRATE -> R.drawable.ic_ringer_vibrate
-                        AudioManager.RINGER_MODE_SILENT -> R.drawable.ic_ringer_silent
-                        else -> R.drawable.ic_ringer_off
-                    }
-                },
-                labelProvider = {
-                    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-                    when (audioManager.ringerMode) {
-                        AudioManager.RINGER_MODE_NORMAL -> getTileType(R.string.ringer_normal)
-                        AudioManager.RINGER_MODE_VIBRATE -> getTileType(R.string.ringer_vibrate)
-                        AudioManager.RINGER_MODE_SILENT -> getTileType(R.string.ringer_silent)
-                        else -> getTileType(R.string.ringer_normal)
-                    }
-                },
-                spec = "ringer"
-            )
-        )
-
-        if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
-            tiles.add(
-                TileConfig.from(
-                    getTileType(R.string.mobile_data),
-                    {
-                        val subId = defaultDataSubId
-                        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
-                            telephonyManager.createForSubscriptionId(subId).isDataEnabled
-                        } else false
-                    },
-                    {
-                        val subId = defaultDataSubId
-                        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
-                            val subTm = telephonyManager.createForSubscriptionId(subId)
-                            try {
-                                subTm.setDataEnabled(!subTm.isDataEnabled)
-                            } catch (_: Exception) {}
-                            subTm.isDataEnabled
-                        } else false
-                    },
-                    iconProvider = { 
-                        val subId = defaultDataSubId
-                        val enabled = if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
-                            telephonyManager.createForSubscriptionId(subId).isDataEnabled
-                        } else false
-                        if (enabled) R.drawable.ic_mobile_data_on else R.drawable.ic_mobile_data_off
-                    },
-                    labelProvider = {
-                        val subId = defaultDataSubId
-                        if (subId != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
-                            val subInfo = SubscriptionManager.from(context).getActiveSubscriptionInfo(subId)
-                            subInfo?.carrierName?.toString() ?: getTileType(R.string.mobile_data)
-                        } else {
-                            getTileType(R.string.mobile_data)
-                        }
-                    },
-                    spec = "mobile_data"
-                )
+                spec = "mobile_data"
             )
         }
         tiles
     }
+}
 
-    private fun getTileType(resId: Int): String {
-        val config = context.resources.configuration
-        val locale = java.util.Locale.ENGLISH
-        val newConfig = android.content.res.Configuration(config)
-        newConfig.setLocale(locale)
-        return context.createConfigurationContext(newConfig)
-            .resources
-            .getString(resId)
-    }
+fun TileConfigs.createTileData(type: String, widgetId: Int): TileData {
+    val tileConfig = tilesRegistry.firstOrNull { it.type == type }
+    return TileData(
+        type = type,
+        isActive = tileConfig?.observeState?.invoke() ?: false,
+        iconRes = tileConfig?.getIcon?.invoke(tileConfig.observeState()) ?: R.drawable.ic_unknown,
+        widgetId = widgetId,
+        label = tileConfig?.getLabel?.invoke()
+    )
 }

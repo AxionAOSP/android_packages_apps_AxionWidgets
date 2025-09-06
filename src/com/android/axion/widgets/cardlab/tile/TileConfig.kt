@@ -28,6 +28,8 @@ data class TileConfig(
             type: String,
             getter: () -> Boolean,
             setter: (() -> Boolean)? = null,
+            iconActive: Int? = null,
+            iconInactive: Int? = null,
             iconProvider: ((Boolean) -> Int)? = null,
             labelProvider: (() -> String)? = null,
             spec: String
@@ -35,11 +37,26 @@ data class TileConfig(
             val observeState: () -> Boolean = getter
             val toggle: () -> Boolean = { setter?.invoke() ?: !getter() }
 
-            val getIcon: (Boolean) -> Int = iconProvider ?: { active ->
-                R.drawable.ic_unknown
-            }
+            val getIcon: (Boolean) -> Int = iconProvider
+                ?: if (iconActive != null && iconInactive != null) {
+                    { active -> if (active) iconActive else iconInactive }
+                } else {
+                    { _ -> R.drawable.ic_unknown }
+                }
 
             return TileConfig(type, observeState, toggle, getIcon, labelProvider, spec)
         }
     }
 }
+
+data class RingerModeInfo(
+    val mode: Int,
+    val icon: Int,
+    val label: String
+)
+
+data class DndMode(
+    val filter: Int,
+    val iconRes: Int,
+    val labelRes: Int
+)

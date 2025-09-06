@@ -12,5 +12,6 @@
     <color name="battery_progressbar_color">#E0E0DE</color>
     <color name="battery_progressbar_color_low_battery_state">#d71921</color>
     <color name="photo_frame_bg">@android:color/system_neutral1_50</color>
-    <color name="tile_active">#d71921</color>
+    <color name="tile_active">@android:color/system_accent1_600</color>
+    <color name="device_primary_color_inverse">@android:color/system_accent1_100</color>
 </resources>

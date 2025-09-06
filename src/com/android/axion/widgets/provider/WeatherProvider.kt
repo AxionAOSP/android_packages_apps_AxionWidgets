@@ -15,122 +15,51 @@ package com.android.axion.widgets.provider
 
 import android.content.Context
 import android.provider.Settings
-import android.os.Handler
-import android.os.Looper
+import com.android.axion.widgets.AxionProvider
+import com.android.axion.widgets.data.QuickLookData
 import com.android.internal.util.android.OmniJawsClient
-import com.android.axion.widgets.data.NTWeatherData
-import com.android.axion.widgets.utils.WeakListenerManager
+import com.android.axion.widgets.utils.callbackFlow
+import com.android.axion.widgets.utils.logger
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class WeatherProvider @Inject constructor(
     @ApplicationContext private val context: Context
-) : OmniJawsClient.OmniJawsObserver {
+) : AxionProvider<QuickLookData.Weather> {
 
-    interface Callback {
-        fun onWeatherUpdated(data: NTWeatherData)
-    }
-
-    private val handler = Handler(Looper.getMainLooper())
-    private var isObservingWeather = false
-    private var isActive = false
-    private var quicklookEnabled = false
-
-    private val callbacks = WeakListenerManager<Callback>().apply {
-        setLifecycleCallbacks(
-            onActive = {
-                quicklookEnabled = isQuicklookEnabled()
-                if (quicklookEnabled) {
-                    startWeatherListening()
-                    queryWeather()
-                } else {
-                    notifyCallbacks(NTWeatherData.EMPTY)
+    override val dataFlow: Flow<QuickLookData.Weather?> = callbackFlow(
+        initial = null,
+        register = { OmniJawsClient.get().addObserver(context, it) },
+        unregister = { OmniJawsClient.get().removeObserver(context, it) },
+        createCallback = { emit ->
+            object : OmniJawsClient.OmniJawsObserver {
+                override fun weatherUpdated() {
+                    val qlEnabled = isQuicklookEnabled()
+                    val omniEnabled = OmniJawsClient.get().isOmniJawsEnabled(context)
+                    if (!qlEnabled || !omniEnabled) {
+                        this.logger("weather not enabled! omniEnabled: $omniEnabled qlEnabled: $qlEnabled")
+                        emit(null)
+                        return
+                    }
+                    OmniJawsClient.get().queryWeather(context)
+                    val info = OmniJawsClient.get().weatherInfo
+                    val weather = info?.run { QuickLookData.Weather(temp, condition, conditionCode) }
+                    this.logger("weather updated! weather: $weather info: $info")
+                    emit(weather)
                 }
-                isActive = true
-            },
-            onInactive = {
-                stopWeatherListening()
-                isActive = false
+
+                override fun weatherError(errorReason: Int) {
+                    emit(null)
+                }
             }
-        )
-    }
+        },
+        onCallbackCreated = { (it as OmniJawsClient.OmniJawsObserver).weatherUpdated() }
+    )
 
-    fun addCallback(callback: Callback) {
-        callbacks.addListener(callback)
-        quicklookEnabled = isQuicklookEnabled()
-        if (quicklookEnabled) {
-            queryWeather()
-        } else {
-            callback.onWeatherUpdated(NTWeatherData.EMPTY)
-        }
-    }
-
-    fun removeCallback(callback: Callback) {
-        callbacks.removeListener(callback)
-        if (callbacks.isEmpty()) {
-            stopWeatherListening()
-        }
-    }
-
-    private fun startWeatherListening() {
-        if (isObservingWeather) return
-        if (!OmniJawsClient.get().isOmniJawsEnabled(context)) return
-
-        OmniJawsClient.get().addObserver(context, this)
-        isObservingWeather = true
-    }
-
-    private fun stopWeatherListening() {
-        if (!isObservingWeather) return
-        OmniJawsClient.get().removeObserver(context, this)
-        isObservingWeather = false
-    }
-
-    private fun queryWeather() {
-        if (!isQuicklookEnabled() || !OmniJawsClient.get().isOmniJawsEnabled(context)) {
-            notifyCallbacks(NTWeatherData.EMPTY)
-            return
-        }
-
-        OmniJawsClient.get().queryWeather(context)
-        val info = OmniJawsClient.get().weatherInfo
-
-        val data = info?.run {
-            NTWeatherData(
-                city = city,
-                conditionCode = conditionCode,
-                temp = temp,
-                tempUnits = tempUnits,
-                condition = condition,
-                windSpeed = windSpeed,
-                windUnits = windUnits,
-                pinWheel = pinWheel,
-                humidity = humidity,
-                timeStamp = timeStamp ?: System.currentTimeMillis()
-            )
-        } ?: NTWeatherData.EMPTY
-
-        notifyCallbacks(data)
-    }
-
-    private fun notifyCallbacks(data: NTWeatherData) {
-        callbacks.notify { it.onWeatherUpdated(data) }
-    }
-
-    private fun isQuicklookEnabled(): Boolean {
-        return Settings.Secure.getInt(
-            context.contentResolver,
-            "nt_quicklook_weather",
-            1
-        ) == 1
-    }
-
-    override fun weatherUpdated() {
-        if (!isQuicklookEnabled() || !OmniJawsClient.get().isOmniJawsEnabled(context)) return
-        queryWeather()
-    }
-
-    override fun weatherError(errorReason: Int) {}
+    private fun isQuicklookEnabled(): Boolean =
+        Settings.Secure.getInt(context.contentResolver, "nt_quicklook_weather", 1) == 1
 }

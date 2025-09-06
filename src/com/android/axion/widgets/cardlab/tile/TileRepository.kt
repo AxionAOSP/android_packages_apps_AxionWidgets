@@ -15,15 +15,17 @@ package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
 import com.android.axion.widgets.AxionApp
-import com.android.axion.widgets.WidgetLifecycleManager
+import com.android.axion.widgets.AxionProvider
 import com.android.axion.widgets.R
+import com.android.axion.widgets.data.*
+import com.android.axion.widgets.utils.SafeCloseable
+import com.android.axion.widgets.utils.Tracker
 import kotlinx.coroutines.*
 import kotlinx.coroutines.selects.onTimeout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.channels.Channel
@@ -32,18 +34,15 @@ import java.util.concurrent.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
-data class TileStates(val states: Map<String, Boolean> = emptyMap())
-
 @Singleton
 class TileRepository @Inject constructor(
     private val context: Context,
-    private val lifecycleManager: WidgetLifecycleManager
-) {
+    private val tileConfigs: TileConfigs
+) : SafeCloseable, AxionProvider<Map<Int, TileData>> {
 
-    private val tileConfigs = TileConfigs(context)
     private val _tileStates = MutableStateFlow(TileStates())
 
-    val tileStates: StateFlow<TileStates> = _tileStates.asStateFlow()
+    private val tileStates: StateFlow<TileStates> = _tileStates.asStateFlow()
     val tilesRegistry get() = tileConfigs.tilesRegistry
     
     private val trigger = Channel<Unit>(Channel.CONFLATED)
@@ -60,38 +59,20 @@ class TileRepository @Inject constructor(
                 val type = WidgetPrefs.getWidgetAction(context, widgetId) ?: continue
                 val isActive = statesSnapshot.states[type] ?: continue
                 val tileConfig = tilesRegistry.firstOrNull { it.type == type } ?: continue
-                result[widgetId] = TileData(
-                    type,
-                    isActive,
-                    tileConfig.getIcon?.invoke(isActive) ?: R.drawable.ic_unknown,
-                    widgetId,
-                    tileConfig.getLabel?.invoke()
-                )
+                result[widgetId] = tileConfigs.createTileData(type, widgetId)
             }
             result
         }
-        .distinctUntilChanged()
+        
+    override val dataFlow = activeTilesFlow
 
     init {
+        Tracker.get().addCloseable(this)
         val initialStates = tilesRegistry.associate { tile ->
             tile.type to runCatching { tile.observeState() }.getOrDefault(false)
         }
         _tileStates.value = TileStates(initialStates)
         buffer.putAll(initialStates)
-    }
-    
-    fun init() {
-        scope.launch {
-            lifecycleManager.addListener(this)
-            lifecycleManager.widgetsActive.collect { active ->
-                if (active) start() else pause()
-            }
-        }
-        start()
-    }
-
-    private fun start() {
-        if (job?.isActive == true) return
         job = scope.launch {
             while (isActive) {
                 select<Unit> {
@@ -104,11 +85,6 @@ class TileRepository @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun pause() {
-        job?.cancel()
-        job = null
     }
 
     suspend fun updateState(type: String): Boolean {
@@ -138,9 +114,9 @@ class TileRepository @Inject constructor(
         }
     }
 
-    fun dispose() {
-        pause()
-        lifecycleManager.removeListener(this)
+    override fun close() {
+        job?.cancel()
+        job = null
     }
     
     companion object {

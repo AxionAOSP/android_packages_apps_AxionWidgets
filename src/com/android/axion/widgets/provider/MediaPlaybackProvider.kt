@@ -17,28 +17,31 @@ import android.content.Context
 import android.media.MediaMetadata
 import android.media.session.*
 import android.service.notification.StatusBarNotification
-import com.android.axion.widgets.data.*
+import com.android.axion.widgets.AxionProvider
+import com.android.axion.widgets.data.QuickLookData
+import com.android.axion.widgets.utils.SafeCloseable
+import com.android.axion.widgets.utils.Tracker
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MediaPlaybackProvider(
-    private val context: Context
-) : MediaController.Callback() {
+@Singleton
+class MediaPlaybackProvider @Inject constructor(
+    @ApplicationContext private val context: Context
+) : MediaController.Callback(), AxionProvider<QuickLookData.Media>, SafeCloseable {
 
     private val mediaControllers = mutableListOf<MediaControllerSession>()
     private var activeController: MediaControllerSession? = null
-
     private var lastPlaybackState: PlaybackState? = null
 
-    private var lastMedia: QuickLookData.Media? = null
-
     private val _mediaFlow = MutableStateFlow<QuickLookData.Media?>(null)
-    val mediaFlow = _mediaFlow.asStateFlow()
-
-    private val isPlaying: Boolean
-        get() = activeController?.isPlaying() == true
-
-    private val currentMedia: QuickLookData.Media?
-        get() = lastMedia
+    override val dataFlow: Flow<QuickLookData.Media?> = _mediaFlow.asStateFlow()
+    
+    init {
+        Tracker.get().addCloseable(this)
+    }
 
     private fun createMedia(): QuickLookData.Media? {
         val metadata = activeController?.controller?.metadata
@@ -46,24 +49,20 @@ class MediaPlaybackProvider(
         val artist = metadata?.getText(MediaMetadata.METADATA_KEY_ARTIST)?.toString()
         val pkg = activeController?.controller?.packageName
         if (title.isNullOrEmpty() && artist.isNullOrEmpty()) return null
+        val isPlaying = activeController?.isPlaying() == true
         return QuickLookData.Media(title, artist, pkg, isPlaying)
     }
 
-    private fun updateCachedMedia() {
-        val newMedia = createMedia()
-        if (newMedia != lastMedia) {
-            lastMedia = newMedia
-            _mediaFlow.value = lastMedia
-        }
+    private fun updateMedia() {
+        _mediaFlow.value = createMedia()
     }
 
-    fun cleanup() {
+    override fun close() {
         mediaControllers.toList().forEach { it.unregister() }
         mediaControllers.clear()
         activeController?.unregister()
         activeController = null
         lastPlaybackState = null
-        lastMedia = null
         _mediaFlow.value = null
     }
 
@@ -92,10 +91,9 @@ class MediaPlaybackProvider(
 
         if (activeController == null) {
             lastPlaybackState = null
-            lastMedia = null
             _mediaFlow.value = null
         } else {
-            updateCachedMedia()
+            updateMedia()
         }
     }
 
@@ -104,20 +102,19 @@ class MediaPlaybackProvider(
         if (state == lastPlaybackState) return
         lastPlaybackState = state
         updateTrackedController()
-        if (isPlaying) {
-            updateCachedMedia()
+        if (activeController?.isPlaying() == true) {
+            updateMedia()
         } else {
             activeController = null
-            lastMedia = null
             _mediaFlow.value = null
         }
     }
 
     override fun onMetadataChanged(metadata: MediaMetadata?) {
         super.onMetadataChanged(metadata)
-        updateCachedMedia()
+        updateMedia()
     }
-    
+
     private inner class MediaControllerSession(
         val controller: MediaController,
         val sbn: StatusBarNotification?

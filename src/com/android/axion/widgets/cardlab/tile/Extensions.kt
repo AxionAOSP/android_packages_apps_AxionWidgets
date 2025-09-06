@@ -19,6 +19,7 @@ import android.content.*
 import android.view.View
 import android.widget.RemoteViews
 import com.android.axion.widgets.R
+import com.android.axion.widgets.data.TileData
 
 const val ACTION_TILE_CLICK = "com.android.axion.widgets.ACTION_TILE_CLICK"
 const val EXTRA_WIDGET_ID = "extra_widget_id"
@@ -37,6 +38,7 @@ fun Context.updateWidget(widgetId: Int, data: TileData) {
     views.setViewVisibility(R.id.overlay_active_tile_view, overlay)
     views.setViewVisibility(R.id.tile_active_view, overlay)
     views.setViewVisibility(R.id.tile_view, tile)
+    views.setViewVisibility(R.id.tile_bg, tile)
     views.setImageViewResource(R.id.tile_view, data.iconRes)
     views.setImageViewResource(R.id.tile_active_view, data.iconRes)
 

@@ -13,49 +13,24 @@
  */
 package com.android.axion.widgets.cardlab.tile
 
-import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import com.android.axion.widgets.AxionWidgetProvider
 
-class PillTileWidgetReceiver : AppWidgetProvider() {
-
-    private val Context.tm: TileManager
-        get() = TileManager.get(this)
-
-    private var initialized = false
+class PillTileWidgetReceiver : AxionWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action == ACTION_TILE_CLICK) {
             val widgetId = intent.getIntExtra(EXTRA_WIDGET_ID, -1)
             if (widgetId != -1) {
-                context.tm.updateState(widgetId)
+                TileManager.get(context).updateState(widgetId)
             }
         }
-    }
-
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds)
-        if (!initialized) init(context)
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         super.onDeleted(context, appWidgetIds)
         appWidgetIds.forEach { WidgetPrefs.removeWidget(context, it) }
-    }
-
-    override fun onDisabled(context: Context) {
-        context.tm.dispose()
-        initialized = false
-    }
-
-    private fun init(context: Context) {
-        context.tm.init()
-        initialized = true
     }
 }

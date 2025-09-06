@@ -39,7 +39,7 @@
         android:visibility="gone"
         android:scaleType="centerInside"
         android:src="@drawable/ic_unknown"
-        android:tint="@*android:color/white"
+        android:tint="@color/device_primary_color_inverse"
         android:clickable="false"
         android:focusable="false"/>
 </FrameLayout>

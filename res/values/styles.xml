@@ -19,7 +19,6 @@
 
     <style name="PrimaryTextInfoStyle" parent="QuickLookBase">
         <item name="android:textSize">@dimen/secondary_text_size</item>
-        <item name="android:layout_marginEnd">@dimen/secondary_text_margin_end</item>
     </style>
 
     <style name="IconStyle">
@@ -27,12 +26,7 @@
         <item name="android:layout_height">@dimen/quicklook_icon_size</item>
     </style>
 
-    <style name="SecondaryIconStyle" parent="IconStyle">
-        <item name="android:tint">@android:color/white</item>
-    </style>
-
     <style name="SecondaryTextInfoStyle" parent="QuickLookBase">
-        <item name="android:layout_marginStart">@dimen/secondary_text_margin_end</item>
         <item name="android:textSize">@dimen/secondary_text_size</item>
     </style>
     

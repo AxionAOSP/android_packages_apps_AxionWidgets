@@ -120,11 +120,9 @@ fun SettingsScreen(
         }
     }
 
-    val notificationPermissionGranted = remember { mutableStateOf(false) }
     val calendarPermissionGranted = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        notificationPermissionGranted.value = isNotificationListenerEnabled(context)
         calendarPermissionGranted.value = ContextCompat.checkSelfPermission(
             context,
             calendarPermission
@@ -183,25 +181,6 @@ fun SettingsScreen(
                 modifier = Modifier.height(180.dp),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 content = {
-                    item {
-                        BoxWithConstraints {
-                            val cardWidth = maxWidth / 2 - 8.dp
-                            SettingsCard(
-                                icon = Icons.Filled.Notifications,
-                                title = stringResource(id = R.string.allow_notification_access),
-                                subtitle = if (notificationPermissionGranted.value)
-                                    stringResource(id = R.string.access_granted)
-                                else
-                                    stringResource(id = R.string.needed_for_now_playing),
-                                onClick = {
-                                    context.startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
-                                },
-                                backgroundColor = cardBgColor,
-                                textColor = if (isDark) Color.White else Color.Black,
-                                modifier = Modifier.width(cardWidth)
-                            )
-                        }
-                    }
                     item {
                         BoxWithConstraints {
                             val cardWidth = maxWidth / 2 - 8.dp
@@ -285,12 +264,4 @@ fun SettingsCard(
             }
         }
     }
-}
-
-private fun isNotificationListenerEnabled(context: Context): Boolean {
-    val enabledListeners = Settings.Secure.getString(
-        context.contentResolver,
-        "enabled_notification_listeners"
-    ) ?: return false
-    return enabledListeners.contains(context.packageName)
 }

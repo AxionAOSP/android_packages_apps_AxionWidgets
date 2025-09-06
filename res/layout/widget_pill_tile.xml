@@ -43,7 +43,7 @@
             android:layout_width="@dimen/widget_pill_icon_size"
             android:layout_height="@dimen/widget_pill_icon_size"
             android:scaleType="centerInside"
-            android:tint="@android:color/white"
+            android:tint="@color/device_primary_color_inverse"
             android:visibility="gone"
             android:clickable="false"
             android:focusable="false" />
@@ -70,7 +70,7 @@
                 android:text="Loading..."
                 android:paddingEnd="@dimen/widget_pill_label_padding_end"
                 android:textSize="@dimen/pill_tile_text_size"
-                android:textColor="@*android:color/white"
+                android:textColor="@color/device_primary_color_inverse"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:visibility="gone"

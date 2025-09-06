@@ -14,116 +14,80 @@
 package com.android.axion.widgets.cardlab
 
 import android.app.PendingIntent
-import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.widget.RemoteViews
+import android.view.View
 import android.graphics.*
 import android.util.TypedValue
-import android.view.View
-import android.widget.RemoteViews
+import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
 import com.android.axion.widgets.data.QuickLookData
-import com.android.axion.widgets.manager.BatteryWidgetManager
 
-class BatteryWidgetReceiver : AppWidgetProvider(), BatteryWidgetManager.Callback {
+class BatteryWidgetReceiver : AxionWidgetProvider() {
 
-    private val Context.bm: BatteryWidgetManager
-        get() = BatteryWidgetManager.get(this)
+    companion object {
+        fun update(context: Context, qldata: QuickLookData?) {
+            AxionWidgetProvider.updateWidget(
+                context,
+                BatteryWidgetReceiver::class.java,
+                qldata ?: QuickLookData.Empty
+            ) { ctx, data ->
+                AxionWidgetProvider.buildRemoteViews(ctx, R.layout.widget_battery, data) { d ->
+                    if (d is QuickLookData.Battery) {
+                        val batteryBg = createBatteryBg(ctx, d.level)
 
-    private lateinit var appContext: Context
-    private var initialized = false
+                        if (d.level <= 20) {
+                            setViewVisibility(R.id.battery_bg_view_low, View.VISIBLE)
+                            setImageViewBitmap(R.id.battery_bg_view_low, batteryBg)
+                            setViewVisibility(R.id.battery_bg_view, View.GONE)
+                            setImageViewBitmap(R.id.battery_bg_view, null)
+                        } else {
+                            setViewVisibility(R.id.battery_bg_view_low, View.GONE)
+                            setImageViewBitmap(R.id.battery_bg_view_low, null)
+                            setViewVisibility(R.id.battery_bg_view, View.VISIBLE)
+                            setImageViewBitmap(R.id.battery_bg_view, batteryBg)
+                        }
 
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        if (!initialized) init(context)
-    }
-
-    override fun onDisabled(context: Context) {
-        context.bm.dispose()
-        initialized = false
-    }
-
-    private fun init(context: Context) {
-        appContext = context.applicationContext
-        context.bm.init()
-        context.bm.addListener(this)
-        initialized = true
-    }
-
-    override fun onBatteryUpdated(data: QuickLookData.Battery?) {
-        updateWidget(data)
-    }
-
-    private fun updateWidget(data: QuickLookData.Battery?) {
-        val appWidgetManager = AppWidgetManager.getInstance(appContext)
-        val thisWidget = ComponentName(appContext, BatteryWidgetReceiver::class.java)
-        val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
-
-        val intent = Intent(Intent.ACTION_POWER_USAGE_SUMMARY).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        val pendingIntent = PendingIntent.getActivity(
-            appContext,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        appWidgetIds.forEach { appWidgetId ->
-            val views = RemoteViews(appContext.packageName, R.layout.widget_battery).apply {
-                setOnClickPendingIntent(R.id.battery_card_root, pendingIntent)
-
-                if (data != null) {
-                    val batteryBg = createBatteryBg(data.level)
-                    if (data.level <= 20) {
-                        setViewVisibility(R.id.battery_bg_view_low, View.VISIBLE)
-                        setImageViewBitmap(R.id.battery_bg_view_low, batteryBg)
-                        setViewVisibility(R.id.battery_bg_view, View.GONE)
-                        setImageViewBitmap(R.id.battery_bg_view, null)
+                        setTextViewText(R.id.battery_percentage, "${d.level}%")
+                        setViewVisibility(R.id.battery_view_bottom_left, if (d.isCharging) View.VISIBLE else View.GONE)
                     } else {
-                        setViewVisibility(R.id.battery_bg_view_low, View.GONE)
-                        setImageViewBitmap(R.id.battery_bg_view_low, null)
-                        setViewVisibility(R.id.battery_bg_view, View.VISIBLE)
-                        setImageViewBitmap(R.id.battery_bg_view, batteryBg)
+                        setTextViewText(R.id.battery_percentage, "")
+                        setViewVisibility(R.id.battery_view_bottom_left, View.INVISIBLE)
                     }
 
-                    setViewVisibility(R.id.battery_percentage, View.VISIBLE)
-                    setTextViewText(R.id.battery_percentage, "${data.level}%")
-                    setViewVisibility(
-                        R.id.battery_view_bottom_left,
-                        if (data.isCharging) View.VISIBLE else View.GONE
+                    val intent = Intent(Intent.ACTION_POWER_USAGE_SUMMARY).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    }
+                    val pendingIntent = PendingIntent.getActivity(
+                        ctx,
+                        0,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     )
-                } else {
-                    setTextViewText(R.id.battery_percentage, "")
-                    setViewVisibility(R.id.battery_view_bottom_left, View.INVISIBLE)
+                    setOnClickPendingIntent(R.id.battery_card_root, pendingIntent)
                 }
             }
-            appWidgetManager.updateAppWidget(appWidgetId, views)
         }
-    }
 
-    private fun createBatteryBg(batteryLevel: Int): Bitmap {
-        val sizeDp = 48
-        val px = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            sizeDp.toFloat(),
-            appContext.resources.displayMetrics
-        ).toInt()
+        private fun createBatteryBg(ctx: Context, batteryLevel: Int): Bitmap {
+            val sizeDp = 48
+            val px = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                sizeDp.toFloat(),
+                ctx.resources.displayMetrics
+            ).toInt()
 
-        return Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888).apply {
-            val canvas = Canvas(this)
-            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                style = Paint.Style.FILL
-                isDither = true
+            return Bitmap.createBitmap(px, px, Bitmap.Config.ARGB_8888).apply {
+                val canvas = Canvas(this)
+                val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    style = Paint.Style.FILL
+                    color = Color.GREEN
+                }
+                val rect = RectF(0f, 0f, px.toFloat(), px.toFloat())
+                val sweepAngle = (batteryLevel / 100f) * 360f
+                canvas.drawArc(rect, -90f, sweepAngle, true, paint)
             }
-            val rect = RectF(0f, 0f, px.toFloat(), px.toFloat())
-            val sweepAngle = (batteryLevel / 100f) * 360f
-            canvas.drawArc(rect, -90f, sweepAngle, true, paint)
         }
     }
 }

@@ -14,15 +14,14 @@
 package com.android.axion.widgets.di
 
 import android.content.Context
-import com.android.axion.widgets.WidgetLifecycleManager
+import com.android.axion.widgets.cardlab.tile.TileConfigs
 import com.android.axion.widgets.cardlab.tile.TileManager
 import com.android.axion.widgets.cardlab.tile.TileRepository
-import com.android.axion.widgets.manager.BatteryDataManager
-import com.android.axion.widgets.manager.BatteryWidgetManager
 import com.android.axion.widgets.manager.QuickLookDataManager
 import com.android.axion.widgets.provider.BatteryStatusProvider
 import com.android.axion.widgets.provider.CalendarProvider
 import com.android.axion.widgets.provider.MediaPlaybackProvider
+import com.android.axion.widgets.provider.NotificationProvider
 import com.android.axion.widgets.provider.WeatherProvider
 import com.android.axion.widgets.quicklook.QuickLookWidgetInteractor
 import dagger.BindsInstance
@@ -40,34 +39,10 @@ object AxionModule {
 
     @Provides
     @Singleton
-    fun provideBatteryDataManager(
-        @ApplicationContext context: Context,
-        batteryStatusProvider: BatteryStatusProvider
-    ): BatteryDataManager =
-        BatteryDataManager(context, batteryStatusProvider)
-
-    @Provides
-    @Singleton
-    fun provideBatteryWidgetManager(
-        @ApplicationContext context: Context,
-        batteryDataManager: BatteryDataManager,
-        lifecycleManager: WidgetLifecycleManager
-    ): BatteryWidgetManager =
-        BatteryWidgetManager(context, batteryDataManager, lifecycleManager)
-
-    @Provides
-    @Singleton
     fun provideBatteryStatusProvider(
         @ApplicationContext context: Context
     ): BatteryStatusProvider =
         BatteryStatusProvider(context)
-
-    @Provides
-    @Singleton
-    fun provideWeatherProvider(
-        @ApplicationContext context: Context
-    ): WeatherProvider =
-        WeatherProvider(context)
 
     @Provides
     @Singleton
@@ -85,22 +60,17 @@ object AxionModule {
 
     @Provides
     @Singleton
+    fun provideNotificationProvider(
+        @ApplicationContext context: Context
+    ): NotificationProvider =
+        NotificationProvider(context)
+
+    @Provides
+    @Singleton
     fun provideQuickLookDataManager(
-        @ApplicationContext context: Context,
-        mediaProvider: MediaPlaybackProvider,
-        weatherProvider: WeatherProvider,
-        calendarProvider: CalendarProvider,
-        batteryDataManager: BatteryDataManager,
-        lifecycleManager: WidgetLifecycleManager
+        @ApplicationContext context: Context
     ): QuickLookDataManager =
-        QuickLookDataManager(
-            context,
-            mediaProvider,
-            weatherProvider,
-            calendarProvider,
-            batteryDataManager,
-            lifecycleManager
-        )
+        QuickLookDataManager(context)
 
     @Provides
     @Singleton
@@ -109,13 +79,13 @@ object AxionModule {
         dataManager: QuickLookDataManager
     ): QuickLookWidgetInteractor =
         QuickLookWidgetInteractor(context, dataManager)
-
+        
     @Provides
     @Singleton
-    fun provideWidgetLifecycleManager(
+    fun provideWeatherProvider(
         @ApplicationContext context: Context
-    ): WidgetLifecycleManager =
-        WidgetLifecycleManager(context)
+    ): WeatherProvider =
+        WeatherProvider(context)
 }
 
 @Module
@@ -124,20 +94,27 @@ object TileModule {
 
     @Provides
     @Singleton
-    fun provideTileRepository(
-        @ApplicationContext context: Context,
-        lifecycleManager: WidgetLifecycleManager
-    ): TileRepository =
-        TileRepository(context, lifecycleManager)
-
-    @Provides
-    @Singleton
     fun provideTileManager(
         @ApplicationContext context: Context,
         repository: TileRepository,
-        lifecycleManager: WidgetLifecycleManager
+        tileConfigs: TileConfigs
     ): TileManager =
-        TileManager(context, repository, lifecycleManager)
+        TileManager(context, repository, tileConfigs)
+
+    @Provides
+    @Singleton
+    fun provideTileConfigs(
+        @ApplicationContext context: Context
+    ): TileConfigs =
+        TileConfigs(context)
+
+    @Provides
+    @Singleton
+    fun provideTileRepository(
+        @ApplicationContext context: Context,
+        tileConfigs: TileConfigs
+    ): TileRepository =
+        TileRepository(context, tileConfigs)
 }
 
 @Singleton
@@ -151,11 +128,8 @@ interface AxionAppComponent {
 
     fun quickLookWidgetInteractor(): QuickLookWidgetInteractor
     fun quickLookDataManager(): QuickLookDataManager
-    fun batteryDataManager(): BatteryDataManager
-    fun batteryWidgetManager(): BatteryWidgetManager
     fun tileRepository(): TileRepository
     fun tileManager(): TileManager
-    fun lifecycleManager(): WidgetLifecycleManager
 
     @Component.Factory
     interface Factory {

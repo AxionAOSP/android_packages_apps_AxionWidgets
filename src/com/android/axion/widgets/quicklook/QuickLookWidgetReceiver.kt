@@ -13,56 +13,32 @@
  */
 package com.android.axion.widgets.quicklook
 
-import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
-import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.widget.RemoteViews
-import com.android.axion.widgets.callback.QuickLookDataCallback
+import com.android.axion.widgets.AxionWidgetProvider
+import com.android.axion.widgets.data.QuickLookData
 import com.android.axion.widgets.manager.QuickLookDataManager
+import com.android.axion.widgets.utils.logger
 
-class QuickLookWidgetReceiver : AppWidgetProvider(), QuickLookDataCallback {
+class QuickLookWidgetReceiver : AxionWidgetProvider() {
 
-    private val Context.dm: QuickLookDataManager
-        get() = QuickLookDataManager.get(this)
-
-    private lateinit var appContext: Context
-    private var initialized = false
-
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        if (!initialized) init(context)
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+        logger("intent received. intent: ${intent}")
+        val qldata = QuickLookDataManager.get(context).quickLookData
+        update(context, qldata)
     }
 
-    override fun onDisabled(context: Context) {
-        context.dm.dispose()
-        initialized = false
-    }
-
-    private fun init(context: Context) {
-        appContext = context.applicationContext
-        context.dm.init()
-        context.dm.addListener(this)
-        refreshWidgets()
-        initialized = true
-    }
-
-    private fun refreshWidgets() {
-        val appWidgetManager = AppWidgetManager.getInstance(appContext)
-        val thisWidget = ComponentName(appContext, QuickLookWidgetReceiver::class.java)
-        val appWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
-        appWidgetIds.forEach { appWidgetId ->
-            val views: RemoteViews? = QuickLookWidgetInteractor.get(appContext).updateRemoteViews()
-            views?.let {
-                appWidgetManager.updateAppWidget(appWidgetId, views)
-            }
+    companion object {
+        fun update(context: Context, data: QuickLookData) {
+            val views = QuickLookWidgetInteractor.get(context).updateRemoteViews(data)
+            AxionWidgetProvider.updateAllWidgets(
+                context,
+                QuickLookWidgetReceiver::class.java,
+                views
+            )
+            this.logger("updated ${data}")
         }
-    }
-
-    override fun onDataUpdated() {
-        refreshWidgets()
     }
 }

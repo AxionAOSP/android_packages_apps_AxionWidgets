@@ -20,6 +20,9 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- Media events -->
     <uses-permission android:name="android.permission.STATUS_BAR_SERVICE" />
@@ -46,6 +49,9 @@
             android:permission="android.permission.BIND_APPWIDGET">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.DATE_CHANGED"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET"/>
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
@@ -130,20 +136,28 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <service
-            android:name=".provider.MediaNotificationListenerService"
-            android:label="@string/label_media_notification_listener"
-            android:exported="true"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>
-        
         <activity
             android:name=".SettingsActivity"
             android:exported="true"
             android:theme="@style/Theme.Material3.DayNight.NoActionBar" />
+
+        <receiver
+            android:name=".AxionReceiver"
+            android:exported="true">
+            <intent-filter android:priority="0">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".WidgetUpdateService"
+            android:foregroundServiceType="systemExempted"
+            android:exported="true" />
+
+        <service
+            android:name=".provider.MediaNotificationListenerService"
+            android:exported="true" />
 
     </application>
 

@@ -23,4 +23,6 @@
     <dimen name="card_padding_vertical">3dp</dimen>
     <dimen name="card_padding_horizontal">9dp</dimen>
     <dimen name="card_radius">16dp</dimen>
+    <dimen name="quicklook_info_margin_horizontal">6dp</dimen>
+    <dimen name="quicklook_secondary_info_margin_horizontal">3dp</dimen>
 </resources>

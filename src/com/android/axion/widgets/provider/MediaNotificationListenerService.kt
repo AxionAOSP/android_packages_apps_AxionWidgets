@@ -13,29 +13,32 @@
  */
 package com.android.axion.widgets.provider
 
+import android.content.ComponentName
+import android.os.UserHandle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import com.android.axion.widgets.manager.QuickLookDataManager
+import dagger.hilt.android.AndroidEntryPoint
+import com.android.axion.widgets.utils.SafeCloseable
+import com.android.axion.widgets.utils.Tracker
+import com.android.axion.widgets.utils.logger
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MediaNotificationListenerService : NotificationListenerService() {
+class MediaNotificationListenerService : NotificationListenerService(), SafeCloseable {
 
-    private val coroutineScope = MainScope()
+    var notifProvider: NotificationProvider? = null
+
+    private val scope = MainScope()
     private val backgroundExecutor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val notificationsMap = mutableMapOf<String, StatusBarNotification>()
-    private val _notificationsFlow = MutableStateFlow<List<StatusBarNotification>>(emptyList())
-    val notificationsFlow = _notificationsFlow.asStateFlow()
-
-    private val dataManager: QuickLookDataManager by lazy {
-        QuickLookDataManager.get(applicationContext)
-    }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        coroutineScope.launch(backgroundExecutor) {
+        scope.launch(backgroundExecutor) {
             notificationsMap[sbn.key] = sbn
             updateNotifications()
         }
@@ -43,28 +46,22 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
-        coroutineScope.launch(backgroundExecutor) {
+        scope.launch(backgroundExecutor) {
             notificationsMap.remove(sbn.key)
             updateNotifications()
         }
     }
 
     private suspend fun updateNotifications() {
-        val currentNotifications = notificationsMap.values.toList()
-        try {
-            dataManager.updateNotifications(currentNotifications)
-        } catch (_: Exception) {}
-        withContext(Dispatchers.Main) {
-            _notificationsFlow.value = currentNotifications
-        }
+        notifProvider?.onNotificationsChanged(notificationsMap.values.toList())
+        logger("notifications update!" + if (notifProvider == null) "notifProvider is null!" else "notifprovider available!!")
     }
 
     private fun refreshNotificationsFromSystem() {
-        coroutineScope.launch(backgroundExecutor) {
+        scope.launch(backgroundExecutor) {
             val activeMap = runCatching {
                 activeNotifications?.associateBy { it.key }
             }.getOrNull() ?: emptyMap()
-
             notificationsMap.clear()
             notificationsMap.putAll(activeMap)
             updateNotifications()
@@ -73,20 +70,26 @@ class MediaNotificationListenerService : NotificationListenerService() {
 
     override fun onListenerConnected() {
         super.onListenerConnected()
+        logger("listener connected")
+        Tracker.get().addCloseable(this)
         refreshNotificationsFromSystem()
-        instance = this
     }
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
-        if (instance === this) {
-            instance = null
-        }
+        logger("listener disconnected")
     }
 
+    override fun close() {
+        scope.cancel()
+    }
+    
     companion object {
-        @Volatile
-        private var instance: MediaNotificationListenerService? = null
-        fun getInstance(): MediaNotificationListenerService? = instance
+        var instance: MediaNotificationListenerService? = null
+            private set
+        val componentName: ComponentName by lazy {
+            val javaClass = MediaNotificationListenerService::class.java
+            ComponentName(javaClass.getPackage().name, javaClass.name)
+        }
     }
 }

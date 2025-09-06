@@ -19,76 +19,41 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Singleton
 import com.android.axion.widgets.AxionApp
-import com.android.axion.widgets.WidgetLifecycleManager
+import com.android.axion.widgets.data.*
 import com.android.axion.widgets.R
 import java.util.concurrent.Executors
-
-data class TileData(
-    val type: String,
-    val isActive: Boolean,
-    val iconRes: Int,
-    val widgetId: Int,
-    val label: String? = null,
-)
 
 @Singleton
 class TileManager @Inject constructor(
     private val context: Context,
     private val repository: TileRepository,
-    private val lifecycleManager: WidgetLifecycleManager
+    private val tileConfigs: TileConfigs
 ) {
 
     private val bgDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
     private val scope = CoroutineScope(SupervisorJob() + bgDispatcher)
+    
+    private val tilesRegistry get() = tileConfigs.tilesRegistry
 
     private val _tilesFlow = MutableStateFlow<Map<Int, TileData>>(emptyMap())
-    val tilesFlow: StateFlow<Map<Int, TileData>> = _tilesFlow.asStateFlow()
-
-    private var repoJob: Job? = null
-
-    fun init() {
-        scope.launch {
-            lifecycleManager.addListener(this)
-            lifecycleManager.widgetsActive.collect { active ->
-                if (active) start() else pause()
-            }
-        }
-        repository.init()
-        start()
-    }
-
-    private fun start() {
-        if (repoJob?.isActive == true) return
-        repoJob = scope.launch {
-            repository.activeTilesFlow.collect { tiles ->
-                _tilesFlow.value = tiles
-                withContext(Dispatchers.Main) {
-                    tiles.values.forEach { data ->
-                        context.updateWidget(data.widgetId, data)
-                    }
+    var tilesFlow: Map<Int, TileData>
+        get() = _tilesFlow.value
+        set(value) {
+            if (_tilesFlow.value != value) {
+                _tilesFlow.value = value.toMap()
+                value.values.forEach { data ->
+                    context.updateWidget(data.widgetId, data)
                 }
             }
         }
-    }
-
-    private fun pause() {
-        repoJob?.cancel()
-        repoJob = null
-    }
 
     fun updateState(widgetId: Int) {
         val type = WidgetPrefs.getWidgetAction(context, widgetId) ?: return
         scope.launch {
             val newState = repository.updateState(type)
-            val tileConfig = repository.tilesRegistry.firstOrNull { it.type == type }
+            val tileConfig = tilesRegistry.firstOrNull { it.type == type }
             withContext(Dispatchers.Main) {
-                val data = TileData(
-                    type,
-                    newState,
-                    tileConfig?.getIcon?.invoke(newState) ?: R.drawable.ic_unknown,
-                    widgetId,
-                    tileConfig?.getLabel?.invoke()
-                )
+                val data = tileConfigs.createTileData(type, widgetId)
                 _tilesFlow.value = _tilesFlow.value + (widgetId to data)
                 context.updateWidget(widgetId, data)
             }
@@ -96,30 +61,18 @@ class TileManager @Inject constructor(
     }
 
     fun getIconForTile(type: String, active: Boolean): Int {
-        return repository.tilesRegistry.firstOrNull { it.type == type }?.getIcon?.invoke(active)
+        return tilesRegistry.firstOrNull { it.type == type }?.getIcon?.invoke(active)
             ?: R.drawable.ic_unknown
     }
 
     fun setTileForWidget(widgetId: Int, type: String) {
         val isActive = false
-        val tileConfig = repository.tilesRegistry.firstOrNull { it.type == type }
-        val data = TileData(
-            type,
-            isActive,
-            getIconForTile(type, isActive),
-            widgetId,
-            tileConfig?.getLabel?.invoke()
-        )
+        val tileConfig = tilesRegistry.firstOrNull { it.type == type }
+        val data = tileConfigs.createTileData(type, widgetId)
         _tilesFlow.value = _tilesFlow.value + (widgetId to data)
         context.updateWidget(widgetId, data)
     }
 
-    fun dispose() {
-        pause()
-        repository.dispose()
-        lifecycleManager.removeListener(this)
-    }
-    
     companion object {
         fun get(context: Context): TileManager {
             val app = context.applicationContext as AxionApp

@@ -38,13 +38,13 @@
 
             <ImageView
                 android:id="@+id/weather_icon"
-                style="@style/SecondaryIconStyle"
+                style="@style/IconStyle"
                 android:layout_marginEnd="@dimen/secondary_text_margin_end"
                 android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/secondary_icon"
-                style="@style/SecondaryIconStyle"
+                style="@style/IconStyle"
                 android:visibility="gone" />
 
             <TextView

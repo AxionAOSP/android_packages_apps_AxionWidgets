@@ -51,7 +51,8 @@ sealed class QuickLookData {
         val title: String,
         val startTime: Long,
         val endTime: Long,
-        val location: String
+        val location: String,
+        val desc: String
     ) : QuickLookData()
 
     data class Battery(
@@ -69,4 +70,14 @@ data class DisplayData(
     val secondaryText: String? = null,
     val iconViewId: Int? = null,
     val iconBitmap: Bitmap? = null
+)
+
+data class TileStates(val states: Map<String, Boolean> = emptyMap())
+
+data class TileData(
+    val type: String,
+    val isActive: Boolean,
+    val iconRes: Int,
+    val widgetId: Int,
+    val label: String? = null,
 )

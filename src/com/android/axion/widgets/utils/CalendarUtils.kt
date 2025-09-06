@@ -152,15 +152,4 @@ object CalendarUtils {
             else -> 3
         }
     }
-
-    fun getCalendarDescription(context: Context, event: CalendarEvent): String {
-        return when (getEventStatus(event)) {
-            1 -> context.getString(
-                R.string.quick_look_widget_calendar_in_time,
-                (TimeUnit.MILLISECONDS.toMinutes(event.startTime) - TimeUnit.MILLISECONDS.toMinutes(System.currentTimeMillis()))
-            )
-            2 -> context.getString(R.string.quick_look_widget_calendar_now)
-            else -> ""
-        }
-    }
 }
