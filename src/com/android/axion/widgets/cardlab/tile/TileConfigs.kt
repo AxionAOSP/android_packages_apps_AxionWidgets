@@ -30,6 +30,8 @@ import android.telephony.SubscriptionManager
 import android.telephony.TelephonyManager
 import com.android.axion.widgets.R
 import com.android.axion.widgets.data.*
+import com.android.axion.widgets.utils.SafeCloseable
+import com.android.axion.widgets.utils.Tracker
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -66,11 +68,9 @@ class TileConfigs @Inject constructor(private val ctx: Context) {
     )
 
     init {
-        cm.registerTorchCallback(object : CameraManager.TorchCallback() {
-            override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-                torchStates[cameraId] = enabled
-            }
-        }, null)
+        TorchCallback(cm) { cameraId, enabled ->
+            torchStates[cameraId] = enabled
+        }
     }
 
     private fun isTorchActive() = torchStates.values.any { it }
@@ -228,4 +228,23 @@ fun TileConfigs.createTileData(type: String, widgetId: Int): TileData {
         widgetId = widgetId,
         label = tileConfig?.getLabel?.invoke()
     )
+}
+
+class TorchCallback(
+    private val cm: CameraManager,
+    private val onTorchChanged: (cameraId: String, enabled: Boolean) -> Unit
+) : CameraManager.TorchCallback(), SafeCloseable {
+
+    init {
+        Tracker.get().addCloseable(this)
+        cm.registerTorchCallback(this, null)
+    }
+
+    override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+        onTorchChanged(cameraId, enabled)
+    }
+
+    override fun close() {
+        cm.unregisterTorchCallback(this)
+    }
 }
