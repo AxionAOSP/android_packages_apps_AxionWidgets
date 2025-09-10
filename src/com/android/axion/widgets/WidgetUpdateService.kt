@@ -16,6 +16,7 @@ package com.android.axion.widgets
 import android.app.*
 import android.app.Service
 import android.content.*
+import android.content.pm.ServiceInfo
 import android.os.*
 import androidx.core.app.NotificationCompat
 import com.android.axion.widgets.cardlab.BatteryWidgetReceiver
@@ -73,7 +74,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
 
     var fgServiceEnabled by Updatable<Boolean> { enabled ->
         if (enabled == true) {
-            startForeground(1002, buildNotification())
+            startForeground(1002, buildNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED)
         } else {
             stopForeground(STOP_FOREGROUND_REMOVE)
         }
