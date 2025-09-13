@@ -23,11 +23,8 @@ import com.android.axion.widgets.utils.Tracker
 import kotlinx.coroutines.*
 import kotlinx.coroutines.selects.onTimeout
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.selects.select
 import java.util.concurrent.*
@@ -41,30 +38,21 @@ class TileRepository @Inject constructor(
 ) : SafeCloseable, AxionProvider<Map<Int, TileData>> {
 
     private val _tileStates = MutableStateFlow(TileStates())
-
     private val tileStates: StateFlow<TileStates> = _tileStates.asStateFlow()
     val tilesRegistry get() = tileConfigs.tilesRegistry
-    
-    private val trigger = Channel<Unit>(Channel.CONFLATED)
-    private val buffer = mutableMapOf<String, Boolean>()
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    private var job: Job? = null
+    private val forceRefresh = Channel<Unit>(Channel.CONFLATED)
 
-    val activeTilesFlow: Flow<Map<Int, TileData>> = tileStates
-        .map { statesSnapshot ->
-            val widgetIds = WidgetPrefs.getAllWidgetIds(context)
-            val result = mutableMapOf<Int, TileData>()
-            for (widgetId in widgetIds) {
-                val type = WidgetPrefs.getWidgetAction(context, widgetId) ?: continue
-                val isActive = statesSnapshot.states[type] ?: continue
-                val tileConfig = tilesRegistry.firstOrNull { it.type == type } ?: continue
-                result[widgetId] = tileConfigs.createTileData(type, widgetId)
+    override val dataFlow: Flow<Map<Int, TileData>> = flow {
+        while (true) {
+            emit(buildActiveTiles(tileStates.value))
+            select<Unit> {
+                onTimeout(3000) {}
+                forceRefresh.onReceive { }
             }
-            result
         }
-        
-    override val dataFlow = activeTilesFlow
+    }
 
     init {
         Tracker.get().addCloseable(this)
@@ -72,26 +60,23 @@ class TileRepository @Inject constructor(
             tile.type to runCatching { tile.observeState() }.getOrDefault(false)
         }
         _tileStates.value = TileStates(initialStates)
-        buffer.putAll(initialStates)
-        job = scope.launch {
-            while (isActive) {
-                select<Unit> {
-                    onTimeout(3000L) {
-                        updateTiles()
-                    }
-                    trigger.onReceive {
-                        updateTiles(force = true)
-                    }
-                }
-            }
-        }
+    }
+
+    private fun buildActiveTiles(statesSnapshot: TileStates): Map<Int, TileData> {
+        val widgetIds = WidgetPrefs.getAllWidgetIds(context)
+        return widgetIds.mapNotNull { widgetId ->
+            val type = WidgetPrefs.getWidgetAction(context, widgetId) ?: return@mapNotNull null
+            val isActive = statesSnapshot.states[type] ?: return@mapNotNull null
+            val tileConfig = tilesRegistry.firstOrNull { it.type == type } ?: return@mapNotNull null
+            widgetId to tileConfigs.createTileData(type, widgetId)
+        }.toMap()
     }
 
     suspend fun updateState(type: String): Boolean {
         val tile = tilesRegistry.firstOrNull { it.type == type } ?: return false
         val newState = withContext(Dispatchers.Default) { tile.toggle() }
-        buffer[type] = newState
-        trigger.trySend(Unit)
+        updateTiles(force = true)
+        forceRefresh.trySend(Unit)
         return newState
     }
 
@@ -99,6 +84,7 @@ class TileRepository @Inject constructor(
         val activeWidgetIds = WidgetPrefs.getAllWidgetIds(context)
         val activeTypes = activeWidgetIds.mapNotNull { WidgetPrefs.getWidgetAction(context, it) }.toSet()
         var hasChange = false
+        val buffer = _tileStates.value.states.toMutableMap()
 
         for (tile in tilesRegistry) {
             if (tile.type !in activeTypes) continue
@@ -115,10 +101,9 @@ class TileRepository @Inject constructor(
     }
 
     override fun close() {
-        job?.cancel()
-        job = null
+        scope.cancel()
     }
-    
+
     companion object {
         fun get(context: Context): TileRepository {
             val app = context.applicationContext as AxionApp

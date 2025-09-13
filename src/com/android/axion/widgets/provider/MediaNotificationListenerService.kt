@@ -31,6 +31,8 @@ import javax.inject.Singleton
 class MediaNotificationListenerService : NotificationListenerService(), SafeCloseable {
 
     var notifProvider: NotificationProvider? = null
+    
+    private var lastNotifiedNotifications: List<StatusBarNotification> = emptyList()
 
     private val scope = MainScope()
     private val backgroundExecutor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
@@ -53,8 +55,12 @@ class MediaNotificationListenerService : NotificationListenerService(), SafeClos
     }
 
     private suspend fun updateNotifications() {
-        notifProvider?.onNotificationsChanged(notificationsMap.values.toList())
-        logger("notifications update!" + if (notifProvider == null) "notifProvider is null!" else "notifprovider available!!")
+        val currentNotifications = notificationsMap.values.toList()
+        if (currentNotifications != lastNotifiedNotifications) {
+            lastNotifiedNotifications = currentNotifications
+            notifProvider?.onNotificationsChanged(currentNotifications)
+            logger("notifications update! notifprovider available!!")
+        }
     }
 
     private fun refreshNotificationsFromSystem() {

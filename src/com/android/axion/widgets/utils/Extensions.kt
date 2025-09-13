@@ -53,78 +53,65 @@ inline fun <reified T> T.logger(msg: String) {
     if (DEBUG) Log.d(T::class.java.simpleName + ": AxLogger", msg)
 }
 
+val callbackFlowCache = mutableMapOf<Any, Flow<*>>()
+val broadcastFlowCache = mutableMapOf<String, Flow<*>>()
+
 inline fun <reified T, Callback> callbackFlow(
     initial: T? = null,
     crossinline register: (Callback) -> Unit,
     crossinline unregister: (Callback) -> Unit,
     crossinline createCallback: (emit: (T?) -> Unit) -> Callback,
     crossinline onCallbackCreated: (Callback) -> Unit = {}
-): Flow<T?> = flow {
-    var last: T? = null
-    emit(initial)
+): Flow<T?> {
+    val key = T::class
 
-    val flow = kotlinx.coroutines.flow.callbackFlow<T?> {
-        val emitFn: (T?) -> Unit = { value ->
-            trySend(value).isSuccess
+    @Suppress("UNCHECKED_CAST")
+    return callbackFlowCache.getOrPut(key) {
+        val flow = kotlinx.coroutines.flow.callbackFlow<T?> {
+            val callback: Callback = createCallback { value -> trySend(value).isSuccess }
+            register(callback)
+            onCallbackCreated(callback)
+
+            Tracker.get().addCloseable(object : SafeCloseable {
+                override fun close() { try { unregister(callback) } catch (_: Exception) {} }
+            })
+
+            awaitClose { try { unregister(callback) } catch (_: Exception) {} }
         }
 
-        val callback: Callback = createCallback(emitFn)
-        register(callback)
-        onCallbackCreated(callback)
-
-        val safeCloseable = object : SafeCloseable {
-            override fun close() {
-                try { unregister(callback) } catch (_: Exception) {}
-            }
-        }
-
-        Tracker.get().addCloseable(safeCloseable)
-
-        awaitClose { unregister(callback) }
-    }
-
-    flow.collect { value ->
-        if (value != last) {
-            last = value
-            emit(value)
-        }
-    }
+        flow.distinctUntilChanged()
+            .shareIn(GlobalScope, SharingStarted.Lazily, replay = 1)
+    } as Flow<T?>
 }
 
 fun <T> Context.broadcastFlow(
     filter: IntentFilter,
     parseIntent: (Intent) -> T
-): Flow<T> = flow {
-    var last: T? = null
+): Flow<T> {
+    val key = filter.toString()
 
-    val flow = kotlinx.coroutines.flow.callbackFlow<T> {
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                if (intent == null) return
-                trySend(parseIntent(intent)).isSuccess
+    @Suppress("UNCHECKED_CAST")
+    return broadcastFlowCache.getOrPut(key) {
+        val flow = kotlinx.coroutines.flow.callbackFlow<T> {
+            val receiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    intent?.let { trySend(parseIntent(it)).isSuccess }
+                }
             }
+
+            val stickyIntent = registerReceiver(receiver, filter)
+            stickyIntent?.let { trySend(parseIntent(it)).isSuccess }
+
+            Tracker.get().addCloseable(object : SafeCloseable {
+                override fun close() { try { unregisterReceiver(receiver) } catch (_: Exception) {} }
+            })
+
+            awaitClose { try { unregisterReceiver(receiver) } catch (_: Exception) {} }
         }
 
-        val stickyIntent = registerReceiver(receiver, filter)
-        stickyIntent?.let { trySend(parseIntent(it)).isSuccess }
-
-        val safeCloseable = object : SafeCloseable {
-            override fun close() {
-                try { unregisterReceiver(receiver) } catch (_: Exception) {}
-            }
-        }
-
-        Tracker.get().addCloseable(safeCloseable)
-
-        awaitClose { try { unregisterReceiver(receiver) } catch (_: Exception) {} }
-    }
-
-    flow.collect { value ->
-        if (value != last) {
-            last = value
-            emit(value)
-        }
-    }
+        flow.distinctUntilChanged()
+            .shareIn(GlobalScope, SharingStarted.Lazily, replay = 1)
+    } as Flow<T>
 }
 
 class Updatable<T>(
@@ -150,36 +137,27 @@ fun <T> CoroutineScope.collect(
     activeFlow: StateFlow<Boolean>,
     action: (T?) -> Unit
 ) {
-    var collectJob: Job? = null
-
     val collector = object : SafeCloseable {
-        override fun close() {
-            collectJob?.cancel()
-            collectJob = null
-        }
-    }
+        private var job: Job? = null
 
-    val mainJob = launch {
-        activeFlow.collect { active ->
-            if (active) {
-                if (collectJob == null || collectJob?.isCancelled == true) {
-                    collectJob = launch {
-                        provider.dataFlow.collect { action(it) }
+        override fun close() {
+            job?.cancel()
+            job = null
+        }
+
+        fun start(scope: CoroutineScope) {
+            job = scope.launch {
+                activeFlow
+                    .onEach { active -> logger("activeFlow changed: $active") }
+                    .flatMapLatest { active ->
+                        if (active) provider.dataFlow.distinctUntilChanged()
+                        else emptyFlow()
                     }
-                }
-                logger("activeflow is active!!! collecting!")
-            } else {
-                Tracker.get().removeCloseable(collector)
-                logger("activeflow is not active! time to sleep!!")
+                    .collect { data -> action(data) }
             }
         }
     }
 
+    collector.start(this)
     Tracker.get().addCloseable(collector)
-    Tracker.get().addCloseable(object : SafeCloseable {
-        override fun close() {
-            mainJob.cancel()
-            Tracker.get().removeCloseable(collector)
-        }
-    })
 }

@@ -35,7 +35,7 @@ interface AxionProvider<T> { val dataFlow: kotlinx.coroutines.flow.Flow<T?> }
 @AndroidEntryPoint(Service::class)
 class WidgetUpdateService : Hilt_WidgetUpdateService() {
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     @Inject lateinit var batteryProvider: BatteryStatusProvider
     @Inject lateinit var calendarProvider: CalendarProvider
@@ -168,7 +168,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
         }
 
         scope.collect(tileRepository, activeFlow) { tiles ->
-            tiles?.let { scope.launch(Dispatchers.Main) { tileManager.tilesFlow = it } }
+            tiles?.let { tileManager.tilesFlow = it }
             logger("tiles update $tiles")
         }
     }
