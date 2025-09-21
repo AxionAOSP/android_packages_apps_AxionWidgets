@@ -37,32 +37,6 @@ class PhotoInteractor(internal val context: Context) {
         get() = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     private val appWidgetManager = AppWidgetManager.getInstance(context)
-    private var photoTracker: PhotoTracker? = null
-    
-    private val allBoundWidgetIds = mutableSetOf<Int>()
-
-    fun bind(widgetIds: List<Int>) {
-        allBoundWidgetIds.addAll(widgetIds)
-        if (photoTracker == null) {
-            photoTracker = PhotoTracker(this)
-        }
-        photoTracker?.bind(allBoundWidgetIds.toList())
-    }
-    
-    fun unbind(widgetIds: List<Int>) {
-        allBoundWidgetIds.removeAll(widgetIds.toSet())
-        if (allBoundWidgetIds.isEmpty()) {
-            dispose()
-        } else {
-            photoTracker?.bind(allBoundWidgetIds.toList())
-        }
-    }
-
-    fun dispose() {
-        photoTracker?.dispose()
-        photoTracker = null
-        allBoundWidgetIds.clear()
-    }
 
     fun getAllActiveWidgetIds(): List<Int> {
         val smallWidgetIds = appWidgetManager.getAppWidgetIds(
@@ -72,21 +46,6 @@ class PhotoInteractor(internal val context: Context) {
             ComponentName(context, PhotoWidgetLargeReceiver::class.java)
         )
         return (smallWidgetIds + largeWidgetIds).toList()
-    }
-
-    fun updateActiveWidgets() {
-        val activeWidgetIds = getAllActiveWidgetIds()
-        allBoundWidgetIds.clear()
-        allBoundWidgetIds.addAll(activeWidgetIds)
-        
-        if (activeWidgetIds.isNotEmpty()) {
-            if (photoTracker == null) {
-                photoTracker = PhotoTracker(this)
-            }
-            photoTracker?.bind(activeWidgetIds)
-        } else {
-            dispose()
-        }
     }
 
     fun saveImageUris(appWidgetId: Int, uris: List<Uri>) {
@@ -141,15 +100,18 @@ class PhotoInteractor(internal val context: Context) {
 
     fun removeImageUris(appWidgetId: Int) {
         val allUris = prefs.getStringSet(PREF_KEY_WIDGET_URIS, mutableSetOf())!!.toMutableSet()
-        val urisToDelete = allUris.filter { it.startsWith("$appWidgetId|") }.mapNotNull { Uri.parse(it.substringAfter("|")) }
+        val urisToDelete = allUris.filter { it.startsWith("$appWidgetId|") }
+            .mapNotNull { Uri.parse(it.substringAfter("|")) }
         urisToDelete.forEach { deleteFileIfExists(it) }
         allUris.removeIf { it.startsWith("$appWidgetId|") }
         prefs.edit { putStringSet(PREF_KEY_WIDGET_URIS, allUris) }
     }
 
-    fun saveGrayscalePref(appWidgetId: Int, grayscale: Boolean) = prefs.edit { putBoolean("grayscale_$appWidgetId", grayscale) }
+    fun saveGrayscalePref(appWidgetId: Int, grayscale: Boolean) =
+        prefs.edit { putBoolean("grayscale_$appWidgetId", grayscale) }
 
-    fun loadGrayscalePref(appWidgetId: Int): Boolean = prefs.getBoolean("grayscale_$appWidgetId", false)
+    fun loadGrayscalePref(appWidgetId: Int): Boolean =
+        prefs.getBoolean("grayscale_$appWidgetId", false)
 
     fun loadBitmapFromUri(uri: Uri): Bitmap? =
         try {
@@ -161,8 +123,9 @@ class PhotoInteractor(internal val context: Context) {
     fun toGrayscale(src: Bitmap): Bitmap {
         val bmpGray = Bitmap.createBitmap(src.width, src.height, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bmpGray)
-        val paint = Paint()
-        paint.colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
+        val paint = Paint().apply {
+            colorFilter = ColorMatrixColorFilter(ColorMatrix().apply { setSaturation(0f) })
+        }
         canvas.drawBitmap(src, 0f, 0f, paint)
         return bmpGray
     }

@@ -13,31 +13,36 @@
  */
 package com.android.axion.widgets.cardlab.photo
 
-import android.appwidget.AppWidgetManager
-import android.appwidget.AppWidgetProvider
 import android.content.Context
+import android.widget.RemoteViews
+import com.android.axion.widgets.AxionWidgetProvider
+import com.android.axion.widgets.R
+import com.android.axion.widgets.utils.logger
 
-class PhotoWidgetSmallReceiver : AppWidgetProvider() {
-
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        val interactor = PhotoWidgetManager.getInteractor(context)
-        interactor.bind(appWidgetIds.toList())
-    }
+class PhotoWidgetSmallReceiver : AxionWidgetProvider() {
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        val interactor = PhotoWidgetManager.getInteractor(context)
-        interactor.unbind(appWidgetIds.toList())
-        val activeWidgets = interactor.getAllActiveWidgetIds()
-        if (activeWidgets.isEmpty()) {
-            PhotoWidgetManager.dispose()
+        val interactor = PhotoInteractor(context)
+
+        appWidgetIds.forEach { widgetId ->
+            interactor.removeImageUris(widgetId)
+            logger("deleted widgetId=$widgetId, clean up!")
         }
+
+        super.onDeleted(context, appWidgetIds)
     }
 
-    override fun onDisabled(context: Context) {
-        val interactor = PhotoWidgetManager.getInteractor(context)
-        interactor.updateActiveWidgets()
-        if (interactor.getAllActiveWidgetIds().isEmpty()) {
-            PhotoWidgetManager.dispose()
+    companion object {
+        fun update(context: Context, data: PhotoWidgetData) {
+            updateWidget(context, PhotoWidgetSmallReceiver::class.java, data) { ctx, d ->
+                val views = RemoteViews(ctx.packageName, R.layout.widget_photo)
+                if (d.bitmap != null) {
+                    views.setImageViewBitmap(R.id.photo_view, d.bitmap)
+                } else {
+                    views.setImageViewResource(R.id.photo_view, R.drawable.photo_image_rec_2_1)
+                }
+                views
+            }
         }
     }
 }

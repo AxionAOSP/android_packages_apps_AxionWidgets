@@ -14,6 +14,7 @@
 package com.android.axion.widgets.di
 
 import android.content.Context
+import com.android.axion.widgets.cardlab.photo.PhotoProvider
 import com.android.axion.widgets.cardlab.tile.TileConfigs
 import com.android.axion.widgets.cardlab.tile.TileManager
 import com.android.axion.widgets.cardlab.tile.TileRepository
@@ -86,6 +87,13 @@ object AxionModule {
         @ApplicationContext context: Context
     ): WeatherProvider =
         WeatherProvider(context)
+        
+    @Provides
+    @Singleton
+    fun providePhotoProvider(
+        @ApplicationContext context: Context
+    ): PhotoProvider =
+        PhotoProvider(context)
 }
 
 @Module

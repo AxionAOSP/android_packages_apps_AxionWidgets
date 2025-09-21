@@ -18,7 +18,6 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.widget.RemoteViews
-import com.android.axion.widgets.data.QuickLookData
 import com.android.axion.widgets.utils.logger
 
 abstract class AxionWidgetProvider : AppWidgetProvider() {
@@ -34,15 +33,15 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
                 val ids = manager.getAppWidgetIds(ComponentName(context, widgetClass))
                 ids.forEach(action)
             }.onFailure { e ->
-                logger("exception occured!!! exception: ${e}")
+                logger("exception occurred!!! exception: $e")
             }
         }
 
-        fun <T : AxionWidgetProvider> updateWidget(
+        fun <W : AxionWidgetProvider, D> updateWidget(
             context: Context,
-            widgetClass: Class<T>,
-            data: QuickLookData,
-            remoteViewsBuilder: (Context, QuickLookData) -> RemoteViews
+            widgetClass: Class<W>,
+            data: D,
+            remoteViewsBuilder: (Context, D) -> RemoteViews
         ) {
             val views = remoteViewsBuilder(context, data)
             forEachWidgetId(context, widgetClass) { id ->
@@ -50,9 +49,9 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
             }
         }
 
-        fun <T : AxionWidgetProvider> updateAllWidgets(
+        fun <W : AxionWidgetProvider> updateAllWidgets(
             context: Context,
-            widgetClass: Class<T>,
+            widgetClass: Class<W>,
             views: RemoteViews
         ) {
             forEachWidgetId(context, widgetClass) { id ->
@@ -60,19 +59,19 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
             }
         }
 
-        fun <T : AxionWidgetProvider> doForAllWidgets(
+        fun <W : AxionWidgetProvider> doForAllWidgets(
             context: Context,
-            widgetClass: Class<T>,
+            widgetClass: Class<W>,
             action: (Int) -> Unit
         ) {
             forEachWidgetId(context, widgetClass, action)
         }
 
-        fun buildRemoteViews(
+        fun <D> buildRemoteViews(
             context: Context,
             layoutResId: Int,
-            data: QuickLookData,
-            binder: RemoteViews.(QuickLookData) -> Unit
+            data: D,
+            binder: RemoteViews.(D) -> Unit
         ): RemoteViews {
             return RemoteViews(context.packageName, layoutResId).apply { binder(data) }
         }

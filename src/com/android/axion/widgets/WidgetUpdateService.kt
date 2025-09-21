@@ -21,6 +21,7 @@ import android.os.*
 import androidx.core.app.NotificationCompat
 import com.android.axion.widgets.cardlab.BatteryWidgetReceiver
 import com.android.axion.widgets.cardlab.tile.*
+import com.android.axion.widgets.cardlab.photo.*
 import com.android.axion.widgets.data.*
 import com.android.axion.widgets.manager.*
 import com.android.axion.widgets.provider.*
@@ -45,6 +46,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     @Inject lateinit var quickLookDataManager: QuickLookDataManager
     @Inject lateinit var tileRepository: TileRepository
     @Inject lateinit var tileManager: TileManager
+    @Inject lateinit var photoProvider: PhotoProvider
 
     lateinit var notifService: MediaNotificationListenerService
 
@@ -170,6 +172,12 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
         scope.collect(tileRepository, activeFlow) { tiles ->
             tiles?.let { tileManager.tilesFlow = it }
             logger("tiles update $tiles")
+        }
+        
+        scope.persistentCollect(photoProvider) { photo ->
+            photo?.let {
+                PhotoWidgetSmallReceiver.update(applicationContext, it)
+            }
         }
     }
 

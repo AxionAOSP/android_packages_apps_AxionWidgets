@@ -161,3 +161,28 @@ fun <T> CoroutineScope.collect(
     collector.start(this)
     Tracker.get().addCloseable(collector)
 }
+
+fun <T> CoroutineScope.persistentCollect(
+    provider: AxionProvider<T>,
+    action: (T?) -> Unit
+) {
+    val collector = object : SafeCloseable {
+        private var job: Job? = null
+
+        override fun close() {
+            job?.cancel()
+            job = null
+        }
+
+        fun start(scope: CoroutineScope) {
+            job = scope.launch {
+                provider.dataFlow
+                    .distinctUntilChanged()
+                    .collect { data -> action(data) }
+            }
+        }
+    }
+
+    collector.start(this)
+    Tracker.get().addCloseable(collector)
+}
