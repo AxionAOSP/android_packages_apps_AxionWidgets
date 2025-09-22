@@ -188,7 +188,7 @@ class TileConfigs @Inject constructor(private val ctx: Context) {
             getter = { am.ringerMode != AudioManager.RINGER_MODE_NORMAL },
             setter = {
                 val next = nextMode(ringerModes.first { it.mode == am.ringerMode }, ringerModes)
-                am.ringerMode = next.mode
+                am.ringerModeInternal = next.mode
                 next.mode != AudioManager.RINGER_MODE_NORMAL
             },
             iconProvider = { ringerModes.first { it.mode == am.ringerMode }.icon },
