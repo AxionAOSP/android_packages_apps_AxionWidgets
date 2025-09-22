@@ -20,6 +20,7 @@ import android.content.pm.ServiceInfo
 import android.os.*
 import androidx.core.app.NotificationCompat
 import com.android.axion.widgets.cardlab.BatteryWidgetReceiver
+import com.android.axion.widgets.cardlab.screentime.*
 import com.android.axion.widgets.cardlab.tile.*
 import com.android.axion.widgets.cardlab.photo.*
 import com.android.axion.widgets.data.*
@@ -47,6 +48,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     @Inject lateinit var tileRepository: TileRepository
     @Inject lateinit var tileManager: TileManager
     @Inject lateinit var photoProvider: PhotoProvider
+    @Inject lateinit var usageStatsProvider: UsageStatsProvider
 
     lateinit var notifService: MediaNotificationListenerService
 
@@ -178,6 +180,10 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
             photo?.let {
                 PhotoWidgetSmallReceiver.update(applicationContext, it)
             }
+        }
+        scope.persistentCollect(usageStatsProvider) { usageData ->
+            ScreenTimeWidgetReceiver.update(applicationContext, usageData)
+            logger("screen time update: $usageData")
         }
     }
 

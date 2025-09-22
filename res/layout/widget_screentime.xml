@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/screen_time_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_widget_card">
+
+    <ImageView
+        android:id="@+id/screen_time_meter"
+        android:layout_width="match_parent"
+        android:layout_height="26dp"
+        android:layout_gravity="top|center_horizontal"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        android:tintMode="src_in"
+        android:tint="@color/battery_device_primary_color"
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="12dp" />
+
+    <LinearLayout
+        android:id="@+id/text_container"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="12dp"
+        android:visibility="gone"
+        android:baselineAligned="true">
+
+        <TextView
+            android:id="@+id/text_hours_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:fontFamily="nothingdot"
+            android:textColor="@color/battery_device_primary_color"
+            android:includeFontPadding="false" />
+
+        <TextView
+            android:id="@+id/text_hours_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="H"
+            android:textSize="18sp"
+            android:layout_marginEnd="4dp"
+            android:fontFamily="nothingdot"
+            android:textColor="@color/battery_device_primary_color"
+            android:includeFontPadding="false" />
+
+        <TextView
+            android:id="@+id/text_minutes_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:fontFamily="nothingdot"
+            android:textColor="@color/battery_device_primary_color"
+            android:includeFontPadding="false" />
+
+        <TextView
+            android:id="@+id/text_minutes_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="M"
+            android:textSize="18sp"
+            android:layout_marginStart="2dp"
+            android:fontFamily="nothingdot"
+            android:textColor="@color/battery_device_primary_color"
+            android:includeFontPadding="false" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_expression"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
+        android:layout_gravity="center"
+        android:src="@drawable/icon_screen_time_expression" />
+
+</FrameLayout>

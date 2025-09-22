@@ -81,3 +81,9 @@ data class TileData(
     val widgetId: Int,
     val label: String? = null,
 )
+
+data class UsageData(
+    val totalTimeForeground: Long = 0L,
+    val formatted: String = "",
+    val level: Int = -1  
+)

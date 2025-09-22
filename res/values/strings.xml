@@ -21,6 +21,7 @@
     <string name="label_photo">Photo</string>
     <string name="label_tile">Tile</string>
     <string name="label_media_notification_listener">Media Notification Listener</string>
+    <string name="label_screentime">Screen time</string>
 
     <!-- Settings -->
     <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>

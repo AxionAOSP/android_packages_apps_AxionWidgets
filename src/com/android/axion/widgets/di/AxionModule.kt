@@ -23,6 +23,7 @@ import com.android.axion.widgets.provider.BatteryStatusProvider
 import com.android.axion.widgets.provider.CalendarProvider
 import com.android.axion.widgets.provider.MediaPlaybackProvider
 import com.android.axion.widgets.provider.NotificationProvider
+import com.android.axion.widgets.provider.UsageStatsProvider
 import com.android.axion.widgets.provider.WeatherProvider
 import com.android.axion.widgets.quicklook.QuickLookWidgetInteractor
 import dagger.BindsInstance
@@ -94,6 +95,13 @@ object AxionModule {
         @ApplicationContext context: Context
     ): PhotoProvider =
         PhotoProvider(context)
+
+    @Provides
+    @Singleton
+    fun provideUsageStatsProvider(
+        @ApplicationContext context: Context
+    ): UsageStatsProvider =
+        UsageStatsProvider(context)
 }
 
 @Module
