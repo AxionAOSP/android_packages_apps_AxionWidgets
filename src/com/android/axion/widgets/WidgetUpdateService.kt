@@ -39,6 +39,9 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
+    private var warmupFinished = false
+    private val warmupDurationMillis = 5 * 60 * 1000L
+
     @Inject lateinit var batteryProvider: BatteryStatusProvider
     @Inject lateinit var calendarProvider: CalendarProvider
     @Inject lateinit var mediaProvider: MediaPlaybackProvider
@@ -101,10 +104,16 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     override fun onCreate() {
         super.onCreate()
         logger("WidgetUpdateService created")
+        
         fgServiceEnabled = true
         notifListenerEnabled = true
         isRunning = true
-        
+
+        scope.launch {
+            delay(warmupDurationMillis)
+            warmupFinished = true
+        }
+
         val filter = IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_ON)
             addAction(Intent.ACTION_SCREEN_OFF)
@@ -212,8 +221,11 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     }
 
     private fun updateWidgetsState() {
-        val active = isScreenOn && onLauncher
-        activeFlow.value = active
+        if (!warmupFinished) {
+            activeFlow.value = true
+            return
+        }
+        activeFlow.value = isScreenOn && onLauncher
     }
 
     companion object {
