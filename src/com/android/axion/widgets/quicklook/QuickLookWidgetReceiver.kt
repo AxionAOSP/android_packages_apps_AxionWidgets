@@ -20,8 +20,19 @@ import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.data.QuickLookData
 import com.android.axion.widgets.manager.QuickLookDataManager
 import com.android.axion.widgets.utils.logger
+import com.android.axion.widgets.provider.BatteryStatusProvider
+import com.android.axion.widgets.provider.CalendarProvider
+import com.android.axion.widgets.provider.MediaPlaybackProvider
+import com.android.axion.widgets.provider.WeatherProvider
 
 class QuickLookWidgetReceiver : AxionWidgetProvider() {
+
+    override fun requiredProviders() = listOf(
+        BatteryStatusProvider::class,
+        CalendarProvider::class,
+        MediaPlaybackProvider::class,
+        WeatherProvider::class
+    )
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)

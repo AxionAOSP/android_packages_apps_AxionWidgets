@@ -22,7 +22,6 @@ import com.android.axion.widgets.manager.QuickLookDataManager
 import com.android.axion.widgets.provider.BatteryStatusProvider
 import com.android.axion.widgets.provider.CalendarProvider
 import com.android.axion.widgets.provider.MediaPlaybackProvider
-import com.android.axion.widgets.provider.NotificationProvider
 import com.android.axion.widgets.provider.UsageStatsProvider
 import com.android.axion.widgets.provider.WeatherProvider
 import com.android.axion.widgets.quicklook.QuickLookWidgetInteractor
@@ -34,6 +33,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import javax.inject.Qualifier
+import kotlinx.coroutines.*
+import kotlin.annotation.AnnotationRetention.BINARY
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -42,16 +44,18 @@ object AxionModule {
     @Provides
     @Singleton
     fun provideBatteryStatusProvider(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        @IoScope scope: CoroutineScope 
     ): BatteryStatusProvider =
-        BatteryStatusProvider(context)
+        BatteryStatusProvider(context, scope)
 
     @Provides
     @Singleton
     fun provideCalendarProvider(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        @IoScope scope: CoroutineScope 
     ): CalendarProvider =
-        CalendarProvider(context)
+        CalendarProvider(context, scope)
 
     @Provides
     @Singleton
@@ -59,13 +63,6 @@ object AxionModule {
         @ApplicationContext context: Context
     ): MediaPlaybackProvider =
         MediaPlaybackProvider(context)
-
-    @Provides
-    @Singleton
-    fun provideNotificationProvider(
-        @ApplicationContext context: Context
-    ): NotificationProvider =
-        NotificationProvider(context)
 
     @Provides
     @Singleton
@@ -85,9 +82,10 @@ object AxionModule {
     @Provides
     @Singleton
     fun provideWeatherProvider(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
+        @IoScope scope: CoroutineScope 
     ): WeatherProvider =
-        WeatherProvider(context)
+        WeatherProvider(context, scope)
         
     @Provides
     @Singleton
@@ -113,9 +111,10 @@ object TileModule {
     fun provideTileManager(
         @ApplicationContext context: Context,
         repository: TileRepository,
-        tileConfigs: TileConfigs
+        tileConfigs: TileConfigs,
+        @IoScope scope: CoroutineScope 
     ): TileManager =
-        TileManager(context, repository, tileConfigs)
+        TileManager(context, repository, tileConfigs, scope)
 
     @Provides
     @Singleton
@@ -128,15 +127,17 @@ object TileModule {
     @Singleton
     fun provideTileRepository(
         @ApplicationContext context: Context,
-        tileConfigs: TileConfigs
+        tileConfigs: TileConfigs,
+        @IoScope scope: CoroutineScope 
     ): TileRepository =
-        TileRepository(context, tileConfigs)
+        TileRepository(context, tileConfigs, scope)
 }
 
 @Singleton
 @Component(
     modules = [
         AxionModule::class,
+        CoroutineScopeModule::class,
         TileModule::class
     ]
 )
@@ -153,4 +154,29 @@ interface AxionAppComponent {
             @BindsInstance @ApplicationContext context: Context
         ): AxionAppComponent
     }
+}
+
+@Qualifier
+@Retention(BINARY)
+annotation class MainScope
+
+@Qualifier
+@Retention(BINARY)
+annotation class IoScope
+
+@Module
+@InstallIn(SingletonComponent::class)
+object CoroutineScopeModule {
+
+    @Provides
+    @Singleton
+    @MainScope
+    fun provideMainScope(): CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    @Provides
+    @Singleton
+    @IoScope
+    fun provideIoScope(): CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.IO)
 }

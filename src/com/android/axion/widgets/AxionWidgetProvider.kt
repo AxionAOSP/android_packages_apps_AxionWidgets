@@ -18,7 +18,9 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.widget.RemoteViews
+import com.android.axion.widgets.manager.WidgetUsageManager
 import com.android.axion.widgets.utils.logger
+import kotlin.reflect.KClass
 
 abstract class AxionWidgetProvider : AppWidgetProvider() {
 
@@ -76,4 +78,29 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
             return RemoteViews(context.packageName, layoutResId).apply { binder(data) }
         }
     }
+    
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        WidgetUsageManager.updateWidgetStatus(context, this::class.java)
+        WidgetUpdateService.update(context)
+    }
+
+    override fun onDisabled(context: Context) {
+        super.onDisabled(context)
+        WidgetUsageManager.updateWidgetStatus(context, this::class.java)
+    }
+
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+        WidgetUsageManager.updateWidgetStatus(context, this::class.java)
+        WidgetUpdateService.update(context)
+    }
+
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        super.onDeleted(context, appWidgetIds)
+        WidgetUsageManager.updateWidgetStatus(context, this::class.java)
+    }
+    
+    open fun requiredProviders(): List<KClass<out AxionProvider<*>>> = emptyList()
+
 }

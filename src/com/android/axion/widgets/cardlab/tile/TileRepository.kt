@@ -18,8 +18,6 @@ import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.AxionProvider
 import com.android.axion.widgets.R
 import com.android.axion.widgets.data.*
-import com.android.axion.widgets.utils.SafeCloseable
-import com.android.axion.widgets.utils.Tracker
 import kotlinx.coroutines.*
 import kotlinx.coroutines.selects.onTimeout
 import kotlinx.coroutines.delay
@@ -34,14 +32,14 @@ import javax.inject.Singleton
 @Singleton
 class TileRepository @Inject constructor(
     private val context: Context,
-    private val tileConfigs: TileConfigs
-) : SafeCloseable, AxionProvider<Map<Int, TileData>> {
+    private val tileConfigs: TileConfigs,
+    private val scope: CoroutineScope
+) : AxionProvider<TilesData> {
 
     private val _tileStates = MutableStateFlow(TileStates())
     private val tileStates: StateFlow<TileStates> = _tileStates.asStateFlow()
     val tilesRegistry get() = tileConfigs.tilesRegistry
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val forceRefresh = Channel<Unit>(Channel.CONFLATED)
 
     override val dataFlow: Flow<Map<Int, TileData>> = flow {
@@ -55,7 +53,6 @@ class TileRepository @Inject constructor(
     }
 
     init {
-        Tracker.get().addCloseable(this)
         val initialStates = tilesRegistry.associate { tile ->
             tile.type to runCatching { tile.observeState() }.getOrDefault(false)
         }
@@ -74,7 +71,7 @@ class TileRepository @Inject constructor(
 
     suspend fun updateState(type: String): Boolean {
         val tile = tilesRegistry.firstOrNull { it.type == type } ?: return false
-        val newState = withContext(Dispatchers.Default) { tile.toggle() }
+        val newState = withContext(scope.coroutineContext) { tile.toggle() }
         updateTiles(force = true)
         forceRefresh.trySend(Unit)
         return newState
@@ -98,10 +95,6 @@ class TileRepository @Inject constructor(
         if (hasChange || force) {
             _tileStates.value = TileStates(buffer.toMap())
         }
-    }
-
-    override fun close() {
-        scope.cancel()
     }
 
     companion object {

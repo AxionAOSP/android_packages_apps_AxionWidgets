@@ -28,11 +28,13 @@ import javax.inject.Singleton
 
 @Singleton
 class WeatherProvider @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val scope: CoroutineScope
 ) : AxionProvider<QuickLookData.Weather> {
 
     override val dataFlow: Flow<QuickLookData.Weather?> = callbackFlow(
         initial = null,
+        scope = scope,
         register = { OmniJawsClient.get().addObserver(context, it) },
         unregister = { OmniJawsClient.get().removeObserver(context, it) },
         createCallback = { emit ->

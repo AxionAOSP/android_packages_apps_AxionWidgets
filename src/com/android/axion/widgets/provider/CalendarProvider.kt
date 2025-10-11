@@ -33,15 +33,16 @@ import javax.inject.Singleton
 
 @Singleton
 class CalendarProvider @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val scope: CoroutineScope
 ) : AxionProvider<QuickLookData.CalendarEvent> {
 
-    private val scope = CoroutineScope(Dispatchers.Default)
     private val handler = Handler(Looper.getMainLooper())
     private var calendarObserver: ContentObserver? = null
 
     override val dataFlow: Flow<QuickLookData.CalendarEvent?> = callbackFlow(
         initial = null,
+        scope = scope,
         register = { callback -> start(callback) },
         unregister = { stop() },
         createCallback = { emit ->

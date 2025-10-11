@@ -23,6 +23,7 @@ import android.util.TypedValue
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
 import com.android.axion.widgets.data.UsageData
+import com.android.axion.widgets.provider.UsageStatsProvider
 
 class ScreenTimeWidgetReceiver : AxionWidgetProvider() {
 
@@ -34,12 +35,17 @@ class ScreenTimeWidgetReceiver : AxionWidgetProvider() {
         }
     }
 
+    override fun requiredProviders() = listOf(
+        UsageStatsProvider::class
+    )
+
     companion object {
-        private var isShowingExpression = false
+        private var isShowingExpression = true
         private var lastUsageData: UsageData? = null
 
-        fun update(context: Context, udata: UsageData?) {
+        fun update(context: Context, udata: UsageData?, reset: Boolean = false) {
             lastUsageData = udata
+            if (reset) isShowingExpression = true
             AxionWidgetProvider.updateWidget(
                 context,
                 ScreenTimeWidgetReceiver::class.java,
@@ -48,10 +54,13 @@ class ScreenTimeWidgetReceiver : AxionWidgetProvider() {
                 AxionWidgetProvider.buildRemoteViews(ctx, R.layout.widget_screentime, data) { d ->
                     if (d is UsageData) {
 
+                        val hours = ((d.totalTimeForeground / (1000 * 60 * 60)) % 24).toInt()
+                        val minutes = ((d.totalTimeForeground / (1000 * 60)) % 60).toInt()
+
                         val expressionRes = when {
-                            d.level > 100 -> R.drawable.icon_screen_time_overtime_expression
-                            d.level < 50 -> R.drawable.icon_screen_time_aod_expression_smile
-                            else -> R.drawable.icon_screen_time_expression
+                            hours >= 8 -> R.drawable.icon_screen_time_overtime_expression
+                            hours >= 2 -> R.drawable.icon_screen_time_expression
+                            else -> R.drawable.icon_screen_time_aod_expression_smile
                         }
 
                         if (isShowingExpression) {
@@ -66,9 +75,6 @@ class ScreenTimeWidgetReceiver : AxionWidgetProvider() {
 
                             val dotMeter = createDotMatrixMeter(ctx, d.level.coerceAtMost(100))
                             setImageViewBitmap(R.id.screen_time_meter, dotMeter)
-
-                            val hours = ((d.totalTimeForeground / (1000 * 60 * 60)) % 24).toInt()
-                            val minutes = ((d.totalTimeForeground / (1000 * 60)) % 60).toInt()
 
                             setTextViewText(R.id.text_hours_number, hours.toString())
                             setTextViewText(R.id.text_minutes_number, minutes.toString())

@@ -22,7 +22,7 @@ class Tracker private constructor() : SafeCloseable {
     private val closeables = mutableListOf<SafeCloseable>()
     private var closed = false
 
-    private val mainScope = CoroutineScope(Dispatchers.Main)
+    var scope :CoroutineScope? = null
 
     companion object {
         @Volatile
@@ -41,7 +41,7 @@ class Tracker private constructor() : SafeCloseable {
     }
 
     fun addCloseable(closeable: SafeCloseable) {
-        mainScope.launch {
+        scope?.launch {
             if (closed) {
                 closeable.close()
                 logger("Closed immediately -> ${closeable::class.simpleName}@${closeable.hashCode()}")
@@ -54,7 +54,7 @@ class Tracker private constructor() : SafeCloseable {
     }
 
     fun removeCloseable(closeable: SafeCloseable) {
-        mainScope.launch {
+        scope?.launch {
             if (closeables.remove(closeable)) {
                 closeable.close()
                 logger("Removed closeable -> ${closeable::class.simpleName}@${closeable.hashCode()}")

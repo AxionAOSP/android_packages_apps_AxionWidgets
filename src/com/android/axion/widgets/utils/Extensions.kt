@@ -22,13 +22,13 @@ import android.os.SystemProperties
 import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
-import com.android.axion.widgets.AxionProvider
 import com.android.axion.widgets.data.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
+import kotlin.reflect.KClass
 
 fun RemoteViews.setTextOrHide(viewId: Int, text: String?) {
     if (text.isNullOrEmpty()) {
@@ -58,10 +58,11 @@ val broadcastFlowCache = mutableMapOf<String, Flow<*>>()
 
 inline fun <reified T, Callback> callbackFlow(
     initial: T? = null,
+    scope: CoroutineScope,
     crossinline register: (Callback) -> Unit,
     crossinline unregister: (Callback) -> Unit,
     crossinline createCallback: (emit: (T?) -> Unit) -> Callback,
-    crossinline onCallbackCreated: (Callback) -> Unit = {}
+    crossinline onCallbackCreated: (Callback) -> Unit = {},
 ): Flow<T?> {
     val key = T::class
 
@@ -80,12 +81,13 @@ inline fun <reified T, Callback> callbackFlow(
         }
 
         flow.distinctUntilChanged()
-            .shareIn(GlobalScope, SharingStarted.Lazily, replay = 1)
+            .shareIn(scope, SharingStarted.Lazily, replay = 1)
     } as Flow<T?>
 }
 
 fun <T> Context.broadcastFlow(
     filter: IntentFilter,
+    scope: CoroutineScope,
     parseIntent: (Intent) -> T
 ): Flow<T> {
     val key = filter.toString()
@@ -110,7 +112,7 @@ fun <T> Context.broadcastFlow(
         }
 
         flow.distinctUntilChanged()
-            .shareIn(GlobalScope, SharingStarted.Lazily, replay = 1)
+            .shareIn(scope, SharingStarted.Lazily, replay = 1)
     } as Flow<T>
 }
 
@@ -130,59 +132,4 @@ class Updatable<T>(
             onChanged(value)
         }
     }
-}
-
-fun <T> CoroutineScope.collect(
-    provider: AxionProvider<T>,
-    activeFlow: StateFlow<Boolean>,
-    action: (T?) -> Unit
-) {
-    val collector = object : SafeCloseable {
-        private var job: Job? = null
-
-        override fun close() {
-            job?.cancel()
-            job = null
-        }
-
-        fun start(scope: CoroutineScope) {
-            job = scope.launch {
-                activeFlow
-                    .onEach { active -> logger("activeFlow changed: $active") }
-                    .flatMapLatest { active ->
-                        if (active) provider.dataFlow.distinctUntilChanged()
-                        else emptyFlow()
-                    }
-                    .collect { data -> action(data) }
-            }
-        }
-    }
-
-    collector.start(this)
-    Tracker.get().addCloseable(collector)
-}
-
-fun <T> CoroutineScope.persistentCollect(
-    provider: AxionProvider<T>,
-    action: (T?) -> Unit
-) {
-    val collector = object : SafeCloseable {
-        private var job: Job? = null
-
-        override fun close() {
-            job?.cancel()
-            job = null
-        }
-
-        fun start(scope: CoroutineScope) {
-            job = scope.launch {
-                provider.dataFlow
-                    .distinctUntilChanged()
-                    .collect { data -> action(data) }
-            }
-        }
-    }
-
-    collector.start(this)
-    Tracker.get().addCloseable(collector)
 }

@@ -18,6 +18,8 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.SystemProperties
 import com.android.axion.widgets.AxionProvider
+import com.android.axion.widgets.data.PhotoWidgetData
+import com.android.axion.widgets.data.PhotoWidgetDataList
 import com.android.axion.widgets.utils.logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
@@ -26,61 +28,73 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-data class PhotoWidgetData(
-    val widgetId: Int,
-    val bitmap: Bitmap?,
-    val uris: List<Uri>,
-    val grayscale: Boolean
-)
-
 @Singleton
 class PhotoProvider @Inject constructor(
     @ApplicationContext private val context: Context
-) : AxionProvider<PhotoWidgetData> {
+) : AxionProvider<PhotoWidgetDataList> {
 
     private val interactor = PhotoInteractor(context)
 
-    override val dataFlow: Flow<PhotoWidgetData?> = flow {
-        val activeWidgetIds = interactor.getAllActiveWidgetIds()
-        logger("started. activeWidgetIds=$activeWidgetIds")
+    private val knownWidgets = mutableSetOf<Pair<Int, Int>>()
 
-        if (activeWidgetIds.isEmpty()) {
-            logger("no active widgets, emitting null")
-            emit(null)
-            return@flow
-        }
+    private val nextShuffleTimes = mutableMapOf<Int, Long>()
+
+    override val dataFlow: Flow<PhotoWidgetDataList?> = flow {
+        logger("PhotoProvider started")
 
         while (true) {
-            activeWidgetIds.forEach { widgetId ->
-                val uris = interactor.getImageUris(widgetId)
-                logger("widgetId=$widgetId uris=${uris.size}")
-
-                if (uris.isEmpty()) {
-                    logger("widgetId=$widgetId has no URIs")
-                    emit(PhotoWidgetData(widgetId, null, emptyList(), false))
-                    return@forEach
-                }
-
-                val prefsKey = "carousel_position_$widgetId"
-                val prefs = context.getSharedPreferences("photo_widget_prefs", Context.MODE_PRIVATE)
-                var pos = prefs.getInt(prefsKey, -1)
-                pos = (pos + 1) % uris.size
-                prefs.edit().putInt(prefsKey, pos).apply()
-
-                logger("widgetId=$widgetId pos=$pos/${uris.size}")
-
-                val bitmap = interactor.loadBitmapFromUri(uris[pos])
-                val grayscale = interactor.loadGrayscalePref(widgetId)
-                val finalBitmap = if (grayscale) bitmap?.let { interactor.toGrayscale(it) } else bitmap
-
-                emit(PhotoWidgetData(widgetId, finalBitmap, uris, grayscale))
-                logger("emitted update for widgetId=$widgetId grayscale=$grayscale")
+            val current = interactor.getAllActiveWidgetIds()
+            if (current.isNotEmpty()) {
+                knownWidgets += current
+                knownWidgets.retainAll(current)
             }
 
-            val interval = activeWidgetIds.minOf { interactor.loadShuffleInterval(it) }
+            if (knownWidgets.isEmpty()) {
+                logger("no active widgets, emitting null")
+                emit(null)
+                delay(10_000)
+                continue
+            }
 
-            logger("delaying for $interval ms before next cycle")
-            delay(interval)
+            val now = System.currentTimeMillis()
+            val updates = mutableListOf<PhotoWidgetData>()
+
+            knownWidgets.forEach { (size, widgetId) ->
+                val interval = interactor.loadShuffleInterval(widgetId)
+                val nextTime = nextShuffleTimes[widgetId] ?: 0L
+
+                if (now >= nextTime) {
+                    val uris = interactor.getImageUris(widgetId)
+                    logger("widgetId=$widgetId (size=$size) uris=${uris.size}")
+
+                    if (uris.isEmpty()) {
+                        updates.add(PhotoWidgetData(widgetId, null, emptyList(), false, size))
+                    } else {
+                        val prefsKey = "carousel_position_$widgetId"
+                        val prefs = context.getSharedPreferences("photo_widget_prefs", Context.MODE_PRIVATE)
+                        var pos = prefs.getInt(prefsKey, -1)
+                        pos = (pos + 1) % uris.size
+                        prefs.edit().putInt(prefsKey, pos).apply()
+
+                        logger("widgetId=$widgetId pos=$pos/${uris.size}")
+
+                        val bitmap = interactor.loadBitmapFromUri(uris[pos])
+                        val grayscale = interactor.loadGrayscalePref(widgetId)
+                        val finalBitmap = if (grayscale) bitmap?.let { interactor.toGrayscale(it) } else bitmap
+
+                        updates.add(PhotoWidgetData(widgetId, finalBitmap, uris, grayscale, size))
+                    }
+
+                    nextShuffleTimes[widgetId] = now + interval
+                }
+            }
+
+            if (updates.isNotEmpty()) {
+                emit(updates)
+                logger("emitted ${updates.size} photo widget updates")
+            }
+
+            delay(60000)
         }
     }
 }

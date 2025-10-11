@@ -23,8 +23,13 @@ import android.util.TypedValue
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
 import com.android.axion.widgets.data.QuickLookData
+import com.android.axion.widgets.provider.BatteryStatusProvider
 
 class BatteryWidgetReceiver : AxionWidgetProvider() {
+
+    override fun requiredProviders() = listOf(
+        BatteryStatusProvider::class
+    )
 
     companion object {
         fun update(context: Context, qldata: QuickLookData?) {

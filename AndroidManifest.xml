@@ -41,7 +41,7 @@
         android:hasCode="true"
         android:allowBackup="false"
         android:directBootAware="true">
-
+        
         <receiver
             android:name="com.android.axion.widgets.quicklook.QuickLookWidgetReceiver"
             android:label="@string/setup_title"

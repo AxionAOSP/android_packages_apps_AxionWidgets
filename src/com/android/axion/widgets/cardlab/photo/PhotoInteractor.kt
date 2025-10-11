@@ -38,14 +38,16 @@ class PhotoInteractor(internal val context: Context) {
 
     private val appWidgetManager = AppWidgetManager.getInstance(context)
 
-    fun getAllActiveWidgetIds(): List<Int> {
+    fun getAllActiveWidgetIds(): List<Pair<Int, Int>> {
         val smallWidgetIds = appWidgetManager.getAppWidgetIds(
             ComponentName(context, PhotoWidgetSmallReceiver::class.java)
-        )
+        ).map { 1 to it }
+
         val largeWidgetIds = appWidgetManager.getAppWidgetIds(
             ComponentName(context, PhotoWidgetLargeReceiver::class.java)
-        )
-        return (smallWidgetIds + largeWidgetIds).toList()
+        ).map { 2 to it }
+
+        return smallWidgetIds + largeWidgetIds
     }
 
     fun saveImageUris(appWidgetId: Int, uris: List<Uri>) {

@@ -13,11 +13,13 @@
  */
 package com.android.axion.widgets.cardlab.photo
 
-import android.content.Context
+import android.appwidget.AppWidgetManager
+import android.content.*
 import android.widget.RemoteViews
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
 import com.android.axion.widgets.utils.logger
+import com.android.axion.widgets.data.PhotoWidgetData
 
 class PhotoWidgetSmallReceiver : AxionWidgetProvider() {
 
@@ -32,16 +34,14 @@ class PhotoWidgetSmallReceiver : AxionWidgetProvider() {
         super.onDeleted(context, appWidgetIds)
     }
 
+    override fun requiredProviders() = listOf(
+        PhotoProvider::class
+    )
+
     companion object {
         fun update(context: Context, data: PhotoWidgetData) {
             updateWidget(context, PhotoWidgetSmallReceiver::class.java, data) { ctx, d ->
-                val views = RemoteViews(ctx.packageName, R.layout.widget_photo)
-                if (d.bitmap != null) {
-                    views.setImageViewBitmap(R.id.photo_view, d.bitmap)
-                } else {
-                    views.setImageViewResource(R.id.photo_view, R.drawable.photo_image_rec_2_1)
-                }
-                views
+                PhotoInteractor(context).updateWidget(d.widgetId, d.bitmap)
             }
         }
     }

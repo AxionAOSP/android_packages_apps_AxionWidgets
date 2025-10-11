@@ -14,82 +14,81 @@
 package com.android.axion.widgets.provider
 
 import android.content.ComponentName
-import android.os.UserHandle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import dagger.hilt.android.AndroidEntryPoint
-import com.android.axion.widgets.utils.SafeCloseable
-import com.android.axion.widgets.utils.Tracker
+import android.media.session.MediaSession
+import com.android.axion.widgets.data.MediaNotification
+import com.android.axion.widgets.data.MediaNotifications
+import com.android.axion.widgets.provider.MediaPlaybackProvider
 import com.android.axion.widgets.utils.logger
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import java.util.concurrent.Executors
-import javax.inject.Inject
-import javax.inject.Singleton
 
-class MediaNotificationListenerService : NotificationListenerService(), SafeCloseable {
+class MediaNotificationListenerService : NotificationListenerService() {
 
-    var notifProvider: NotificationProvider? = null
-    
-    private var lastNotifiedNotifications: List<StatusBarNotification> = emptyList()
+    var mediaProvider: MediaPlaybackProvider? = null
+    var scope: CoroutineScope? = null
 
-    private val scope = MainScope()
-    private val backgroundExecutor = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-    private val notificationsMap = mutableMapOf<String, StatusBarNotification>()
+    private val mediaNotifications = mutableMapOf<String, MediaNotification>()
+    private var lastMediaNotifs: MediaNotifications = emptyList()
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        scope.launch(backgroundExecutor) {
-            notificationsMap[sbn.key] = sbn
-            updateNotifications()
+        scope?.launch {
+            val mediaNotif = MediaNotification(
+                key = sbn.key,
+                token = sbn.notification.extras.getParcelable("android.mediaSession")
+            )
+            mediaNotifications[sbn.key] = mediaNotif
+            update()
         }
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification) {
         super.onNotificationRemoved(sbn)
-        scope.launch(backgroundExecutor) {
-            notificationsMap.remove(sbn.key)
-            updateNotifications()
+        scope?.launch {
+            mediaNotifications.remove(sbn.key)
+            update()
         }
     }
 
-    private suspend fun updateNotifications() {
-        val currentNotifications = notificationsMap.values.toList()
-        if (currentNotifications != lastNotifiedNotifications) {
-            lastNotifiedNotifications = currentNotifications
-            notifProvider?.onNotificationsChanged(currentNotifications)
-            logger("notifications update! notifprovider available!!")
+    private suspend fun update() {
+        val list = mediaNotifications.values.toList()
+        if (list != lastMediaNotifs) {
+            lastMediaNotifs = list
+            mediaProvider?.onMediaUpdate(list)
+            logger("media notifications updated!")
         }
     }
 
-    private fun refreshNotificationsFromSystem() {
-        scope.launch(backgroundExecutor) {
+    private fun refresh() {
+        scope?.launch {
             val activeMap = runCatching {
-                activeNotifications?.associateBy { it.key }
+                activeNotifications?.associateBy { it.key }?.mapValues { (_, sbn) ->
+                    MediaNotification(
+                        key = sbn.key,
+                        token = sbn.notification.extras.getParcelable("android.mediaSession")
+                    )
+                } ?: emptyMap()
             }.getOrNull() ?: emptyMap()
-            notificationsMap.clear()
-            notificationsMap.putAll(activeMap)
-            updateNotifications()
+
+            mediaNotifications.clear()
+            mediaNotifications.putAll(activeMap)
+            update()
         }
     }
 
     override fun onListenerConnected() {
         super.onListenerConnected()
-        logger("listener connected")
-        Tracker.get().addCloseable(this)
-        refreshNotificationsFromSystem()
+        logger("Listener connected")
+        refresh()
     }
 
     override fun onListenerDisconnected() {
         super.onListenerDisconnected()
-        logger("listener disconnected")
+        logger("Listener disconnected")
     }
 
-    override fun close() {
-        scope.cancel()
-    }
-    
     companion object {
         var instance: MediaNotificationListenerService? = null
             private set

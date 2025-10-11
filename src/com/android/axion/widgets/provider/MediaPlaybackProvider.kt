@@ -16,9 +16,9 @@ package com.android.axion.widgets.provider
 import android.content.Context
 import android.media.MediaMetadata
 import android.media.session.*
-import android.service.notification.StatusBarNotification
 import com.android.axion.widgets.AxionProvider
-import com.android.axion.widgets.data.QuickLookData
+import com.android.axion.widgets.data.MediaData
+import com.android.axion.widgets.data.MediaNotifications
 import com.android.axion.widgets.utils.SafeCloseable
 import com.android.axion.widgets.utils.Tracker
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -30,27 +30,27 @@ import javax.inject.Singleton
 @Singleton
 class MediaPlaybackProvider @Inject constructor(
     @ApplicationContext private val context: Context
-) : MediaController.Callback(), AxionProvider<QuickLookData.Media>, SafeCloseable {
+) : MediaController.Callback(), AxionProvider<MediaData>, SafeCloseable {
 
-    private val mediaControllers = mutableListOf<MediaControllerSession>()
-    private var activeController: MediaControllerSession? = null
+    private val session = mutableListOf<MediaSessionController>()
+    private var activeController: MediaSessionController? = null
     private var lastPlaybackState: PlaybackState? = null
 
-    private val _mediaFlow = MutableStateFlow<QuickLookData.Media?>(null)
-    override val dataFlow: Flow<QuickLookData.Media?> = _mediaFlow.asStateFlow()
+    private val _mediaFlow = MutableStateFlow<MediaData?>(null)
+    override val dataFlow: Flow<MediaData?> = _mediaFlow.asStateFlow()
     
     init {
         Tracker.get().addCloseable(this)
     }
 
-    private fun createMedia(): QuickLookData.Media? {
+    private fun createMedia(): MediaData? {
         val metadata = activeController?.controller?.metadata
         val title = metadata?.getText(MediaMetadata.METADATA_KEY_TITLE)?.toString()
         val artist = metadata?.getText(MediaMetadata.METADATA_KEY_ARTIST)?.toString()
         val pkg = activeController?.controller?.packageName
         if (title.isNullOrEmpty() && artist.isNullOrEmpty()) return null
         val isPlaying = activeController?.isPlaying() == true
-        return QuickLookData.Media(title, artist, pkg, isPlaying)
+        return MediaData(title, artist, pkg, isPlaying)
     }
 
     private fun updateMedia() {
@@ -58,35 +58,35 @@ class MediaPlaybackProvider @Inject constructor(
     }
 
     override fun close() {
-        mediaControllers.toList().forEach { it.unregister() }
-        mediaControllers.clear()
+        session.toList().forEach { it.unregister() }
+        session.clear()
         activeController?.unregister()
         activeController = null
         lastPlaybackState = null
         _mediaFlow.value = null
     }
 
-    fun updateNotifications(notifs: List<StatusBarNotification>) {
-        mediaControllers.toList().forEach { it.unregister() }
-        mediaControllers.clear()
-        notifs.forEach { sbn ->
-            val token = sbn.notification.extras.getParcelable<MediaSession.Token>("android.mediaSession")
+    fun onMediaUpdate(mediaNotifs: MediaNotifications) {
+        session.toList().forEach { it.unregister() }
+        session.clear()
+        mediaNotifs.forEach { n ->
+            val token = n.token
             token?.let {
                 val controller = MediaController(context, it)
-                val wrapper = MediaControllerSession(controller, sbn)
-                mediaControllers.add(wrapper)
+                val wrapper = MediaSessionController(controller)
+                session.add(wrapper)
                 wrapper.register()
             }
         }
-        updateTrackedController()
+        updateController()
     }
 
-    private fun updateTrackedController() {
-        val newTracked = mediaControllers.firstOrNull { it.isPlaying() }
-        if (newTracked == activeController) return
+    private fun updateController() {
+        val new = session.firstOrNull { it.isPlaying() }
+        if (new == activeController) return
 
         activeController?.unregister()
-        activeController = newTracked
+        activeController = new
         activeController?.register()
 
         if (activeController == null) {
@@ -101,7 +101,7 @@ class MediaPlaybackProvider @Inject constructor(
         super.onPlaybackStateChanged(state)
         if (state == lastPlaybackState) return
         lastPlaybackState = state
-        updateTrackedController()
+        updateController()
         if (activeController?.isPlaying() == true) {
             updateMedia()
         } else {
@@ -115,9 +115,8 @@ class MediaPlaybackProvider @Inject constructor(
         updateMedia()
     }
 
-    private inner class MediaControllerSession(
-        val controller: MediaController,
-        val sbn: StatusBarNotification?
+    private inner class MediaSessionController(
+        val controller: MediaController
     ) {
         fun isPlaying(): Boolean {
             val state = controller.playbackState ?: return false

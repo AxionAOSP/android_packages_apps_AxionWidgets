@@ -14,6 +14,9 @@
 package com.android.axion.widgets.data
 
 import android.graphics.Bitmap
+import android.media.session.MediaSession
+import android.net.Uri
+import android.service.notification.StatusBarNotification
 
 data class NTWeatherData(
     val city: String? = null,
@@ -87,3 +90,29 @@ data class UsageData(
     val formatted: String = "",
     val level: Int = -1  
 )
+
+data class PhotoWidgetData(
+    val widgetId: Int,
+    val bitmap: Bitmap?,
+    val uris: List<Uri>,
+    val grayscale: Boolean,
+    val size: Int = 1
+)
+
+data class MediaNotification(
+    val key: String,
+    val token: MediaSession.Token?
+)
+
+typealias MediaNotifications = List<MediaNotification>
+
+typealias PhotoWidgetDataList = List<PhotoWidgetData>
+
+typealias TilesData = Map<Int, TileData>
+
+typealias StatusBarNotifications = List<StatusBarNotification>
+
+typealias WeatherData = QuickLookData.Weather
+typealias MediaData = QuickLookData.Media
+typealias CalendarData = QuickLookData.CalendarEvent
+typealias BatteryData = QuickLookData.Battery

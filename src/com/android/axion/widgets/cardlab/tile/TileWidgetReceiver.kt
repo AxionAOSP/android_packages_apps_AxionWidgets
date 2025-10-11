@@ -19,6 +19,10 @@ import com.android.axion.widgets.AxionWidgetProvider
 
 class TileWidgetReceiver : AxionWidgetProvider() {
 
+    override fun requiredProviders() = listOf(
+        TileRepository::class
+    )
+
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action == ACTION_TILE_CLICK) {

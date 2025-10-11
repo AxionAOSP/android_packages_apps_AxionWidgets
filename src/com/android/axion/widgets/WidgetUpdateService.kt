@@ -24,6 +24,7 @@ import com.android.axion.widgets.cardlab.screentime.*
 import com.android.axion.widgets.cardlab.tile.*
 import com.android.axion.widgets.cardlab.photo.*
 import com.android.axion.widgets.data.*
+import com.android.axion.widgets.di.*
 import com.android.axion.widgets.manager.*
 import com.android.axion.widgets.provider.*
 import com.android.axion.widgets.utils.*
@@ -37,47 +38,27 @@ interface AxionProvider<T> { val dataFlow: kotlinx.coroutines.flow.Flow<T?> }
 @AndroidEntryPoint(Service::class)
 class WidgetUpdateService : Hilt_WidgetUpdateService() {
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    @Inject @IoScope
+    lateinit var scope: CoroutineScope
 
-    private var warmupFinished = false
-    private val warmupDurationMillis = 5 * 60 * 1000L
+    @Inject @MainScope
+    lateinit var mainScope: CoroutineScope
 
     @Inject lateinit var batteryProvider: BatteryStatusProvider
     @Inject lateinit var calendarProvider: CalendarProvider
     @Inject lateinit var mediaProvider: MediaPlaybackProvider
-    @Inject lateinit var notificationProvider: NotificationProvider
     @Inject lateinit var weatherProvider: WeatherProvider
     @Inject lateinit var quickLookDataManager: QuickLookDataManager
     @Inject lateinit var tileRepository: TileRepository
     @Inject lateinit var tileManager: TileManager
     @Inject lateinit var photoProvider: PhotoProvider
     @Inject lateinit var usageStatsProvider: UsageStatsProvider
+    
+    private var usageData: UsageData? = null
+    private var photodSmall: PhotoWidgetData? = null
+    private var photodLarge: PhotoWidgetData? = null
 
     lateinit var notifService: MediaNotificationListenerService
-
-    private val activeFlow = MutableStateFlow(true)
-    private var isScreenOn = true
-    private var onLauncher = true
-    private var stackRegistered = false
-
-    private val taskListener = object : TaskStackListener() {
-        override fun onTaskStackChanged() = checkFocusedTask()
-    }
-
-    private val screenReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: android.content.Context?, intent: Intent?) {
-            when (intent?.action) {
-                Intent.ACTION_SCREEN_OFF -> {
-                    isScreenOn = false
-                    updateWidgetsState()
-                }
-                Intent.ACTION_SCREEN_ON -> {
-                    isScreenOn = true
-                    checkFocusedTask()
-                }
-            }
-        }
-    }
 
     var fgServiceEnabled by Updatable<Boolean> { enabled ->
         if (enabled == true) {
@@ -89,48 +70,31 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
 
     var notifListenerEnabled by Updatable<Boolean> { enabled ->
         runCatching {
-            if (enabled == true) {
-                notifService = MediaNotificationListenerService()
-                notifService.notifProvider = notificationProvider
-                notifService.registerAsSystemService(applicationContext, MediaNotificationListenerService.componentName, UserHandle.USER_ALL)
-                logger("enable notification listener")
-            } else {
-                notifService.unregisterAsSystemService()
-                logger("disabled notification listener")
-            }
+            if (enabled == true) registerNotifService()
+            else unregisterNotifService()
         }
     }
 
     override fun onCreate() {
         super.onCreate()
         logger("WidgetUpdateService created")
-        
+        Tracker.get().scope = mainScope
         fgServiceEnabled = true
         notifListenerEnabled = true
-        isRunning = true
-
-        scope.launch {
-            delay(warmupDurationMillis)
-            warmupFinished = true
-        }
-
-        val filter = IntentFilter().apply {
-            addAction(Intent.ACTION_SCREEN_ON)
-            addAction(Intent.ACTION_SCREEN_OFF)
-        }
-        registerReceiver(screenReceiver, filter)
-
-        if (!stackRegistered) {
-            runCatching {
-                ActivityTaskManager.getService().registerTaskStackListener(taskListener)
-                stackRegistered = true
-            }
-        }
-
+        WidgetUsageManager.refreshAll(applicationContext)
         startProviders()
+        isRunning = true
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int = START_STICKY
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        when (intent?.action) {
+            ACTION_UPDATE -> {
+                logger("Update requested from widget provider")
+                update()
+            }
+        }
+        return START_STICKY
+    }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -139,60 +103,49 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
         Tracker.destroy()
         notifListenerEnabled = false
         fgServiceEnabled = false
-        
-        runCatching {
-            unregisterReceiver(screenReceiver)
-            if (stackRegistered) {
-                ActivityTaskManager.getService().unregisterTaskStackListener(taskListener)
-            }
-        }
-
         scope.cancel()
+        mainScope.cancel()
         isRunning = false
         super.onDestroy()
     }
 
-    fun startProviders() {
-        scope.collect(batteryProvider, activeFlow) { battery ->
-            BatteryWidgetReceiver.update(applicationContext, battery)
-            quickLookDataManager.batteryData = battery
-            logger("battery update: $battery")
-        }
+    private fun startProviders() {
+        scope.combinedCollect(
+            combinedFlow = WidgetFlows(
+                batteryProvider,
+                calendarProvider,
+                mediaProvider,
+                weatherProvider,
+                tileRepository,
+                photoProvider,
+                usageStatsProvider
+            )
+        ) { data ->
+            data?.let { d ->
+                BatteryWidgetReceiver.update(applicationContext, d.battery)
+                ScreenTimeWidgetReceiver.update(applicationContext, d.usage)
+                d.photos?.forEach { photo ->
+                    when (photo.size) {
+                        1 -> {
+                            PhotoWidgetSmallReceiver.update(applicationContext, photo)
+                            photodSmall = photo
+                        }
+                        2 -> {
+                            PhotoWidgetLargeReceiver.update(applicationContext, photo)
+                            photodLarge = photo
+                        }
+                    }
+                }
+                
+                quickLookDataManager.apply {
+                    batteryData = d.battery
+                    calendarData = d.calendar
+                    mediaData = d.media
+                    weatherData = d.weather
+                }
 
-        scope.collect(calendarProvider, activeFlow) { calendar ->
-            quickLookDataManager.calendarData = calendar
-            logger("calendarData update: $calendar")
-        }
-
-        scope.collect(mediaProvider, activeFlow) { media ->
-            quickLookDataManager.mediaData = media
-            logger("mediaData update $media")
-        }
-
-        scope.collect(notificationProvider, activeFlow) { notifications ->
-            notifications?.let { 
-                scope.launch(Dispatchers.Main) { mediaProvider.updateNotifications(it) }
+                d.tiles?.let { tileManager.tilesFlow = it }
             }
-        }
-
-        scope.collect(weatherProvider, activeFlow) { weather ->
-            quickLookDataManager.weatherData = weather
-            logger("weather update $weather")
-        }
-
-        scope.collect(tileRepository, activeFlow) { tiles ->
-            tiles?.let { tileManager.tilesFlow = it }
-            logger("tiles update $tiles")
-        }
-        
-        scope.persistentCollect(photoProvider) { photo ->
-            photo?.let {
-                PhotoWidgetSmallReceiver.update(applicationContext, it)
-            }
-        }
-        scope.persistentCollect(usageStatsProvider) { usageData ->
-            ScreenTimeWidgetReceiver.update(applicationContext, usageData)
-            logger("screen time update: $usageData")
         }
     }
 
@@ -209,27 +162,46 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
             .build()
         return notification
     }
-
-    private fun checkFocusedTask() {
-        val topPackage = try {
-            ActivityTaskManager.getService().getFocusedRootTaskInfo()?.topActivity?.packageName
-        } catch (e: RemoteException) {
-            null
-        }
-        onLauncher = topPackage == "com.android.launcher3"
-        updateWidgetsState()
+    
+    fun registerNotifService() {
+        notifService = MediaNotificationListenerService()
+        notifService.scope = mainScope
+        notifService.mediaProvider = mediaProvider
+        notifService.registerAsSystemService(applicationContext, MediaNotificationListenerService.componentName, UserHandle.USER_ALL)
+        logger("enable notification listener")
+    }
+    
+    fun unregisterNotifService() {
+        notifService.unregisterAsSystemService()
+        logger("disabled notification listener")
     }
 
-    private fun updateWidgetsState() {
-        if (!warmupFinished) {
-            activeFlow.value = true
-            return
+    private fun update() {
+        scope.launch {
+            BatteryWidgetReceiver.update(applicationContext, quickLookDataManager.batteryData)
+            ScreenTimeWidgetReceiver.update(applicationContext, usageData, true)
+            photodSmall?.let {
+                PhotoWidgetSmallReceiver.update(applicationContext, it)
+                logger("photo update: widgetId=${it.widgetId} ${it.size}")
+            }
+            photodLarge?.let {
+                PhotoWidgetLargeReceiver.update(applicationContext, it)
+                logger("photo update: widgetId=${it.widgetId} ${it.size}")
+            }
         }
-        activeFlow.value = isScreenOn && onLauncher
     }
 
     companion object {
         @Volatile
         var isRunning = false
+        
+        const val ACTION_UPDATE = "com.android.axion.widgets.ACTION_UPDATE"
+
+        fun update(context: Context) {
+            val intent = Intent(context, WidgetUpdateService::class.java).apply {
+                action = ACTION_UPDATE
+            }
+            context.startService(intent)
+        }
     }
 }

@@ -27,12 +27,10 @@ import java.util.concurrent.Executors
 class TileManager @Inject constructor(
     private val context: Context,
     private val repository: TileRepository,
-    private val tileConfigs: TileConfigs
+    private val tileConfigs: TileConfigs,
+    private val scope: CoroutineScope
 ) {
 
-    private val bgDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
-    private val scope = CoroutineScope(SupervisorJob() + bgDispatcher)
-    
     private val tilesRegistry get() = tileConfigs.tilesRegistry
 
     private val _tilesFlow = MutableStateFlow<Map<Int, TileData>>(emptyMap())

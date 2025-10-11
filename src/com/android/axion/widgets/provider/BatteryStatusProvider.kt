@@ -28,7 +28,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class BatteryStatusProvider @Inject constructor(@ApplicationContext private val context: Context) : AxionProvider<QuickLookData.Battery> {
+class BatteryStatusProvider @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val scope: CoroutineScope
+) : AxionProvider<QuickLookData.Battery> {
 
     private val PLUGGED_TYPES = setOf(
         BatteryManager.BATTERY_PLUGGED_AC,
@@ -45,7 +48,8 @@ class BatteryStatusProvider @Inject constructor(@ApplicationContext private val 
     private val batteryManager by lazy { context.getSystemService(Context.BATTERY_SERVICE) as BatteryManager }
 
     override val dataFlow: Flow<QuickLookData.Battery?> = context.broadcastFlow(
-        filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
+        filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED),
+        scope = scope
     ) { intent ->
         val status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN)
         val plugged = intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0)

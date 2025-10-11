@@ -20,8 +20,8 @@ import android.util.Log
 import com.android.axion.widgets.AxionProvider
 import com.android.axion.widgets.data.UsageData
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -77,8 +77,7 @@ class UsageStatsProvider @Inject constructor(
                 )
             }
 
-            kotlinx.coroutines.delay(60_000)
+            delay(60_000)
         }
     }
-
 }
