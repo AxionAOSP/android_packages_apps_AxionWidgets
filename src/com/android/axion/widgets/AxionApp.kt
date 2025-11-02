@@ -14,7 +14,9 @@
 package com.android.axion.widgets
 
 import android.app.Application
-import androidx.lifecycle.ProcessLifecycleOwner
+import android.content.Intent
+import android.os.UserHandle
+import android.util.Log
 import com.android.axion.widgets.di.AxionAppComponent
 import com.android.axion.widgets.di.DaggerAxionAppComponent
 import dagger.hilt.android.HiltAndroidApp
@@ -22,11 +24,30 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp(Application::class)
 class AxionApp : Hilt_AxionApp() {
 
+    private val TAG = "AxionApp"
+
     lateinit var appComponent: AxionAppComponent
         private set
 
     override fun onCreate() {
         super.onCreate()
+        Log.d(TAG, "Application created")
         appComponent = DaggerAxionAppComponent.factory().create(this)
+        startWidgetUpdateService()
+    }
+
+    private fun startWidgetUpdateService() {
+        if (WidgetUpdateService.isRunning) {
+            Log.d(TAG, "WidgetUpdateService already running")
+            return
+        }
+        
+        try {
+            val intent = Intent(this, WidgetUpdateService::class.java)
+            startServiceAsUser(intent, UserHandle.CURRENT)
+            Log.i(TAG, "WidgetUpdateService started")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to start WidgetUpdateService", e)
+        }
     }
 }

@@ -16,33 +16,31 @@ package com.android.axion.widgets
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Handler
-import android.os.Looper
-import com.android.axion.widgets.utils.logger
+import android.util.Log
 
 class AxionReceiver : BroadcastReceiver() {
-
-    private val delayMillis = 3000L
-
+    
     override fun onReceive(context: Context, intent: Intent) {
-        logger("Intent received: ${intent.action}")
+        Log.d(TAG, "Received broadcast: ${intent.action}")
+        
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED,
+            Intent.ACTION_LOCKED_BOOT_COMPLETED,
             Intent.ACTION_MY_PACKAGE_REPLACED -> {
-                Handler(Looper.getMainLooper()).postDelayed({
-                    if (!WidgetUpdateService.isRunning) {
-                        runCatching {
-                            context.startForegroundService(
-                                Intent(context, WidgetUpdateService::class.java)
-                            )
-                        }.onFailure { e ->
-                            logger("Failed to start WidgetUpdateService: $e")
-                        }
-                    } else {
-                        logger("WidgetUpdateService is already running")
-                    }
-                }, delayMillis)
+                Log.d(TAG, "Starting WidgetUpdateService")
+                
+                try {
+                    val serviceIntent = Intent(context, WidgetUpdateService::class.java)
+                    context.startService(serviceIntent)
+                    Log.d(TAG, "WidgetUpdateService started successfully")
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to start WidgetUpdateService", e)
+                }
             }
         }
+    }
+    
+    companion object {
+        private const val TAG = "AxionReceiver"
     }
 }

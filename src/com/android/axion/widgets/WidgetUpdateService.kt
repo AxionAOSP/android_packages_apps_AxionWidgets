@@ -16,9 +16,7 @@ package com.android.axion.widgets
 import android.app.*
 import android.app.Service
 import android.content.*
-import android.content.pm.ServiceInfo
 import android.os.*
-import androidx.core.app.NotificationCompat
 import com.android.axion.widgets.cardlab.BatteryWidgetReceiver
 import com.android.axion.widgets.cardlab.screentime.*
 import com.android.axion.widgets.cardlab.tile.*
@@ -60,14 +58,6 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
 
     lateinit var notifService: MediaNotificationListenerService
 
-    var fgServiceEnabled by Updatable<Boolean> { enabled ->
-        if (enabled == true) {
-            startForeground(1002, buildNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_SYSTEM_EXEMPTED)
-        } else {
-            stopForeground(STOP_FOREGROUND_REMOVE)
-        }
-    }
-
     var notifListenerEnabled by Updatable<Boolean> { enabled ->
         runCatching {
             if (enabled == true) registerNotifService()
@@ -77,16 +67,25 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
 
     override fun onCreate() {
         super.onCreate()
+        if (isRunning) {
+            logger("WidgetUpdateService already running, skipping onCreate")
+            return
+        }
+        
         logger("WidgetUpdateService created")
+        isRunning = true
         Tracker.get().scope = mainScope
-        fgServiceEnabled = true
         notifListenerEnabled = true
         WidgetUsageManager.refreshAll(applicationContext)
         startProviders()
-        isRunning = true
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (!isRunning) {
+            logger("Service not initialized, initializing now")
+            onCreate()
+        }
+        
         when (intent?.action) {
             ACTION_UPDATE -> {
                 logger("Update requested from widget provider")
@@ -102,7 +101,6 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
         logger("WidgetUpdateService destroyed")
         Tracker.destroy()
         notifListenerEnabled = false
-        fgServiceEnabled = false
         scope.cancel()
         mainScope.cancel()
         isRunning = false
@@ -149,20 +147,6 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
         }
     }
 
-    fun buildNotification(): Notification {
-        val nm = getSystemService(NotificationManager::class.java)
-        val channel = NotificationChannel("widgets_service", "Widget Service", NotificationManager.IMPORTANCE_LOW)
-        nm.createNotificationChannel(channel)
-        nm.setNotificationListenerAccessGrantedForUser(MediaNotificationListenerService.componentName, UserHandle.USER_CURRENT, true)
-        val notification = NotificationCompat.Builder(this, "widgets_service")
-            .setContentTitle("Widget Service Running")
-            .setContentText("Updating widgets in real-time")
-            .setSmallIcon(R.drawable.ic_unknown)
-            .setOngoing(true)
-            .build()
-        return notification
-    }
-    
     fun registerNotifService() {
         notifService = MediaNotificationListenerService()
         notifService.scope = mainScope
