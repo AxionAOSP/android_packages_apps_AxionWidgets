@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<privapp-permissions>
+<permissions>
     <privapp-permission package="com.android.axion.widgets">
         <permission name="android.permission.BIND_APPWIDGET" />
         <permission name="android.permission.READ_PHONE_STATE" />
@@ -15,4 +15,4 @@
         <permission name="android.permission.MODIFY_PHONE_STATE" />
         <permission name="android.permission.WRITE_SECURE_SETTINGS"/>
     </privapp-permission>
-</privapp-permissions>
+</permissions>
