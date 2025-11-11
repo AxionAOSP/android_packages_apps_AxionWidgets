@@ -15,6 +15,7 @@ package com.android.axion.widgets
 
 import android.app.Application
 import android.content.Intent
+import android.os.Process
 import android.os.UserHandle
 import android.util.Log
 import com.android.axion.widgets.di.AxionAppComponent
@@ -34,6 +35,7 @@ class AxionApp : Hilt_AxionApp() {
         Log.d(TAG, "Application created")
         appComponent = DaggerAxionAppComponent.factory().create(this)
         startWidgetUpdateService()
+        Process.setThreadAffinity(Process.myPid(), 1)
     }
 
     private fun startWidgetUpdateService() {
