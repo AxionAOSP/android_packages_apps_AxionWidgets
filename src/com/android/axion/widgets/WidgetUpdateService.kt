@@ -67,6 +67,11 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
 
     override fun onCreate() {
         super.onCreate()
+        
+        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
+        Process.setThreadGroupAndCpuset(Process.myPid(), 9)
+        Process.setProcessGroup(Process.myPid(), 9)
+
         if (isRunning) {
             logger("WidgetUpdateService already running, skipping onCreate")
             return
@@ -81,11 +86,11 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (!isRunning) {
-            logger("Service not initialized, initializing now")
-            onCreate()
+        scope.launch(Dispatchers.Default + CoroutineName("WidgetUpdateBackground")) {
+            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
+            Process.setThreadGroupAndCpuset(Process.myPid(), 9)
         }
-        
+
         when (intent?.action) {
             ACTION_UPDATE -> {
                 logger("Update requested from widget provider")
@@ -161,7 +166,10 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     }
 
     private fun update() {
-        scope.launch {
+        scope.launch(Dispatchers.IO + CoroutineName("WidgetUpdateIO")) {
+            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
+            Process.setThreadGroupAndCpuset(Process.myPid(), 9)
+
             BatteryWidgetReceiver.update(applicationContext, quickLookDataManager.batteryData)
             ScreenTimeWidgetReceiver.update(applicationContext, usageData, true)
             photodSmall?.let {
