@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="welcome_message">歡迎來到斧頭。單擊此處以設置快速瀏覽。</string>
-    <string name="label_tile">瓦</string>
+    <string name="welcome_message">歡迎來到Axion。單擊此處以設置快速瀏覽。</string>
+    <string name="label_tile">自定義圖块</string>
     <string name="label_photo">照片</string>
-    <string name="label_media_notification_listener">媒體通知聽眾</string>
-    <string name="app_name">斧頭小部件</string>
+    <string name="label_media_notification_listener">媒體通知</string>
+    <string name="app_name">Axion小部件</string>
     <string name="toast_calendar_permission_required">需要日曆權限</string>
     <string name="allow_notification_access">允許通知訪問</string>
     <string name="allow_calendar_access">允許日曆訪問</string>
     <string name="access_granted">獲得訪問</string>
-    <string name="needed_for_calendar_events">日曆事件需要</string>
+    <string name="needed_for_calendar_events">日曆事件需要的權限</string>
     <string name="loading_text">載入中...</string>
     <string name="quick_look_widget_calendar_now">現在</string>
-    <string name="needed_for_now_playing">現在需要玩</string>
+    <string name="needed_for_now_playing">Now Playing需要的權限</string>
     <string name="quick_look_widget_calendar_no_title">（無標題活動）</string>
-    <string name="full_charge">帶電</string>
-    <string name="charging">收費</string>
+    <string name="full_charge">完成充電</string>
+    <string name="charging">充電中</string>
     <string name="quick_look_widget_calendar_yesterday">昨天</string>
     <string name="quick_look_widget_calendar_tomorrow">明天</string>
     <string name="add_photos">添加照片</string>
@@ -24,8 +24,8 @@
     <string name="grayscale_mode">灰度模式</string>
     <string name="display_options">顯示選項</string>
     <string name="select_interval">選擇間隔</string>
-    <string name="shuffle_interval">洗牌間隔</string>
-    <string name="select_shuffle_interval">選擇洗牌間隔</string>
+    <string name="shuffle_interval">更新間隔</string>
+    <string name="select_shuffle_interval">選擇更新間隔</string>
     <string name="save_changes">保存更改</string>
     <string name="manage_photos">管理照片</string>
     <string name="back">後退</string>
@@ -40,20 +40,20 @@
     <string name="interval_1_minute">1分鐘</string>
     <string name="interval_5_minutes">5分鐘</string>
     <string name="interval_15_minutes">15分鐘</string>
-    <string name="wifi">無線上網</string>
+    <string name="wifi">WIFI</string>
     <string name="bluetooth">藍牙</string>
     <string name="interval_1_hour">1小時</string>
-    <string name="airplane_mode">飛機</string>
-    <string name="torch">火炬</string>
+    <string name="airplane_mode">飛行模式</string>
+    <string name="torch">手電筒</string>
     <string name="dnd">DND</string>
     <string name="alarms_only">僅警報</string>
     <string name="dark_theme">黑暗主題</string>
     <string name="priority">優先事項</string>
-    <string name="total_silence">完全沉默</string>
+    <string name="total_silence">完全靜音</string>
     <string name="auto_rotate">自動旋轉</string>
     <string name="ringer_normal">鈴聲</string>
-    <string name="ringer_silent">沉默的</string>
+    <string name="ringer_silent">靜音鈴聲</string>
     <string name="ringer_unknown">未知</string>
     <string name="mobile_data">移動數據</string>
-    <string name="ringer_vibrate">顫動</string>
+    <string name="ringer_vibrate">振動</string>
 </resources>
