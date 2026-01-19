@@ -11,6 +11,8 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
+
 package com.android.axion.widgets.cardlab.tile
 
 import android.app.Activity
@@ -105,14 +107,14 @@ fun TileConfigureTheme(content: @Composable () -> Unit) {
         )
     }
 
-    MaterialTheme(
+    MaterialExpressiveTheme(
         colorScheme = dynamicColorScheme,
+        motionScheme = MotionScheme.expressive(),
         typography = Typography(),
         content = content
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WidgetConfigScreen(
     widgetId: Int,

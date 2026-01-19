@@ -11,6 +11,8 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
+@file:OptIn(ExperimentalCoroutinesApi::class)
 package com.android.axion.widgets.utils
 
 import com.android.axion.widgets.AxionProvider
