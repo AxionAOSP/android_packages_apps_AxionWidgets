@@ -11,6 +11,8 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
+
 package com.android.axion.widgets
 
 import android.app.Activity.RESULT_OK
@@ -84,8 +86,9 @@ class SettingsActivity : ComponentActivity() {
             val bgColor = Color(ContextCompat.getColor(context, bgColorRes))
             val cardColor = Color(ContextCompat.getColor(context, cardColorRes))
 
-            MaterialTheme(
-                colorScheme = if (isDark) darkColorScheme() else lightColorScheme()
+            MaterialExpressiveTheme(
+                colorScheme = if (isDark) darkColorScheme() else lightColorScheme(),
+                motionScheme = MotionScheme.expressive()
             ) {
                 Surface(
                     modifier = Modifier
@@ -104,7 +107,6 @@ class SettingsActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     calendarPermission: String,

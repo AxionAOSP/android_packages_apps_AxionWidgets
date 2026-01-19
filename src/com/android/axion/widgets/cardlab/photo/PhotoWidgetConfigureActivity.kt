@@ -11,6 +11,8 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+@file:OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
+
 package com.android.axion.widgets.cardlab.photo
 
 import android.app.Activity
@@ -81,7 +83,10 @@ class PhotoWidgetConfigureActivity : ComponentActivity() {
             val isDarkTheme = isSystemInDarkTheme()
             val colorScheme = if (isDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
 
-            MaterialTheme(colorScheme = colorScheme) {
+            MaterialExpressiveTheme(
+                colorScheme = colorScheme,
+                motionScheme = MotionScheme.expressive()
+            ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -99,7 +104,6 @@ class PhotoWidgetConfigureActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoWidgetConfigureScreen(
     widgetId: Int,
@@ -416,7 +420,6 @@ fun ShuffleIntervalSelector(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SaveButtonSection(
     widgetId: Int,
@@ -456,7 +459,6 @@ fun SaveButtonSection(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoManageScreen(
     widgetId: Int,
@@ -537,7 +539,6 @@ fun PhotoManageScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoManageTopBar(
     selectionMode: Boolean,
