@@ -1,0 +1,137 @@
+/*
+ * Copyright (C) 2025 AxionOS Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+package com.android.axion.widgets.cardlab
+
+import android.appwidget.AppWidgetManager
+import android.content.Context
+import android.graphics.*
+import android.util.TypedValue
+import android.widget.RemoteViews
+import com.android.axion.widgets.AxionWidgetProvider
+import com.android.axion.widgets.R
+import java.time.LocalDate
+import java.time.Year
+import java.time.YearMonth
+
+class YearProgressWidgetReceiver : AxionWidgetProvider() {
+
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+        update(context)
+    }
+
+    companion object {
+        fun update(context: Context) {
+            val now = LocalDate.now()
+            AxionWidgetProvider.updateWidget(
+                context,
+                YearProgressWidgetReceiver::class.java,
+                now
+            ) { ctx, date ->
+                AxionWidgetProvider.buildRemoteViews(ctx, R.layout.widget_year_progress, date) { d ->
+                    val bitmap = createYearProgressBitmap(ctx, d)
+                    setImageViewBitmap(R.id.year_progress_view, bitmap)
+                    
+                    val dayOfYear = d.dayOfYear
+                    val totalDays = d.lengthOfYear() // Correctly handles leap years
+                    val labelText = "YEAR PROGRESS - $dayOfYear/$totalDays DAYS"
+                    setTextViewText(R.id.year_progress_label, labelText)
+                }
+            }
+        }
+
+        private fun createYearProgressBitmap(ctx: Context, today: LocalDate): Bitmap {
+            val res = ctx.resources
+            val dm = res.displayMetrics
+            
+            val scale = 3f 
+            
+            val dotSizeDp = 3.5f
+            val gapDp = 3f
+            val paddingDp = 4f
+            val labelWidthDp = 22f // Space for month labels
+            
+            val dotSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dotSizeDp, dm) * scale
+            val gap = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, gapDp, dm) * scale
+            val padding = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, paddingDp, dm) * scale
+            val labelWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, labelWidthDp, dm) * scale
+            
+            val cols = 31
+            val rows = 12
+            
+            val width = (labelWidth + cols * (dotSize + gap) - gap + 2 * padding).toInt()
+            val height = (rows * (dotSize + gap) - gap + 2 * padding).toInt()
+            
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+            
+            val year = today.year
+            
+            val primaryColor = ctx.getColor(R.color.battery_device_primary_color)
+            val accentColor = ctx.getColor(R.color.tile_active)
+            
+            val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                color = primaryColor
+                alpha = 180
+                textSize = 7f * dm.density * scale
+                textAlign = Paint.Align.LEFT
+                typeface = Typeface.create("nothingdot", Typeface.NORMAL)
+            }
+            
+            val months = arrayOf("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")
+            
+            for (month in 1..12) {
+                val labelY = padding + (month - 1) * (dotSize + gap) + dotSize / 2f + (textPaint.textSize / 3f)
+                canvas.drawText(months[month - 1], padding, labelY, textPaint)
+
+                val daysInMonth = YearMonth.of(year, month).lengthOfMonth()
+                for (day in 1..31) {
+                    val cx = padding + labelWidth + (day - 1) * (dotSize + gap) + dotSize / 2f
+                    val cy = padding + (month - 1) * (dotSize + gap) + dotSize / 2f
+                    
+                    if (day > daysInMonth) continue
+                    
+                    val date = LocalDate.of(year, month, day)
+                    when {
+                        date.isBefore(today) -> {
+                            paint.color = primaryColor
+                            paint.alpha = 255
+                            paint.style = Paint.Style.FILL
+                            canvas.drawCircle(cx, cy, dotSize / 2f, paint)
+                        }
+                        date.isEqual(today) -> {
+                            paint.color = accentColor
+                            paint.alpha = 255
+                            paint.style = Paint.Style.FILL
+                            canvas.drawCircle(cx, cy, dotSize / 2f, paint)
+                            
+                            paint.color = ctx.getColor(R.color.battery_bg_color)
+                            canvas.drawCircle(cx, cy, dotSize / 4f, paint)
+                        }
+                        else -> {
+                            paint.color = primaryColor
+                            paint.style = Paint.Style.STROKE
+                            paint.strokeWidth = 1.5f * scale
+                            paint.alpha = 70
+                            canvas.drawCircle(cx, cy, (dotSize / 2f) - (paint.strokeWidth / 2f), paint)
+                            paint.alpha = 255
+                        }
+                    }
+                }
+            }
+            return bitmap
+        }
+    }
+}

@@ -142,6 +142,20 @@
                 android:resource="@xml/axion_widget_screentime_info" />
         </receiver>
 
+        <receiver
+            android:name="com.android.axion.widgets.cardlab.YearProgressWidgetReceiver"
+            android:label="@string/label_year_progress"
+            android:exported="true"
+            android:directBootAware="true"
+            android:permission="android.permission.BIND_APPWIDGET">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/axion_widget_year_info" />
+        </receiver>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

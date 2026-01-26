@@ -87,4 +87,5 @@
     <string name="ringer_silent">Silent</string>
     <string name="ringer_unknown">Unknown</string>
     <string name="mobile_data">Mobile Data</string>
+    <string name="label_year_progress">Year Progress</string>
 </resources>
