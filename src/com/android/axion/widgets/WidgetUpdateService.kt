@@ -19,6 +19,7 @@ import android.content.*
 import android.os.*
 import com.android.axion.widgets.cardlab.BatteryWidgetReceiver
 import com.android.axion.widgets.cardlab.screentime.*
+import com.android.axion.widgets.cardlab.YearProgressWidgetReceiver
 import com.android.axion.widgets.cardlab.tile.*
 import com.android.axion.widgets.cardlab.photo.*
 import com.android.axion.widgets.data.*
@@ -127,6 +128,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
             data?.let { d ->
                 BatteryWidgetReceiver.update(applicationContext, d.battery)
                 ScreenTimeWidgetReceiver.update(applicationContext, d.usage)
+                YearProgressWidgetReceiver.update(applicationContext)
                 d.photos?.forEach { photo ->
                     when (photo.size) {
                         1 -> {
@@ -172,6 +174,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
 
             BatteryWidgetReceiver.update(applicationContext, quickLookDataManager.batteryData)
             ScreenTimeWidgetReceiver.update(applicationContext, usageData, true)
+            YearProgressWidgetReceiver.update(applicationContext)
             photodSmall?.let {
                 PhotoWidgetSmallReceiver.update(applicationContext, it)
                 logger("photo update: widgetId=${it.widgetId} ${it.size}")

@@ -10,12 +10,29 @@
     android:orientation="vertical"
     android:padding="12dp">
 
-    <ImageView
-        android:id="@+id/year_progress_view"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scaleType="fitCenter" />
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/year_progress_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:tint="@color/battery_device_primary_color"
+            android:tintMode="src_in" />
+
+        <ImageView
+            android:id="@+id/year_progress_preview_placeholder"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_calendar_event"
+            android:tint="@color/battery_device_primary_color"
+            android:alpha="0.2" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/year_progress_label"

@@ -42,6 +42,7 @@ class YearProgressWidgetReceiver : AxionWidgetProvider() {
                 AxionWidgetProvider.buildRemoteViews(ctx, R.layout.widget_year_progress, date) { d ->
                     val bitmap = createYearProgressBitmap(ctx, d)
                     setImageViewBitmap(R.id.year_progress_view, bitmap)
+                    setViewVisibility(R.id.year_progress_preview_placeholder, android.view.View.GONE)
                     
                     val dayOfYear = d.dayOfYear
                     val totalDays = d.lengthOfYear() // Correctly handles leap years
@@ -79,11 +80,8 @@ class YearProgressWidgetReceiver : AxionWidgetProvider() {
             
             val year = today.year
             
-            val primaryColor = ctx.getColor(R.color.battery_device_primary_color)
-            val accentColor = ctx.getColor(R.color.tile_active)
-            
             val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                color = primaryColor
+                color = Color.WHITE
                 alpha = 180
                 textSize = 7f * dm.density * scale
                 textAlign = Paint.Align.LEFT
@@ -104,29 +102,26 @@ class YearProgressWidgetReceiver : AxionWidgetProvider() {
                     if (day > daysInMonth) continue
                     
                     val date = LocalDate.of(year, month, day)
+                    paint.style = Paint.Style.FILL
+                    paint.color = Color.WHITE
+                    
                     when {
                         date.isBefore(today) -> {
-                            paint.color = primaryColor
                             paint.alpha = 255
-                            paint.style = Paint.Style.FILL
                             canvas.drawCircle(cx, cy, dotSize / 2f, paint)
                         }
                         date.isEqual(today) -> {
-                            paint.color = accentColor
                             paint.alpha = 255
-                            paint.style = Paint.Style.FILL
                             canvas.drawCircle(cx, cy, dotSize / 2f, paint)
                             
-                            paint.color = ctx.getColor(R.color.battery_bg_color)
-                            canvas.drawCircle(cx, cy, dotSize / 4f, paint)
+                            val holePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                                xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
+                            }
+                            canvas.drawCircle(cx, cy, dotSize / 4f, holePaint)
                         }
                         else -> {
-                            paint.color = primaryColor
-                            paint.style = Paint.Style.STROKE
-                            paint.strokeWidth = 1.5f * scale
-                            paint.alpha = 70
-                            canvas.drawCircle(cx, cy, (dotSize / 2f) - (paint.strokeWidth / 2f), paint)
-                            paint.alpha = 255
+                            paint.alpha = 100
+                            canvas.drawCircle(cx, cy, dotSize / 2f, paint)
                         }
                     }
                 }
