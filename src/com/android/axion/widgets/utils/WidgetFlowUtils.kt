@@ -13,13 +13,14 @@
  */
 
 @file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.android.axion.widgets.utils
 
 import com.android.axion.widgets.AxionProvider
 import com.android.axion.widgets.data.*
 import com.android.axion.widgets.manager.WidgetUsageManager
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 data class WidgetDatas(
     val battery: BatteryData?,
@@ -28,7 +29,7 @@ data class WidgetDatas(
     val weather: WeatherData?,
     val tiles: TilesData?,
     val photos: PhotoWidgetDataList?,
-    val usage: UsageData?
+    val usage: UsageData?,
 )
 
 inline fun <T1, T2, T3, T4, T5, T6, T7, R> combineFlows(
@@ -40,18 +41,19 @@ inline fun <T1, T2, T3, T4, T5, T6, T7, R> combineFlows(
     flow6: Flow<T6>,
     flow7: Flow<T7>,
     crossinline transform: suspend (T1, T2, T3, T4, T5, T6, T7) -> R,
-): Flow<R> = combine(flow1, flow2, flow3, flow4, flow5, flow6, flow7) { args ->
-    @Suppress("UNCHECKED_CAST")
-    transform(
-        args[0] as T1,
-        args[1] as T2,
-        args[2] as T3,
-        args[3] as T4,
-        args[4] as T5,
-        args[5] as T6,
-        args[6] as T7
-    )
-}
+): Flow<R> =
+    combine(flow1, flow2, flow3, flow4, flow5, flow6, flow7) { args ->
+        @Suppress("UNCHECKED_CAST")
+        transform(
+            args[0] as T1,
+            args[1] as T2,
+            args[2] as T3,
+            args[3] as T4,
+            args[4] as T5,
+            args[5] as T6,
+            args[6] as T7,
+        )
+    }
 
 fun <T> AxionProvider<T>.requiredFlow(): Flow<T?> =
     WidgetUsageManager.isProviderRequired(this::class).flatMapLatest { required ->
@@ -65,7 +67,7 @@ fun WidgetFlows(
     weatherProvider: AxionProvider<WeatherData>,
     tileRepository: AxionProvider<TilesData>,
     photoProvider: AxionProvider<PhotoWidgetDataList>,
-    usageStatsProvider: AxionProvider<UsageData>
+    usageStatsProvider: AxionProvider<UsageData>,
 ): Flow<WidgetDatas> {
 
     return combineFlows(
@@ -75,7 +77,7 @@ fun WidgetFlows(
         weatherProvider.requiredFlow(),
         tileRepository.requiredFlow(),
         photoProvider.requiredFlow(),
-        usageStatsProvider.requiredFlow()
+        usageStatsProvider.requiredFlow(),
     ) { battery, calendar, media, weather, tiles, photos, usage ->
         WidgetDatas(
             battery = battery,
@@ -84,32 +86,34 @@ fun WidgetFlows(
             weather = weather,
             tiles = tiles,
             photos = photos,
-            usage = usage
+            usage = usage,
         )
     }
 }
 
 fun CoroutineScope.combinedCollect(
     combinedFlow: Flow<WidgetDatas>,
-    action: (WidgetDatas?) -> Unit
+    action: (WidgetDatas?) -> Unit,
 ) {
-    val collector = object : SafeCloseable {
-        private var job: Job? = null
+    val collector =
+        object : SafeCloseable {
+            private var job: Job? = null
 
-        override fun close() {
-            job?.cancel()
-            job = null
-        }
+            override fun close() {
+                job?.cancel()
+                job = null
+            }
 
-        fun start(scope: CoroutineScope) {
-            job = scope.launch {
-                combinedFlow
-                    .distinctUntilChanged()
-                    .catch { e -> logger("combinedCollect error: $e") }
-                    .collect { data -> action(data) }
+            fun start(scope: CoroutineScope) {
+                job =
+                    scope.launch {
+                        combinedFlow
+                            .distinctUntilChanged()
+                            .catch { e -> logger("combinedCollect error: $e") }
+                            .collect { data -> action(data) }
+                    }
             }
         }
-    }
 
     collector.start(this)
     Tracker.get().addCloseable(collector)

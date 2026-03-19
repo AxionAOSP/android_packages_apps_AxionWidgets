@@ -14,4 +14,12 @@
     <color name="photo_frame_bg">@android:color/system_neutral1_50</color>
     <color name="tile_active">@android:color/system_accent1_600</color>
     <color name="device_primary_color_inverse">@android:color/system_accent1_100</color>
+    <color name="media_widget_bg">@android:color/system_neutral1_50</color>
+    <color name="media_widget_idle_icon">@android:color/system_neutral1_900</color>
+
+    <!-- AOD colors -->
+    <color name="aod_primary">#FFFFFF</color>
+    <color name="aod_bg">@android:color/transparent</color>
+    <color name="aod_tile_stroke">#80FFFFFF</color>
+    <color name="aod_progress_track">#33FFFFFF</color>
 </resources>

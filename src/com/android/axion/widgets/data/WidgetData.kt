@@ -11,42 +11,25 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets.data
 
 import android.graphics.Bitmap
-import android.media.session.MediaSession
 import android.net.Uri
-import android.service.notification.StatusBarNotification
-
-data class NTWeatherData(
-    val city: String? = null,
-    val conditionCode: Int = 0,
-    val temp: String? = null,
-    val tempUnits: String? = null,
-    val condition: String? = null,
-    val windSpeed: String? = null,
-    val windUnits: String? = null,
-    val pinWheel: String? = null,
-    val humidity: String? = null,
-    val timeStamp: Long = 0L
-) {
-    companion object {
-        val EMPTY = NTWeatherData()
-    }
-}
 
 sealed class QuickLookData {
     data class Weather(
         val temp: String?,
         val condition: String?,
-        val conditionCode: Int
+        val conditionCode: Int,
+        val iconBytes: ByteArray? = null,
     ) : QuickLookData()
-    
+
     data class Media(
         val title: String?,
         val artist: String?,
         val packageName: String?,
-        val active: Boolean
+        val active: Boolean,
     ) : QuickLookData()
 
     data class CalendarEvent(
@@ -55,14 +38,16 @@ sealed class QuickLookData {
         val startTime: Long,
         val endTime: Long,
         val location: String,
-        val desc: String
+        val desc: String,
     ) : QuickLookData()
 
     data class Battery(
         val isCharging: Boolean,
         val level: Int,
-        val chargingTimeRemaining: Long? = null
+        val chargingTimeRemaining: Long? = null,
     ) : QuickLookData()
+
+    data class Message(val text: String) : QuickLookData()
 
     object Empty : QuickLookData()
 }
@@ -72,23 +57,22 @@ data class DisplayData(
     val primaryText: String? = null,
     val secondaryText: String? = null,
     val iconViewId: Int? = null,
-    val iconBitmap: Bitmap? = null
+    val iconBitmap: Bitmap? = null,
 )
 
-data class TileStates(val states: Map<String, Boolean> = emptyMap())
-
 data class TileData(
-    val type: String,
+    val spec: String,
     val isActive: Boolean,
     val iconRes: Int,
     val widgetId: Int,
     val label: String? = null,
+    val secondaryLabel: String? = null,
 )
 
 data class UsageData(
     val totalTimeForeground: Long = 0L,
     val formatted: String = "",
-    val level: Int = -1  
+    val level: Int = -1,
 )
 
 data class PhotoWidgetData(
@@ -96,23 +80,30 @@ data class PhotoWidgetData(
     val bitmap: Bitmap?,
     val uris: List<Uri>,
     val grayscale: Boolean,
-    val size: Int = 1
 )
-
-data class MediaNotification(
-    val key: String,
-    val token: MediaSession.Token?
-)
-
-typealias MediaNotifications = List<MediaNotification>
 
 typealias PhotoWidgetDataList = List<PhotoWidgetData>
 
 typealias TilesData = Map<Int, TileData>
 
-typealias StatusBarNotifications = List<StatusBarNotification>
+data class MediaPlayerData(
+    val title: String?,
+    val artist: String?,
+    val albumArt: Bitmap?,
+    val isPlaying: Boolean,
+    val duration: Long,
+    val position: Long,
+    val packageName: String?,
+)
+
+data class PedometerData(val steps: Int)
+
+data class CompassData(val azimuth: Float)
 
 typealias WeatherData = QuickLookData.Weather
+
 typealias MediaData = QuickLookData.Media
+
 typealias CalendarData = QuickLookData.CalendarEvent
+
 typealias BatteryData = QuickLookData.Battery

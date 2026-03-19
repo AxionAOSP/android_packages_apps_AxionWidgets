@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pedometer_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/battery_bg_color"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/pedometer_progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/pedometer_walking_figure"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginBottom="2dp"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/pedometer_steps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="nothingdot57"
+            android:includeFontPadding="false"
+            android:textColor="@color/battery_device_primary_color"
+            android:textSize="28sp" />
+
+        <TextView
+            android:id="@+id/pedometer_steps_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="nothingdot57"
+            android:text="steps"
+            android:textColor="@color/battery_device_primary_color"
+            android:textSize="11sp"
+            android:alpha="0.6" />
+
+        <TextView
+            android:id="@+id/pedometer_goal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:fontFamily="nothingdot57"
+            android:alpha="0.4"
+            android:textColor="@color/battery_device_primary_color"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+</FrameLayout>

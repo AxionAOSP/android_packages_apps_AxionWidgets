@@ -11,6 +11,7 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets.utils
 
 import android.app.PendingIntent
@@ -40,24 +41,26 @@ object CalendarUtils {
         context: Context,
         remoteViews: RemoteViews,
         viewId: Int,
-        event: CalendarEvent
+        event: CalendarEvent,
     ) {
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            data = CalendarContract.Events.CONTENT_URI
-                .buildUpon()
-                .appendPath(event.id.toString())
-                .build()
-            putExtra("beginTime", event.startTime)
-            putExtra("endTime", event.endTime)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-        }
+        val intent =
+            Intent(Intent.ACTION_VIEW).apply {
+                data =
+                    CalendarContract.Events.CONTENT_URI.buildUpon()
+                        .appendPath(event.id.toString())
+                        .build()
+                putExtra("beginTime", event.startTime)
+                putExtra("endTime", event.endTime)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            }
 
-        val pendingIntent = PendingIntent.getActivity(
-            context,
-            REQUEST_CODE_OPEN_EVENT,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
+        val pendingIntent =
+            PendingIntent.getActivity(
+                context,
+                REQUEST_CODE_OPEN_EVENT,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
 
         remoteViews.setOnClickPendingIntent(viewId, pendingIntent)
     }
@@ -99,11 +102,7 @@ object CalendarUtils {
         return isSameDay(target + ONE_DAY_MILLIS, base)
     }
 
-    private fun getFormattedTime(
-        context: Context,
-        eventTime: Long,
-        referenceTime: Long
-    ): String {
+    private fun getFormattedTime(context: Context, eventTime: Long, referenceTime: Long): String {
         val use24Hour = DateFormat.is24HourFormat(context)
         val timeFormat = if (use24Hour) FORMAT_24_HOUR else FORMAT_12_HOUR
 
@@ -133,7 +132,8 @@ object CalendarUtils {
         var endTimeStr = getFormattedTime(context, event.endTime, now)
 
         if (isNextDay(now, event.startTime) && isNextDay(now, event.endTime)) {
-            val tomorrowPrefix = "${context.getString(R.string.quick_look_widget_calendar_tomorrow)} "
+            val tomorrowPrefix =
+                "${context.getString(R.string.quick_look_widget_calendar_tomorrow)} "
             if (endTimeStr.startsWith(tomorrowPrefix)) {
                 endTimeStr = endTimeStr.removePrefix(tomorrowPrefix)
             }
@@ -144,7 +144,8 @@ object CalendarUtils {
 
     private fun getEventStatus(event: CalendarEvent): Int {
         val now = System.currentTimeMillis()
-        val toBeginMinutes = TimeUnit.MILLISECONDS.toMinutes(event.startTime) - TimeUnit.MILLISECONDS.toMinutes(now)
+        val toBeginMinutes =
+            TimeUnit.MILLISECONDS.toMinutes(event.startTime) - TimeUnit.MILLISECONDS.toMinutes(now)
         return when {
             toBeginMinutes > 20 -> 0
             toBeginMinutes > 0 -> 1

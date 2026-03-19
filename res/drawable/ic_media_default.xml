@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="64dp"
+    android:autoMirrored="true"
+    android:viewportWidth="72"
+    android:viewportHeight="64">
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M20,36m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M60,36m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M20,44m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M60,44m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M20,52m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M60,52m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M20,28m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M60,28m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M28,12m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M28,20m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M52,4m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M36,4m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M20,4m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M20,20m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M60,20m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M20,12m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M60,12m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M60,4m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M44,4m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M28,4m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M36,12m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M36,20m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M44,12m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M44,20m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M52,12m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M52,20m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M12,52m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M52,52m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M4,52m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M44,52m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M12,60m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M52,60m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M4,60m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+    <path android:fillColor="@color/media_widget_idle_icon" android:pathData="M44,60m0,4a4,4 0,1 1,0 -8a4,4 0,1 1,0 8" />
+</vector>

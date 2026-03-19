@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/date_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/battery_bg_color"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/date_day_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="nothingdot57"
+        android:includeFontPadding="false"
+        android:textColor="@color/battery_device_primary_color"
+        android:textSize="56sp" />
+
+    <TextView
+        android:id="@+id/date_day_of_week"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="nothingdot57"
+        android:includeFontPadding="false"
+        android:textColor="@color/battery_device_primary_color"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/date_month_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:fontFamily="nothingdot57"
+        android:includeFontPadding="false"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/battery_device_primary_color"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/date_divider"
+        android:layout_width="32dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:alpha="0.2"
+        android:background="@color/battery_device_primary_color" />
+
+    <TextView
+        android:id="@+id/date_event_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="nothingdot57"
+        android:maxLines="1"
+        android:textColor="@color/battery_device_primary_color"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/date_event_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:fontFamily="nothingdot57"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/battery_device_primary_color"
+        android:textSize="11sp" />
+
+</LinearLayout>

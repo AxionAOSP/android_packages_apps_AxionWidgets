@@ -11,6 +11,7 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets
 
 import android.content.BroadcastReceiver
@@ -19,16 +20,16 @@ import android.content.Intent
 import android.util.Log
 
 class AxionReceiver : BroadcastReceiver() {
-    
+
     override fun onReceive(context: Context, intent: Intent) {
         Log.d(TAG, "Received broadcast: ${intent.action}")
-        
+
         when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED,
             Intent.ACTION_LOCKED_BOOT_COMPLETED,
             Intent.ACTION_MY_PACKAGE_REPLACED -> {
                 Log.d(TAG, "Starting WidgetUpdateService")
-                
+
                 try {
                     val serviceIntent = Intent(context, WidgetUpdateService::class.java)
                     context.startService(serviceIntent)
@@ -39,7 +40,7 @@ class AxionReceiver : BroadcastReceiver() {
             }
         }
     }
-    
+
     companion object {
         private const val TAG = "AxionReceiver"
     }

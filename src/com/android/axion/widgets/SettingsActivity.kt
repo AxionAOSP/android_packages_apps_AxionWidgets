@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 AxionOS Project
+ * Copyright (C) 2025-2026 AxionOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of the License at
@@ -11,259 +11,337 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-@file:OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
 
 package com.android.axion.widgets
 
-import android.app.Activity.RESULT_OK
 import android.Manifest
+import android.app.Activity.RESULT_OK
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Typeface
 import android.os.Bundle
-import android.provider.Settings
 import android.widget.Toast
-import androidx.activity.*
-import androidx.activity.compose.*
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.core.view.WindowCompat
-import androidx.compose.foundation.*
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.lazy.grid.*
-import androidx.compose.material3.*
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material.icons.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
-import androidx.compose.ui.*
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.*
+import com.android.axion.compose.preferences.ListPreference
+import com.android.axion.compose.preferences.PreferenceGroup
+import com.android.axion.compose.preferences.SwitchPreference
+import com.android.axion.compose.scaffold.AxionScaffold
+import com.android.axion.compose.theme.AxionTheme
+import com.android.axion.widgets.manager.QuickLookDataManager
+import com.android.axion.widgets.quicklook.MessageProvider
+import com.android.axion.widgets.quicklook.QuickLookPrefs
 
 class SettingsActivity : ComponentActivity() {
 
-    private val calendarPermission = Manifest.permission.READ_CALENDAR
+    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setResult(RESULT_OK)
+        appWidgetId =
+            intent?.getIntExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_ID,
+                AppWidgetManager.INVALID_APPWIDGET_ID,
+            ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+
+        setResult(RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId))
 
         enableEdgeToEdge()
-
         setContent {
-            val isDark = isSystemInDarkTheme()
-            val context = LocalContext.current
-
-            val window = (context as? ComponentActivity)?.window
-            DisposableEffect(isDark) {
-                window?.let {
-                    val wic = WindowCompat.getInsetsController(it, it.decorView)
-                    wic.isAppearanceLightStatusBars = !isDark
-                }
-                onDispose { setResult(RESULT_OK) }
-            }
-
-            val bgColorRes =
-                if (isDark) android.R.color.system_neutral1_900 else android.R.color.system_neutral1_50
-            val cardColorRes =
-                if (isDark) android.R.color.system_neutral1_800 else android.R.color.system_neutral1_0
-
-            val bgColor = Color(ContextCompat.getColor(context, bgColorRes))
-            val cardColor = Color(ContextCompat.getColor(context, cardColorRes))
-
-            MaterialExpressiveTheme(
-                colorScheme = if (isDark) darkColorScheme() else lightColorScheme(),
-                motionScheme = MotionScheme.expressive()
-            ) {
+            AxionTheme {
                 Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .systemBarsPadding(),
-                    color = bgColor
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.surfaceContainer,
                 ) {
-                    SettingsScreen(
-                        calendarPermission = calendarPermission,
-                        cardBgColor = cardColor,
-                        isDark = isDark
-                    )
+                SettingsScreen(
+                    onApply = {
+                        refreshWidget(this)
+                        setResult(
+                            RESULT_OK,
+                            Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId),
+                        )
+                        finish()
+                    }
+                )
                 }
             }
         }
     }
 }
 
+private fun refreshWidget(context: Context) {
+    QuickLookDataManager.get(context).onDataUpdated()
+}
+
 @Composable
-fun SettingsScreen(
-    calendarPermission: String,
-    cardBgColor: Color,
-    isDark: Boolean
-) {
+private fun SettingsScreen(onApply: () -> Unit) {
     val context = LocalContext.current
-    val activity = (context as? ComponentActivity)
 
-    val permissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (!isGranted) {
-            Toast.makeText(context, context.getString(R.string.toast_calendar_permission_required), Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    val calendarPermissionGranted = remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        calendarPermissionGranted.value = ContextCompat.checkSelfPermission(
-            context,
-            calendarPermission
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            LargeTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(id = R.string.setup_title),
-                        style = TextStyle(
-                            fontFamily = FontFamily(
-                                Typeface.create("nothingdot57", Typeface.NORMAL)
-                            ),
-                            fontSize = 36.sp
-                        )
+    val permissionLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (!granted) {
+                Toast.makeText(
+                        context,
+                        context.getString(R.string.toast_calendar_permission_required),
+                        Toast.LENGTH_SHORT,
                     )
-                },
-                scrollBehavior = scrollBehavior,
-                colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = Color.Transparent,
-                    titleContentColor = if (isDark) Color.White else Color.Black
-                )
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    activity?.setResult(RESULT_OK)
-                    activity?.finish()
-                },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Icon(Icons.Default.ExitToApp, contentDescription = "Exit")
+                    .show()
+            }
+        }
+
+    val calendarGranted = remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) ==
+                PackageManager.PERMISSION_GRANTED
+        )
+    }
+
+    val showDate = remember { mutableStateOf(QuickLookPrefs.showDate(context)) }
+    val dateFormat = remember { mutableIntStateOf(QuickLookPrefs.getDateFormat(context)) }
+    val calLookahead = remember { mutableIntStateOf(QuickLookPrefs.getCalendarLookahead(context)) }
+    val msgInterval = remember { mutableIntStateOf(QuickLookPrefs.getMessageInterval(context)) }
+
+    val calendarEnabled = remember {
+        mutableStateOf(QuickLookPrefs.isEnabled(context, QuickLookPrefs.SOURCE_CALENDAR))
+    }
+    val mediaEnabled = remember {
+        mutableStateOf(QuickLookPrefs.isEnabled(context, QuickLookPrefs.SOURCE_MEDIA))
+    }
+    val batteryEnabled = remember {
+        mutableStateOf(QuickLookPrefs.isEnabled(context, QuickLookPrefs.SOURCE_BATTERY))
+    }
+    val weatherEnabled = remember {
+        mutableStateOf(QuickLookPrefs.isEnabled(context, QuickLookPrefs.SOURCE_WEATHER))
+    }
+    val messagesEnabled = remember {
+        mutableStateOf(QuickLookPrefs.isEnabled(context, QuickLookPrefs.SOURCE_MESSAGES))
+    }
+
+    val dateFormatOptions =
+        listOf(
+            "0" to stringResource(R.string.ql_date_default),
+            "1" to stringResource(R.string.ql_date_short),
+            "2" to stringResource(R.string.ql_date_full),
+        )
+    val lookaheadOptions =
+        listOf(
+            "15" to stringResource(R.string.ql_lookahead_15),
+            "30" to stringResource(R.string.ql_lookahead_30),
+            "60" to stringResource(R.string.ql_lookahead_60),
+            "120" to stringResource(R.string.ql_lookahead_120),
+        )
+    val msgIntervalOptions =
+        listOf(
+            "30" to stringResource(R.string.ql_msg_30m),
+            "60" to stringResource(R.string.ql_msg_1h),
+            "180" to stringResource(R.string.ql_msg_3h),
+            "360" to stringResource(R.string.ql_msg_6h),
+            "1440" to stringResource(R.string.ql_msg_daily),
+        )
+
+    AxionScaffold(
+        title = stringResource(R.string.setup_title),
+        onBackClick = onApply,
+        collapsedByDefault = false,
+        actions = {
+            IconButton(onClick = onApply) {
+                Icon(Icons.Filled.Save, contentDescription = stringResource(R.string.ql_apply))
             }
         },
-        floatingActionButtonPosition = FabPosition.End
     ) { paddingValues ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp)
+            modifier =
+                Modifier.fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(paddingValues)
+                    .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Spacer(modifier = Modifier.height(120.dp))
-
-            LazyHorizontalGrid(
-                rows = GridCells.Fixed(1),
-                modifier = Modifier.height(180.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                content = {
+            if (!calendarGranted.value) {
+                PreferenceGroup {
                     item {
-                        BoxWithConstraints {
-                            val cardWidth = maxWidth / 2 - 8.dp
-                            SettingsCard(
-                                icon = Icons.Filled.CalendarToday,
-                                title = stringResource(id = R.string.allow_calendar_access),
-                                subtitle = if (calendarPermissionGranted.value)
-                                    stringResource(id = R.string.access_granted)
-                                else
-                                    stringResource(id = R.string.needed_for_calendar_events),
-                                onClick = {
-                                    if (!calendarPermissionGranted.value) {
-                                        permissionLauncher.launch(calendarPermission)
-                                    }
-                                },
-                                backgroundColor = cardBgColor,
-                                textColor = if (isDark) Color.White else Color.Black,
-                                modifier = Modifier.width(cardWidth)
-                            )
-                        }
+                        SwitchPreference(
+                            title = stringResource(R.string.allow_calendar_access),
+                            summary = stringResource(R.string.needed_for_calendar_events),
+                            icon = Icons.Filled.Security,
+                            checked = false,
+                            onCheckedChange = {
+                                permissionLauncher.launch(Manifest.permission.READ_CALENDAR)
+                            },
+                        )
                     }
                 }
-            )
-        }
-    }
-}
-
-@Composable
-fun SettingsCard(
-    icon: ImageVector,
-    title: String,
-    subtitle: String,
-    onClick: () -> Unit,
-    backgroundColor: Color,
-    textColor: Color,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier
-            .fillMaxHeight()
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = backgroundColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = title,
-                tint = textColor,
-                modifier = Modifier.size(32.dp)
-            )
-            Column {
-                Text(
-                    text = title,
-                    style = TextStyle(
-                        fontFamily = FontFamily(
-                            Typeface.create("sans-serif", Typeface.NORMAL)
-                        ),
-                        fontSize = 18.sp
-                    ),
-                    color = textColor,
-                    maxLines = 2
-                )
-                Text(
-                    text = subtitle,
-                    style = TextStyle(
-                        fontFamily = FontFamily(
-                            Typeface.create("sans-serif", Typeface.NORMAL)
-                        ),
-                        fontSize = 13.sp
-                    ),
-                    color = textColor,
-                    maxLines = 2
-                )
             }
+
+            PreferenceGroup(title = stringResource(R.string.ql_display)) {
+                item {
+                    SwitchPreference(
+                        title = stringResource(R.string.ql_show_date),
+                        summary = stringResource(R.string.ql_show_date_desc),
+                        icon = Icons.Filled.Today,
+                        checked = showDate.value,
+                        onCheckedChange = {
+                            showDate.value = it
+                            QuickLookPrefs.setShowDate(context, it)
+                            refreshWidget(context)
+                        },
+                    )
+                }
+                item {
+                    ListPreference(
+                        title = stringResource(R.string.ql_date_format),
+                        summary =
+                            dateFormatOptions
+                                .first { it.first == dateFormat.intValue.toString() }
+                                .second,
+                        options = dateFormatOptions,
+                        value = dateFormat.intValue.toString(),
+                        enabled = showDate.value,
+                        onValueChange = {
+                            val v = it.toInt()
+                            dateFormat.intValue = v
+                            QuickLookPrefs.setDateFormat(context, v)
+                            refreshWidget(context)
+                        },
+                    )
+                }
+            }
+
+            PreferenceGroup(title = stringResource(R.string.ql_data_sources)) {
+                item {
+                    SwitchPreference(
+                        title = stringResource(R.string.ql_source_calendar),
+                        summary = stringResource(R.string.ql_source_calendar_desc),
+                        icon = Icons.Filled.CalendarToday,
+                        checked = calendarEnabled.value,
+                        onCheckedChange = {
+                            calendarEnabled.value = it
+                            QuickLookPrefs.setEnabled(context, QuickLookPrefs.SOURCE_CALENDAR, it)
+                            refreshWidget(context)
+                        },
+                    )
+                }
+                item {
+                    SwitchPreference(
+                        title = stringResource(R.string.ql_source_media),
+                        summary = stringResource(R.string.ql_source_media_desc),
+                        icon = Icons.Filled.MusicNote,
+                        checked = mediaEnabled.value,
+                        onCheckedChange = {
+                            mediaEnabled.value = it
+                            QuickLookPrefs.setEnabled(context, QuickLookPrefs.SOURCE_MEDIA, it)
+                            refreshWidget(context)
+                        },
+                    )
+                }
+                item {
+                    SwitchPreference(
+                        title = stringResource(R.string.ql_source_battery),
+                        summary = stringResource(R.string.ql_source_battery_desc),
+                        icon = Icons.Filled.BatteryChargingFull,
+                        checked = batteryEnabled.value,
+                        onCheckedChange = {
+                            batteryEnabled.value = it
+                            QuickLookPrefs.setEnabled(context, QuickLookPrefs.SOURCE_BATTERY, it)
+                            refreshWidget(context)
+                        },
+                    )
+                }
+                item {
+                    SwitchPreference(
+                        title = stringResource(R.string.ql_source_weather),
+                        summary = stringResource(R.string.ql_source_weather_desc),
+                        icon = Icons.Filled.Cloud,
+                        checked = weatherEnabled.value,
+                        onCheckedChange = {
+                            weatherEnabled.value = it
+                            QuickLookPrefs.setEnabled(context, QuickLookPrefs.SOURCE_WEATHER, it)
+                            refreshWidget(context)
+                        },
+                    )
+                }
+                item {
+                    SwitchPreference(
+                        title = stringResource(R.string.ql_source_messages),
+                        summary = stringResource(R.string.ql_source_messages_desc),
+                        icon = Icons.Filled.Lightbulb,
+                        checked = messagesEnabled.value,
+                        onCheckedChange = {
+                            messagesEnabled.value = it
+                            QuickLookPrefs.setEnabled(context, QuickLookPrefs.SOURCE_MESSAGES, it)
+                            refreshWidget(context)
+                        },
+                    )
+                }
+            }
+
+            if (calendarEnabled.value) {
+                PreferenceGroup(title = stringResource(R.string.ql_cal_settings)) {
+                    item {
+                        ListPreference(
+                            title = stringResource(R.string.ql_cal_lookahead),
+                            summary =
+                                lookaheadOptions
+                                    .first { it.first == calLookahead.intValue.toString() }
+                                    .second,
+                            options = lookaheadOptions,
+                            value = calLookahead.intValue.toString(),
+                            onValueChange = {
+                                val v = it.toInt()
+                                calLookahead.intValue = v
+                                QuickLookPrefs.setCalendarLookahead(context, v)
+                                refreshWidget(context)
+                            },
+                        )
+                    }
+                }
+            }
+
+            if (messagesEnabled.value) {
+                PreferenceGroup(title = stringResource(R.string.ql_msg_settings)) {
+                    item {
+                        ListPreference(
+                            title = stringResource(R.string.ql_msg_interval),
+                            summary =
+                                msgIntervalOptions
+                                    .first { it.first == msgInterval.intValue.toString() }
+                                    .second,
+                            options = msgIntervalOptions,
+                            value = msgInterval.intValue.toString(),
+                            onValueChange = {
+                                val v = it.toInt()
+                                msgInterval.intValue = v
+                                QuickLookPrefs.setMessageInterval(context, v)
+                                val mp = (context.applicationContext as AxionApp)
+                                    .appComponent.messageProvider()
+                                mp.scheduleRotation()
+                            },
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }

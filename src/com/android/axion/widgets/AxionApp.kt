@@ -11,6 +11,7 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets
 
 import android.app.Application
@@ -43,7 +44,7 @@ class AxionApp : Hilt_AxionApp() {
             Log.d(TAG, "WidgetUpdateService already running")
             return
         }
-        
+
         try {
             val intent = Intent(this, WidgetUpdateService::class.java)
             startServiceAsUser(intent, UserHandle.CURRENT)

@@ -34,6 +34,9 @@ android_app {
         "kotlinx-coroutines-core",
         "gson-prebuilt-jar-2.9.1",
         "hilt_android",
+        "ax_compose",
+        "ax_platform_hooks",
+        "axquicklook-client",
     ],
 
     kotlincflags: [

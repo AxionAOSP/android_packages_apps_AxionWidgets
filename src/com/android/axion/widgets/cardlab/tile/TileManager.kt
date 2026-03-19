@@ -11,27 +11,25 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import javax.inject.Inject
-import javax.inject.Singleton
 import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.data.*
-import com.android.axion.widgets.R
-import java.util.concurrent.Executors
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 @Singleton
-class TileManager @Inject constructor(
+class TileManager
+@Inject
+constructor(
     private val context: Context,
     private val repository: TileRepository,
-    private val tileConfigs: TileConfigs,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
 ) {
-
-    private val tilesRegistry get() = tileConfigs.tilesRegistry
 
     private val _tilesFlow = MutableStateFlow<Map<Int, TileData>>(emptyMap())
     var tilesFlow: Map<Int, TileData>
@@ -39,34 +37,29 @@ class TileManager @Inject constructor(
         set(value) {
             if (_tilesFlow.value != value) {
                 _tilesFlow.value = value.toMap()
-                value.values.forEach { data ->
-                    context.updateWidget(data.widgetId, data)
-                }
+                value.values.forEach { data -> context.updateWidget(data.widgetId, data) }
             }
         }
 
     fun updateState(widgetId: Int) {
-        val type = WidgetPrefs.getWidgetAction(context, widgetId) ?: return
-        scope.launch {
-            val newState = repository.updateState(type)
-            val tileConfig = tilesRegistry.firstOrNull { it.type == type }
-            withContext(Dispatchers.Main) {
-                val data = tileConfigs.createTileData(type, widgetId)
-                _tilesFlow.value = _tilesFlow.value + (widgetId to data)
-                context.updateWidget(widgetId, data)
-            }
-        }
+        val spec = WidgetPrefs.getWidgetAction(context, widgetId) ?: return
+        repository.toggle(spec)
     }
 
-    fun getIconForTile(type: String, active: Boolean): Int {
-        return tilesRegistry.firstOrNull { it.type == type }?.getIcon?.invoke(active)
-            ?: R.drawable.ic_unknown
+    fun getIconForTile(spec: String, active: Boolean): Int {
+        return TileIcons.getIcon(spec, active)
     }
 
-    fun setTileForWidget(widgetId: Int, type: String) {
-        val isActive = false
-        val tileConfig = tilesRegistry.firstOrNull { it.type == type }
-        val data = tileConfigs.createTileData(type, widgetId)
+    fun setTileForWidget(widgetId: Int, spec: String) {
+        repository.startObservingSpec(spec)
+        val data =
+            TileData(
+                spec = spec,
+                isActive = false,
+                iconRes = TileIcons.getIcon(spec, false),
+                widgetId = widgetId,
+                label = spec.replaceFirstChar { it.uppercase() },
+            )
         _tilesFlow.value = _tilesFlow.value + (widgetId to data)
         context.updateWidget(widgetId, data)
     }

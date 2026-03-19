@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2025 AxionOS Project
+ * Copyright (C) 2025-2026 AxionOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
  * except in compliance with the License. You may obtain a copy of the License at
@@ -11,96 +11,132 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
+import android.os.Bundle
+import com.android.axion.platform.AxPlatformClient
 import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.AxionProvider
-import com.android.axion.widgets.R
 import com.android.axion.widgets.data.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.selects.onTimeout
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.selects.select
-import java.util.concurrent.*
+import com.android.axion.widgets.platform.AxPlatformBridge
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 @Singleton
-class TileRepository @Inject constructor(
+class TileRepository
+@Inject
+constructor(
     private val context: Context,
-    private val tileConfigs: TileConfigs,
-    private val scope: CoroutineScope
+    private val scope: CoroutineScope,
+    private val bridge: AxPlatformBridge,
 ) : AxionProvider<TilesData> {
 
-    private val _tileStates = MutableStateFlow(TileStates())
-    private val tileStates: StateFlow<TileStates> = _tileStates.asStateFlow()
-    val tilesRegistry get() = tileConfigs.tilesRegistry
-
-    private val forceRefresh = Channel<Unit>(Channel.CONFLATED)
-
-    override val dataFlow: Flow<Map<Int, TileData>> = flow {
-        while (true) {
-            emit(buildActiveTiles(tileStates.value))
-            select<Unit> {
-                onTimeout(3000) {}
-                forceRefresh.onReceive { }
-            }
-        }
-    }
-
-    init {
-        val initialStates = tilesRegistry.associate { tile ->
-            tile.type to runCatching { tile.observeState() }.getOrDefault(false)
-        }
-        _tileStates.value = TileStates(initialStates)
-    }
-
-    private fun buildActiveTiles(statesSnapshot: TileStates): Map<Int, TileData> {
-        val widgetIds = WidgetPrefs.getAllWidgetIds(context)
-        return widgetIds.mapNotNull { widgetId ->
-            val type = WidgetPrefs.getWidgetAction(context, widgetId) ?: return@mapNotNull null
-            val isActive = statesSnapshot.states[type] ?: return@mapNotNull null
-            val tileConfig = tilesRegistry.firstOrNull { it.type == type } ?: return@mapNotNull null
-            widgetId to tileConfigs.createTileData(type, widgetId)
-        }.toMap()
-    }
-
-    suspend fun updateState(type: String): Boolean {
-        val tile = tilesRegistry.firstOrNull { it.type == type } ?: return false
-        val newState = withContext(scope.coroutineContext) { tile.toggle() }
-        updateTiles(force = true)
-        forceRefresh.trySend(Unit)
-        return newState
-    }
-
-    private fun updateTiles(force: Boolean = false) {
-        val activeWidgetIds = WidgetPrefs.getAllWidgetIds(context)
-        val activeTypes = activeWidgetIds.mapNotNull { WidgetPrefs.getWidgetAction(context, it) }.toSet()
-        var hasChange = false
-        val buffer = _tileStates.value.states.toMutableMap()
-
-        for (tile in tilesRegistry) {
-            if (tile.type !in activeTypes) continue
-            val newState = runCatching { tile.observeState() }.getOrDefault(false)
-            if (buffer[tile.type] != newState) {
-                buffer[tile.type] = newState
-                hasChange = true
-            }
-        }
-
-        if (hasChange || force) {
-            _tileStates.value = TileStates(buffer.toMap())
-        }
-    }
-
     companion object {
+        fun specToFeature(spec: String): String? = AxPlatformClient.resolveFeature(spec)
+
         fun get(context: Context): TileRepository {
             val app = context.applicationContext as AxionApp
             return app.appComponent.tileRepository()
         }
+    }
+
+    private val _tileStates = MutableStateFlow<Map<String, TileStateInfo>>(emptyMap())
+    private val observedFeatures = mutableSetOf<String>()
+
+    data class TileStateInfo(
+        val spec: String,
+        val isActive: Boolean = false,
+        val isAvailable: Boolean = true,
+        val label: String? = null,
+        val secondaryLabel: String? = null,
+        val tileState: Int = AxPlatformClient.TILE_STATE_INACTIVE,
+    )
+
+    override val dataFlow: Flow<TilesData?> = _tileStates.map { states -> buildActiveTiles(states) }
+
+    init {
+        startListening()
+    }
+
+    private fun startListening() {
+        val widgetIds = WidgetPrefs.getAllWidgetIds(context)
+        val activeSpecs = widgetIds.mapNotNull { WidgetPrefs.getWidgetAction(context, it) }.toSet()
+        activeSpecs.forEach { spec -> observeSpec(spec) }
+    }
+
+    private fun observeSpec(spec: String) {
+        val feature = specToFeature(spec) ?: return
+        if (!observedFeatures.add(feature)) return
+        scope.launch {
+            bridge.stateFlow(feature).collect { bundle ->
+                if (bundle.isEmpty) return@collect
+                val info = parseFeatureBundle(spec, feature, bundle)
+                _tileStates.update { current -> current + (spec to info) }
+            }
+        }
+    }
+
+    private fun parseFeatureBundle(spec: String, feature: String, bundle: Bundle): TileStateInfo {
+        return TileStateInfo(
+            spec = spec,
+            isActive = bundle.getBoolean("active", false),
+            isAvailable = bundle.getBoolean("available", true),
+            label = AxPlatformClient.getLabel(bundle),
+            secondaryLabel = AxPlatformClient.getSecondaryLabel(bundle),
+            tileState = AxPlatformClient.getTileState(bundle),
+        )
+    }
+
+    fun startObservingSpec(spec: String) {
+        if (_tileStates.value.containsKey(spec)) return
+        observeSpec(spec)
+    }
+
+    private fun buildActiveTiles(states: Map<String, TileStateInfo>): TilesData {
+        val widgetIds = WidgetPrefs.getAllWidgetIds(context)
+        return widgetIds
+            .mapNotNull { widgetId ->
+                val spec = WidgetPrefs.getWidgetAction(context, widgetId) ?: return@mapNotNull null
+                val info = states[spec]
+                val isActive = info?.isActive == true
+                widgetId to
+                    TileData(
+                        spec = spec,
+                        isActive = isActive,
+                        iconRes = TileIcons.getIcon(spec, isActive),
+                        widgetId = widgetId,
+                        label = info?.label ?: spec.replaceFirstChar { it.uppercase() },
+                        secondaryLabel = info?.secondaryLabel,
+                    )
+            }
+            .toMap()
+    }
+
+    fun toggle(spec: String) {
+        val feature = specToFeature(spec) ?: return
+        bridge.toggle(feature)
+    }
+
+    data class AvailableTile(val spec: String, val label: String, val category: String? = null)
+
+    fun queryAvailableTiles(): Flow<List<AvailableTile>> = flow {
+        val features = bridge.getSupportedFeatures()
+        emit(
+            features.map { feature ->
+                val state = bridge.getState(feature)
+                AvailableTile(
+                    spec = feature,
+                    label =
+                        AxPlatformClient.getLabel(state)
+                            ?: feature.replaceFirstChar { it.uppercase() },
+                    category = AxPlatformClient.getCategory(feature),
+                )
+            }
+        )
     }
 }

@@ -1,8 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tile_view_root"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/pill_widget_height"
-    android:paddingHorizontal="@dimen/pill_widget_padding_horizontal">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/pill_widget_padding_horizontal"
+    android:paddingVertical="@dimen/pill_widget_padding_vertical">
     <View
         android:id="@+id/tile_bg"
         android:layout_width="match_parent"
@@ -48,6 +49,7 @@
             android:clickable="false"
             android:focusable="false" />
         <FrameLayout
+            android:id="@+id/tile_label_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/widget_label_frame_margin_start">

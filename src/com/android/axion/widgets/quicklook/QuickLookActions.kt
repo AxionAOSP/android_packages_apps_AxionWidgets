@@ -11,62 +11,66 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets.quicklook
 
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import com.android.axion.widgets.SettingsActivity
 import com.android.axion.widgets.data.QuickLookData
 
 object QuickLookActions {
 
-    private fun getPendingIntent(
-        context: Context,
-        intent: Intent
-    ): PendingIntent {
+    private fun getPendingIntent(context: Context, intent: Intent): PendingIntent {
         return PendingIntent.getActivity(
-            context, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
     }
 
-    fun getClickPendingIntent(
-        context: Context,
-        qlData: QuickLookData
-    ): PendingIntent {
-        val defaultIntent = Intent(context, SettingsActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
+    fun getClickPendingIntent(context: Context, qlData: QuickLookData): PendingIntent {
+        val defaultIntent =
+            Intent(context, SettingsActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
 
-        val clickIntent = when (qlData) {
-            is QuickLookData.CalendarEvent -> Intent(Intent.ACTION_MAIN).apply {
-                addCategory(Intent.CATEGORY_APP_CALENDAR)
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            is QuickLookData.Media -> {
-                val packageName = qlData.packageName
-                if (!packageName.isNullOrEmpty()) {
-                    context.packageManager.getLaunchIntentForPackage(packageName)?.apply {
+        val clickIntent =
+            when (qlData) {
+                is QuickLookData.CalendarEvent ->
+                    Intent(Intent.ACTION_MAIN).apply {
+                        addCategory(Intent.CATEGORY_APP_CALENDAR)
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    } ?: defaultIntent
-                } else {
-                    defaultIntent
+                    }
+                is QuickLookData.Media -> {
+                    val packageName = qlData.packageName
+                    if (!packageName.isNullOrEmpty()) {
+                        context.packageManager.getLaunchIntentForPackage(packageName)?.apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        } ?: defaultIntent
+                    } else {
+                        defaultIntent
+                    }
                 }
+                is QuickLookData.Weather ->
+                    Intent().apply {
+                        setClassName(
+                            "org.omnirom.omnijaws",
+                            "org.omnirom.omnijaws.SettingsActivity",
+                        )
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    }
+                else -> defaultIntent
             }
-            is QuickLookData.Weather -> Intent().apply {
-                setClassName("org.omnirom.omnijaws", "org.omnirom.omnijaws.SettingsActivity")
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            }
-            else -> defaultIntent
-        }
 
         return getPendingIntent(context, clickIntent)
     }
-    
+
     fun getDateClickPendingIntent(context: Context): PendingIntent? {
-        val clickIntent = Intent(Intent.ACTION_MAIN).apply {
+        val clickIntent =
+            Intent(Intent.ACTION_MAIN).apply {
                 addCategory(Intent.CATEGORY_APP_CALENDAR)
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }

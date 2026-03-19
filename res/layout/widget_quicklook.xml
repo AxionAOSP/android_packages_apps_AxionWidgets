@@ -6,19 +6,27 @@
     android:background="@android:color/transparent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical|start">
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/date_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeMaxTextSize="24sp"
+            android:autoSizeStepGranularity="1sp"
+            android:ellipsize="end"
+            android:maxLines="2"
             style="@style/DateTextStyle"
             android:text="@string/loading_text" />
 
         <LinearLayout
             android:id="@+id/secondary_info"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/secondary_container_margin_top"
@@ -26,7 +34,16 @@
 
             <TextView
                 android:id="@+id/primary_text_info"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:layout_marginEnd="@dimen/quicklook_secondary_info_margin_horizontal"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="24sp"
+                android:autoSizeStepGranularity="1sp"
+                android:ellipsize="end"
+                android:maxLines="2"
                 style="@style/PrimaryTextInfoStyle"
                 android:text="@string/placeholder" />
 
@@ -50,7 +67,15 @@
 
             <TextView
                 android:id="@+id/secondary_text_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/quicklook_secondary_info_margin_horizontal"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="12sp"
+                android:autoSizeMaxTextSize="24sp"
+                android:autoSizeStepGranularity="1sp"
+                android:ellipsize="end"
+                android:maxLines="2"
                 style="@style/SecondaryTextInfoStyle" />
         </LinearLayout>
 

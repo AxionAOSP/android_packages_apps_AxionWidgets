@@ -11,6 +11,7 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
@@ -21,12 +22,12 @@ object WidgetPrefs {
     private const val PREFS_NAME = "tile_widget_prefs"
 
     private fun getPrefs(context: Context): SharedPreferences =
-        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        context
+            .createDeviceProtectedStorageContext()
+            .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
     fun setWidgetAction(context: Context, widgetId: Int, tileType: String) {
-        getPrefs(context).edit()
-            .putString(widgetId.toString(), tileType)
-            .apply()
+        getPrefs(context).edit().putString(widgetId.toString(), tileType).apply()
     }
 
     fun getWidgetAction(context: Context, widgetId: Int): String? {
@@ -34,13 +35,10 @@ object WidgetPrefs {
     }
 
     fun removeWidget(context: Context, widgetId: Int) {
-        getPrefs(context).edit()
-            .remove(widgetId.toString())
-            .apply()
+        getPrefs(context).edit().remove(widgetId.toString()).apply()
     }
-    
+
     fun getAllWidgetIds(context: Context): List<Int> {
-        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            .all.keys.mapNotNull { it.toIntOrNull() }
+        return getPrefs(context).all.keys.mapNotNull { it.toIntOrNull() }
     }
 }

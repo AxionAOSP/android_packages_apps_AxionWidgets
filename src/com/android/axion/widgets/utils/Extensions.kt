@@ -11,6 +11,7 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets.utils
 
 import android.content.BroadcastReceiver
@@ -23,12 +24,11 @@ import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import com.android.axion.widgets.data.*
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
-import kotlin.reflect.KClass
 
 fun RemoteViews.setTextOrHide(viewId: Int, text: String?) {
     if (text.isNullOrEmpty()) {
@@ -68,57 +68,78 @@ inline fun <reified T, Callback> callbackFlow(
 
     @Suppress("UNCHECKED_CAST")
     return callbackFlowCache.getOrPut(key) {
-        val flow = kotlinx.coroutines.flow.callbackFlow<T?> {
-            val callback: Callback = createCallback { value -> trySend(value).isSuccess }
-            register(callback)
-            onCallbackCreated(callback)
+        val flow =
+            kotlinx.coroutines.flow.callbackFlow<T?> {
+                val callback: Callback = createCallback { value -> trySend(value).isSuccess }
+                register(callback)
+                onCallbackCreated(callback)
 
-            Tracker.get().addCloseable(object : SafeCloseable {
-                override fun close() { try { unregister(callback) } catch (_: Exception) {} }
-            })
+                Tracker.get()
+                    .addCloseable(
+                        object : SafeCloseable {
+                            override fun close() {
+                                try {
+                                    unregister(callback)
+                                } catch (_: Exception) {}
+                            }
+                        }
+                    )
 
-            awaitClose { try { unregister(callback) } catch (_: Exception) {} }
-        }
+                awaitClose {
+                    try {
+                        unregister(callback)
+                    } catch (_: Exception) {}
+                }
+            }
 
-        flow.distinctUntilChanged()
-            .shareIn(scope, SharingStarted.Lazily, replay = 1)
+        flow.distinctUntilChanged().shareIn(scope, SharingStarted.Lazily, replay = 1)
     } as Flow<T?>
 }
 
 fun <T> Context.broadcastFlow(
     filter: IntentFilter,
     scope: CoroutineScope,
-    parseIntent: (Intent) -> T
+    parseIntent: (Intent) -> T,
 ): Flow<T> {
     val key = filter.toString()
 
     @Suppress("UNCHECKED_CAST")
     return broadcastFlowCache.getOrPut(key) {
-        val flow = kotlinx.coroutines.flow.callbackFlow<T> {
-            val receiver = object : BroadcastReceiver() {
-                override fun onReceive(context: Context?, intent: Intent?) {
-                    intent?.let { trySend(parseIntent(it)).isSuccess }
+        val flow =
+            kotlinx.coroutines.flow.callbackFlow<T> {
+                val receiver =
+                    object : BroadcastReceiver() {
+                        override fun onReceive(context: Context?, intent: Intent?) {
+                            intent?.let { trySend(parseIntent(it)).isSuccess }
+                        }
+                    }
+
+                val stickyIntent = registerReceiver(receiver, filter)
+                stickyIntent?.let { trySend(parseIntent(it)).isSuccess }
+
+                Tracker.get()
+                    .addCloseable(
+                        object : SafeCloseable {
+                            override fun close() {
+                                try {
+                                    unregisterReceiver(receiver)
+                                } catch (_: Exception) {}
+                            }
+                        }
+                    )
+
+                awaitClose {
+                    try {
+                        unregisterReceiver(receiver)
+                    } catch (_: Exception) {}
                 }
             }
 
-            val stickyIntent = registerReceiver(receiver, filter)
-            stickyIntent?.let { trySend(parseIntent(it)).isSuccess }
-
-            Tracker.get().addCloseable(object : SafeCloseable {
-                override fun close() { try { unregisterReceiver(receiver) } catch (_: Exception) {} }
-            })
-
-            awaitClose { try { unregisterReceiver(receiver) } catch (_: Exception) {} }
-        }
-
-        flow.distinctUntilChanged()
-            .shareIn(scope, SharingStarted.Lazily, replay = 1)
+        flow.distinctUntilChanged().shareIn(scope, SharingStarted.Lazily, replay = 1)
     } as Flow<T>
 }
 
-class Updatable<T>(
-    private val onChanged: (T?) -> Unit
-) : ReadWriteProperty<Any?, T?> {
+class Updatable<T>(private val onChanged: (T?) -> Unit) : ReadWriteProperty<Any?, T?> {
 
     constructor(onChanged: () -> Unit) : this({ _ -> onChanged() })
 

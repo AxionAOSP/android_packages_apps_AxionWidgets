@@ -11,15 +11,18 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets.manager
 
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import com.android.axion.widgets.AxionProvider
 import com.android.axion.widgets.AxionWidgetProvider
-import kotlinx.coroutines.flow.*
+import com.android.axion.widgets.WidgetUpdateService
 import kotlin.reflect.KClass
+import kotlinx.coroutines.flow.*
 
 object WidgetUsageManager {
 
@@ -37,10 +40,12 @@ object WidgetUsageManager {
         val manager = AppWidgetManager.getInstance(context)
         val ids = manager.getAppWidgetIds(ComponentName(context, widgetClass))
         val hasWidgets = ids.isNotEmpty()
-        widgetActiveMap
-            .getOrPut(widgetClass.kotlin) { MutableStateFlow(false) }
-            .value = hasWidgets
+        widgetActiveMap.getOrPut(widgetClass.kotlin) { MutableStateFlow(false) }.value = hasWidgets
         recalcProviderRequirements(context)
+
+        if (widgetActiveMap.values.none { it.value }) {
+            context.stopService(Intent(context, WidgetUpdateService::class.java))
+        }
     }
 
     fun getActiveWidgets(): Set<KClass<out AxionWidgetProvider>> =
@@ -52,12 +57,13 @@ object WidgetUsageManager {
 
     private fun recalcProviderRequirements(context: Context) {
         val activeWidgets = getActiveWidgets()
-        val activeProviders = activeWidgets
-            .flatMap { widgetCls ->
-                val widgetInstance = runCatching { widgetCls.java.newInstance() }.getOrNull()
-                widgetInstance?.requiredProviders().orEmpty()
-            }
-            .toSet()
+        val activeProviders =
+            activeWidgets
+                .flatMap { widgetCls ->
+                    val widgetInstance = runCatching { widgetCls.java.newInstance() }.getOrNull()
+                    widgetInstance?.requiredProviders().orEmpty()
+                }
+                .toSet()
 
         for (provider in activeProviders) {
             val flow = providerRequiredFlows.getOrPut(provider) { MutableStateFlow(false) }
@@ -70,8 +76,14 @@ object WidgetUsageManager {
     }
 
     fun refreshAll(context: Context) {
-        widgetActiveMap.keys.forEach { cls ->
-            updateWidgetStatus(context, cls.java)
-        }
+        widgetActiveMap.keys.forEach { cls -> updateWidgetStatus(context, cls.java) }
+    }
+
+    fun refreshAll(context: Context, allClasses: List<Class<out AxionWidgetProvider>>) {
+        allClasses.forEach { updateWidgetStatus(context, it) }
+    }
+
+    fun isActive(widgetClass: Class<out AxionWidgetProvider>): Boolean {
+        return widgetActiveMap[widgetClass.kotlin]?.value == true
     }
 }

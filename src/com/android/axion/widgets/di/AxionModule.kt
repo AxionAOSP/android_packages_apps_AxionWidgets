@@ -11,19 +11,23 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets.di
 
 import android.content.Context
 import com.android.axion.widgets.cardlab.photo.PhotoProvider
-import com.android.axion.widgets.cardlab.tile.TileConfigs
 import com.android.axion.widgets.cardlab.tile.TileManager
 import com.android.axion.widgets.cardlab.tile.TileRepository
 import com.android.axion.widgets.manager.QuickLookDataManager
+import com.android.axion.widgets.platform.AxPlatformBridge
 import com.android.axion.widgets.provider.BatteryStatusProvider
-import com.android.axion.widgets.provider.CalendarProvider
-import com.android.axion.widgets.provider.MediaPlaybackProvider
+import com.android.axion.widgets.provider.CompassProvider
+import com.android.axion.widgets.provider.DozeStateProvider
+import com.android.axion.widgets.provider.MediaPlayerProvider
+import com.android.axion.widgets.provider.PedometerProvider
+import com.android.axion.widgets.provider.QuickLookServiceClient
 import com.android.axion.widgets.provider.UsageStatsProvider
-import com.android.axion.widgets.provider.WeatherProvider
+import com.android.axion.widgets.quicklook.MessageProvider
 import com.android.axion.widgets.quicklook.QuickLookWidgetInteractor
 import dagger.BindsInstance
 import dagger.Component
@@ -32,10 +36,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import javax.inject.Qualifier
-import kotlinx.coroutines.*
+import javax.inject.Singleton
 import kotlin.annotation.AnnotationRetention.BINARY
+import kotlinx.coroutines.*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -43,63 +47,72 @@ object AxionModule {
 
     @Provides
     @Singleton
-    fun provideBatteryStatusProvider(
-        @ApplicationContext context: Context,
-        @IoScope scope: CoroutineScope 
-    ): BatteryStatusProvider =
-        BatteryStatusProvider(context, scope)
+    fun provideAxPlatformBridge(@ApplicationContext context: Context): AxPlatformBridge =
+        AxPlatformBridge(context)
 
     @Provides
     @Singleton
-    fun provideCalendarProvider(
-        @ApplicationContext context: Context,
-        @IoScope scope: CoroutineScope 
-    ): CalendarProvider =
-        CalendarProvider(context, scope)
+    fun provideBatteryStatusProvider(bridge: AxPlatformBridge): BatteryStatusProvider =
+        BatteryStatusProvider(bridge)
 
     @Provides
     @Singleton
-    fun provideMediaPlaybackProvider(
+    fun provideQuickLookServiceClient(
         @ApplicationContext context: Context
-    ): MediaPlaybackProvider =
-        MediaPlaybackProvider(context)
+    ): QuickLookServiceClient = QuickLookServiceClient(context)
+
+    @Provides
+    @Singleton
+    fun provideMessageProvider(@ApplicationContext context: Context): MessageProvider =
+        MessageProvider(context)
 
     @Provides
     @Singleton
     fun provideQuickLookDataManager(
-        @ApplicationContext context: Context
-    ): QuickLookDataManager =
-        QuickLookDataManager(context)
+        @ApplicationContext context: Context,
+        messageProvider: MessageProvider,
+    ): QuickLookDataManager = QuickLookDataManager(context, messageProvider)
 
     @Provides
     @Singleton
     fun provideQuickLookWidgetInteractor(
         @ApplicationContext context: Context,
-        dataManager: QuickLookDataManager
-    ): QuickLookWidgetInteractor =
-        QuickLookWidgetInteractor(context, dataManager)
-        
+        dataManager: QuickLookDataManager,
+    ): QuickLookWidgetInteractor = QuickLookWidgetInteractor(context, dataManager)
+
     @Provides
     @Singleton
-    fun provideWeatherProvider(
-        @ApplicationContext context: Context,
-        @IoScope scope: CoroutineScope 
-    ): WeatherProvider =
-        WeatherProvider(context, scope)
-        
-    @Provides
-    @Singleton
-    fun providePhotoProvider(
-        @ApplicationContext context: Context
-    ): PhotoProvider =
+    fun providePhotoProvider(@ApplicationContext context: Context): PhotoProvider =
         PhotoProvider(context)
 
     @Provides
     @Singleton
-    fun provideUsageStatsProvider(
-        @ApplicationContext context: Context
-    ): UsageStatsProvider =
+    fun provideUsageStatsProvider(@ApplicationContext context: Context): UsageStatsProvider =
         UsageStatsProvider(context)
+
+    @Provides
+    @Singleton
+    fun provideMediaPlayerProvider(
+        @ApplicationContext context: Context,
+        @MainScope scope: CoroutineScope,
+    ): MediaPlayerProvider = MediaPlayerProvider(context, scope)
+
+    @Provides
+    @Singleton
+    fun providePedometerProvider(@ApplicationContext context: Context): PedometerProvider =
+        PedometerProvider(context)
+
+    @Provides
+    @Singleton
+    fun provideCompassProvider(
+        @ApplicationContext context: Context,
+        @IoScope scope: CoroutineScope,
+    ): CompassProvider = CompassProvider(context, scope)
+
+    @Provides
+    @Singleton
+    fun provideDozeStateProvider(bridge: AxPlatformBridge): DozeStateProvider =
+        DozeStateProvider(bridge)
 }
 
 @Module
@@ -111,58 +124,47 @@ object TileModule {
     fun provideTileManager(
         @ApplicationContext context: Context,
         repository: TileRepository,
-        tileConfigs: TileConfigs,
-        @IoScope scope: CoroutineScope 
-    ): TileManager =
-        TileManager(context, repository, tileConfigs, scope)
-
-    @Provides
-    @Singleton
-    fun provideTileConfigs(
-        @ApplicationContext context: Context
-    ): TileConfigs =
-        TileConfigs(context)
+        @IoScope scope: CoroutineScope,
+    ): TileManager = TileManager(context, repository, scope)
 
     @Provides
     @Singleton
     fun provideTileRepository(
         @ApplicationContext context: Context,
-        tileConfigs: TileConfigs,
-        @IoScope scope: CoroutineScope 
-    ): TileRepository =
-        TileRepository(context, tileConfigs, scope)
+        @IoScope scope: CoroutineScope,
+        bridge: AxPlatformBridge,
+    ): TileRepository = TileRepository(context, scope, bridge)
 }
 
 @Singleton
-@Component(
-    modules = [
-        AxionModule::class,
-        CoroutineScopeModule::class,
-        TileModule::class
-    ]
-)
+@Component(modules = [AxionModule::class, CoroutineScopeModule::class, TileModule::class])
 interface AxionAppComponent {
 
     fun quickLookWidgetInteractor(): QuickLookWidgetInteractor
+
     fun quickLookDataManager(): QuickLookDataManager
+
     fun tileRepository(): TileRepository
+
     fun tileManager(): TileManager
+
+    fun messageProvider(): MessageProvider
+
+    fun mediaPlayerProvider(): MediaPlayerProvider
+
+    fun pedometerProvider(): PedometerProvider
+
+    fun compassProvider(): CompassProvider
 
     @Component.Factory
     interface Factory {
-        fun create(
-            @BindsInstance @ApplicationContext context: Context
-        ): AxionAppComponent
+        fun create(@BindsInstance @ApplicationContext context: Context): AxionAppComponent
     }
 }
 
-@Qualifier
-@Retention(BINARY)
-annotation class MainScope
+@Qualifier @Retention(BINARY) annotation class MainScope
 
-@Qualifier
-@Retention(BINARY)
-annotation class IoScope
+@Qualifier @Retention(BINARY) annotation class IoScope
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -171,12 +173,10 @@ object CoroutineScopeModule {
     @Provides
     @Singleton
     @MainScope
-    fun provideMainScope(): CoroutineScope =
-        CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    fun provideMainScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     @Provides
     @Singleton
     @IoScope
-    fun provideIoScope(): CoroutineScope =
-        CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    fun provideIoScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 }

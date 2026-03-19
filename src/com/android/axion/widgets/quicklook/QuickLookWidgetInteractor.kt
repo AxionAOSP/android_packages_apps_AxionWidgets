@@ -11,9 +11,11 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets.quicklook
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
@@ -24,22 +26,33 @@ import com.android.axion.widgets.data.*
 import com.android.axion.widgets.manager.QuickLookDataManager
 import com.android.axion.widgets.utils.*
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
-class QuickLookWidgetInteractor @Inject constructor(
+class QuickLookWidgetInteractor
+@Inject
+constructor(
     @ApplicationContext internal val context: Context,
-    private val dataManager: QuickLookDataManager
+    private val dataManager: QuickLookDataManager,
 ) {
 
-    private val dateFormat =
-        SimpleDateFormat(context.getString(R.string.date_format_pattern), Locale.getDefault())
+    private fun getDateFormat(): SimpleDateFormat {
+        val pattern =
+            when (QuickLookPrefs.getDateFormat(context)) {
+                QuickLookPrefs.DATE_FORMAT_SHORT -> "EEE, MMM d"
+                QuickLookPrefs.DATE_FORMAT_FULL -> "EEEE, MMMM d, yyyy"
+                else -> context.getString(R.string.date_format_pattern)
+            }
+        return SimpleDateFormat(pattern, Locale.getDefault())
+    }
 
     private fun setDisplayData(views: RemoteViews, data: DisplayData) {
-        views.setTextOrHide(R.id.date_text, data.dateText ?: dateFormat.format(Date()))
+        val showDate = QuickLookPrefs.showDate(context)
+        val dateText = if (showDate) data.dateText ?: getDateFormat().format(Date()) else null
+        views.setTextOrHide(R.id.date_text, dateText)
         views.setTextOrHide(R.id.primary_text_info, data.primaryText)
         views.setTextOrHide(R.id.secondary_text_info, data.secondaryText)
 
@@ -47,68 +60,118 @@ class QuickLookWidgetInteractor @Inject constructor(
         iconIds.forEach { views.setViewVisibility(it, View.GONE) }
 
         data.iconViewId?.let { id ->
-            data.iconBitmap?.let { bitmap ->
-                views.setIconOrHide(id, bitmap)
-            }
+            data.iconBitmap?.let { bitmap -> views.setIconOrHide(id, bitmap) }
         }
     }
 
     fun updateRemoteViews(qlData: QuickLookData): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.widget_quicklook)
 
-        val displayData = when (qlData) {
-            is QuickLookData.CalendarEvent -> {
-                val title = qlData.title ?: context.getString(R.string.quick_look_widget_calendar_no_title)
-                val b = ContextCompat.getDrawable(context, R.drawable.ic_calendar_event)?.toBitmap()
-                DisplayData(dateText = title,secondaryText = qlData.desc, iconViewId = R.id.media_icon, iconBitmap = b)
-            }
-
-            is QuickLookData.Media -> {
-                val pm = context.packageManager
-                val iconBitmap = try { pm.getApplicationIcon(qlData.packageName ?: "").toBitmap() } catch (e: Exception) { null }
-                val b = iconBitmap ?: ContextCompat.getDrawable(context, R.drawable.ic_music_note)?.toBitmap()
-                DisplayData(dateText = qlData.title, secondaryText = qlData.artist, iconViewId = R.id.media_icon, iconBitmap = b)
-            }
-
-            is QuickLookData.Battery -> {
-                val iconBitmap = ContextCompat.getDrawable(context, R.drawable.ic_battery_charging)?.toBitmap()
-                val isFull = qlData.level == 100 && qlData.isCharging
-                val chargingStatus = context.getString(if (isFull) R.string.full_charge else R.string.charging)
-                val chargingTime = qlData.chargingTimeRemaining
-                    ?.let { (it + 59999) / 60000 }
-                    ?.takeIf { it > 0 }
-                    ?.let { context.getString(R.string.minutes_left, it) }
-
-                val status = when {
-                    !isFull && qlData.isCharging && !chargingTime.isNullOrEmpty() ->
-                        context.getString(R.string.charging_with_time, chargingStatus, chargingTime)
-                    else -> chargingStatus
+        val displayData =
+            when (qlData) {
+                is QuickLookData.CalendarEvent -> {
+                    val title =
+                        qlData.title
+                            ?: context.getString(R.string.quick_look_widget_calendar_no_title)
+                    val b =
+                        ContextCompat.getDrawable(context, R.drawable.ic_calendar_event)?.toBitmap()
+                    DisplayData(
+                        dateText = title,
+                        secondaryText = qlData.desc,
+                        iconViewId = R.id.media_icon,
+                        iconBitmap = b,
+                    )
                 }
 
-                DisplayData(
-                    dateText = status,
-                    secondaryText = context.getString(R.string.battery_level_format, qlData.level),
-                    iconViewId = R.id.media_icon,
-                    iconBitmap = iconBitmap
-                )
-            }
+                is QuickLookData.Media -> {
+                    val pm = context.packageManager
+                    val iconBitmap =
+                        try {
+                            pm.getApplicationIcon(qlData.packageName ?: "").toBitmap()
+                        } catch (e: Exception) {
+                            null
+                        }
+                    val b =
+                        iconBitmap
+                            ?: ContextCompat.getDrawable(context, R.drawable.ic_music_note)
+                                ?.toBitmap()
+                    DisplayData(
+                        dateText = qlData.title,
+                        secondaryText = qlData.artist,
+                        iconViewId = R.id.media_icon,
+                        iconBitmap = b,
+                    )
+                }
 
-            is QuickLookData.Weather -> {
-                val icon = WeatherUtils.getWeatherIcon(context, qlData.conditionCode)?.toBitmap()
-                DisplayData(primaryText = "${qlData.temp}°", secondaryText = qlData.condition ?: "", iconViewId = R.id.weather_icon, iconBitmap = icon)
-            }
+                is QuickLookData.Battery -> {
+                    val iconBitmap =
+                        ContextCompat.getDrawable(context, R.drawable.ic_battery_charging)
+                            ?.toBitmap()
+                    val isFull = qlData.level == 100 && qlData.isCharging
+                    val chargingStatus =
+                        context.getString(if (isFull) R.string.full_charge else R.string.charging)
+                    val chargingTime =
+                        qlData.chargingTimeRemaining
+                            ?.let { (it + 59999) / 60000 }
+                            ?.takeIf { it > 0 }
+                            ?.let { context.getString(R.string.minutes_left, it) }
 
-            else -> DisplayData(primaryText = context.getString(R.string.placeholder), secondaryText = "")
-        }
+                    val status =
+                        when {
+                            !isFull && qlData.isCharging && !chargingTime.isNullOrEmpty() ->
+                                context.getString(
+                                    R.string.charging_with_time,
+                                    chargingStatus,
+                                    chargingTime,
+                                )
+                            else -> chargingStatus
+                        }
+
+                    DisplayData(
+                        dateText = status,
+                        secondaryText =
+                            context.getString(R.string.battery_level_format, qlData.level),
+                        iconViewId = R.id.media_icon,
+                        iconBitmap = iconBitmap,
+                    )
+                }
+
+                is QuickLookData.Weather -> {
+                    val icon =
+                        qlData.iconBytes?.let { bytes ->
+                            BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        } ?: WeatherUtils.getWeatherIcon(context, qlData.conditionCode)?.toBitmap()
+                    DisplayData(
+                        primaryText = "${qlData.temp}°",
+                        secondaryText = qlData.condition ?: "",
+                        iconViewId = R.id.weather_icon,
+                        iconBitmap = icon,
+                    )
+                }
+
+                is QuickLookData.Message ->
+                    DisplayData(primaryText = qlData.text, secondaryText = "")
+
+                else ->
+                    DisplayData(
+                        primaryText = context.getString(R.string.placeholder),
+                        secondaryText = "",
+                    )
+            }
 
         setDisplayData(views, displayData)
 
-        views.setOnClickPendingIntent(R.id.secondary_info, QuickLookActions.getClickPendingIntent(context, qlData))
-        QuickLookActions.getDateClickPendingIntent(context)?.let { views.setOnClickPendingIntent(R.id.date_text, it) }
+        views.setOnClickPendingIntent(
+            R.id.secondary_info,
+            QuickLookActions.getClickPendingIntent(context, qlData),
+        )
+        QuickLookActions.getDateClickPendingIntent(context)?.let {
+            views.setOnClickPendingIntent(R.id.date_text, it)
+        }
 
         return views
     }
-    
+
     companion object {
         fun get(context: Context): QuickLookWidgetInteractor {
             val app = context.applicationContext as AxionApp

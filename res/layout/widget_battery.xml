@@ -1,72 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/battery_card_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
     android:layout_marginHorizontal="@dimen/card_padding_horizontal"
     android:layout_marginVertical="@dimen/card_padding_vertical"
-    android:orientation="vertical"
-    android:background="@drawable/bg_widget_card">
-    <RelativeLayout
+    android:padding="@dimen/battery_margin"
+    android:background="@drawable/bg_widget_card"
+    android:clipChildren="true"
+    android:clipToPadding="true">
+
+    <!-- Full mode (2x2+) -->
+    <FrameLayout
+        android:id="@+id/battery_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <FrameLayout
-            android:id="@+id/battery_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="@dimen/battery_margin"
-            android:layout_marginTop="@dimen/battery_margin">
-            <ImageView
-                android:id="@+id/battery_bg_view"
-                android:layout_width="@dimen/battery_bg_arc_size"
-                android:layout_height="@dimen/battery_bg_arc_size"
-                android:scaleType="fitCenter"
-                android:tint="@color/battery_progressbar_color" />
-            <ImageView
-                android:id="@+id/battery_bg_view_low"
-                android:layout_width="@dimen/battery_bg_arc_size"
-                android:layout_height="@dimen/battery_bg_arc_size"
-                android:scaleType="fitCenter"
-                android:tint="@color/battery_progressbar_color_low_battery_state" />
-            <LinearLayout
-                android:layout_width="@dimen/battery_bg_arc_size"
-                android:layout_height="@dimen/battery_bg_arc_size"
-                android:orientation="vertical"
-                android:gravity="center">
-                <ImageView
-                    android:id="@+id/battery_view_top_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/device_phone_default"
-                    android:layout_gravity="center" />
-                <ImageView
-                    android:id="@+id/battery_view_bottom_left"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/battery_aod_charging"
-                    android:tint="@*android:color/white"
-                    android:background="@drawable/battery_bg_color"
-                    android:padding="0.5dp"
-                    android:layout_gravity="center"
-                    android:translationY="@dimen/battery_charge_y" />
-            </LinearLayout>
-        </FrameLayout>
-        <TextView
-            android:id="@+id/battery_percentage"
+        android:layout_height="match_parent"
+        android:layout_gravity="top|start"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="28dp">
+        <ImageView
+            android:id="@+id/battery_bg_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/battery_margin"
-            android:layout_marginEnd="@dimen/battery_margin"
-            android:maxLines="1"
-            android:includeFontPadding="false"
-            android:textAlignment="textEnd"
-            android:fontFamily="nothingdot"
-            style="@style/BatteryLevelTextStyle" />
-    </RelativeLayout>
-</LinearLayout>
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:tint="@color/battery_progressbar_color" />
+        <ImageView
+            android:id="@+id/battery_bg_view_low"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:tint="@color/battery_progressbar_color_low_battery_state" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/battery_view_top_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/device_phone_default"
+                android:layout_gravity="center" />
+            <ImageView
+                android:id="@+id/battery_view_bottom_left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/battery_aod_charging"
+                android:tint="@*android:color/white"
+                android:background="@drawable/battery_bg_color"
+                android:padding="0.5dp"
+                android:layout_gravity="center"
+                android:translationY="@dimen/battery_charge_y" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/battery_percentage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:maxLines="1"
+        android:includeFontPadding="false"
+        android:fontFamily="nothingdot"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="18sp"
+        android:autoSizeMaxTextSize="30sp"
+        style="@style/BatteryLevelTextStyle" />
+
+    <!-- Compact mode (1x1) -->
+    <ImageView
+        android:id="@+id/battery_compact_ring"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/battery_compact_pct"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:fontFamily="nothingdot"
+        android:includeFontPadding="false"
+        android:textColor="@color/battery_device_primary_color"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="12sp"
+        android:autoSizeMaxTextSize="22sp"
+        android:visibility="gone" />
+
+</FrameLayout>

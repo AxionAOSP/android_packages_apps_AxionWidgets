@@ -11,6 +11,7 @@
  * KIND, either express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
+
 package com.android.axion.widgets
 
 import android.appwidget.AppWidgetManager
@@ -28,22 +29,21 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
         private fun <T : AxionWidgetProvider> forEachWidgetId(
             context: Context,
             widgetClass: Class<T>,
-            action: (Int) -> Unit
+            action: (Int) -> Unit,
         ) {
             runCatching {
-                val manager = AppWidgetManager.getInstance(context)
-                val ids = manager.getAppWidgetIds(ComponentName(context, widgetClass))
-                ids.forEach(action)
-            }.onFailure { e ->
-                logger("exception occurred!!! exception: $e")
-            }
+                    val manager = AppWidgetManager.getInstance(context)
+                    val ids = manager.getAppWidgetIds(ComponentName(context, widgetClass))
+                    ids.forEach(action)
+                }
+                .onFailure { e -> logger("exception occurred!!! exception: $e") }
         }
 
         fun <W : AxionWidgetProvider, D> updateWidget(
             context: Context,
             widgetClass: Class<W>,
             data: D,
-            remoteViewsBuilder: (Context, D) -> RemoteViews
+            remoteViewsBuilder: (Context, D) -> RemoteViews,
         ) {
             val views = remoteViewsBuilder(context, data)
             forEachWidgetId(context, widgetClass) { id ->
@@ -54,7 +54,7 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
         fun <W : AxionWidgetProvider> updateAllWidgets(
             context: Context,
             widgetClass: Class<W>,
-            views: RemoteViews
+            views: RemoteViews,
         ) {
             forEachWidgetId(context, widgetClass) { id ->
                 AppWidgetManager.getInstance(context).updateAppWidget(id, views)
@@ -64,7 +64,7 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
         fun <W : AxionWidgetProvider> doForAllWidgets(
             context: Context,
             widgetClass: Class<W>,
-            action: (Int) -> Unit
+            action: (Int) -> Unit,
         ) {
             forEachWidgetId(context, widgetClass, action)
         }
@@ -73,12 +73,12 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
             context: Context,
             layoutResId: Int,
             data: D,
-            binder: RemoteViews.(D) -> Unit
+            binder: RemoteViews.(D) -> Unit,
         ): RemoteViews {
             return RemoteViews(context.packageName, layoutResId).apply { binder(data) }
         }
     }
-    
+
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
         WidgetUsageManager.updateWidgetStatus(context, this::class.java)
@@ -90,7 +90,11 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
         WidgetUsageManager.updateWidgetStatus(context, this::class.java)
     }
 
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray,
+    ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         WidgetUsageManager.updateWidgetStatus(context, this::class.java)
         WidgetUpdateService.update(context)
@@ -100,7 +104,6 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
         super.onDeleted(context, appWidgetIds)
         WidgetUsageManager.updateWidgetStatus(context, this::class.java)
     }
-    
-    open fun requiredProviders(): List<KClass<out AxionProvider<*>>> = emptyList()
 
+    open fun requiredProviders(): List<KClass<out AxionProvider<*>>> = emptyList()
 }
