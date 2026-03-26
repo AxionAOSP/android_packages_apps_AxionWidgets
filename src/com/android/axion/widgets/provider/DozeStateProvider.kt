@@ -29,7 +29,10 @@ data class DozeState(
 }
 
 object AodState {
+    const val DOZE_TRANSPARENCY_ENABLED = false
+
     @Volatile var isAod: Boolean = false
+        get() = DOZE_TRANSPARENCY_ENABLED && field
 }
 
 class DozeStateProvider(private val bridge: AxPlatformBridge) {

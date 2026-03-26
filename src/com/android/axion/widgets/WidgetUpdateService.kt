@@ -207,13 +207,15 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
             }
         }
 
-        scope.launch {
-            dozeStateProvider.dozeFlow.distinctUntilChanged().collect { state ->
-                val wasAod = AodState.isAod
-                AodState.isAod = state.isAod
-                if (wasAod != state.isAod) {
-                    logger("AOD state changed: ${state.isAod}")
-                    refreshAllWidgets()
+        if (AodState.DOZE_TRANSPARENCY_ENABLED) {
+            scope.launch {
+                dozeStateProvider.dozeFlow.distinctUntilChanged().collect { state ->
+                    val wasAod = AodState.isAod
+                    AodState.isAod = state.isAod
+                    if (wasAod != state.isAod) {
+                        logger("AOD state changed: ${state.isAod}")
+                        refreshAllWidgets()
+                    }
                 }
             }
         }
