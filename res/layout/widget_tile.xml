@@ -28,21 +28,21 @@
             android:focusable="false"/>
         <ImageView
             android:id="@+id/tile_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:tint="@color/battery_device_primary_color"
             android:src="@drawable/ic_unknown"
             android:clickable="false"
             android:focusable="false"/>
         <ImageView
             android:id="@+id/tile_active_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_unknown"
             android:tint="@color/device_primary_color_inverse"
             android:clickable="false"

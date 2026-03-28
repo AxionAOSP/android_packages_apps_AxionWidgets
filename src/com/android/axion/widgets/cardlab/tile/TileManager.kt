@@ -15,8 +15,10 @@
 package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
+import com.android.axion.platform.AxPlatformClient
 import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.data.*
+import com.android.axion.widgets.platform.AxPlatformBridge
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.*
@@ -28,6 +30,7 @@ class TileManager
 constructor(
     private val context: Context,
     private val repository: TileRepository,
+    private val bridge: AxPlatformBridge,
     private val scope: CoroutineScope,
 ) {
 
@@ -52,13 +55,19 @@ constructor(
 
     fun setTileForWidget(widgetId: Int, spec: String) {
         repository.startObservingSpec(spec)
+        val feature = TileRepository.specToFeature(spec)
+        val state = feature?.let { bridge.getState(it) }
+        val isActive = state?.getBoolean("active", false) ?: false
+        val label = state?.let { AxPlatformClient.getLabel(it) }
+        val secondaryLabel = state?.let { AxPlatformClient.getSecondaryLabel(it) }
         val data =
             TileData(
                 spec = spec,
-                isActive = false,
-                iconRes = TileIcons.getIcon(spec, false),
+                isActive = isActive,
+                iconRes = TileIcons.getIcon(spec, isActive),
                 widgetId = widgetId,
-                label = spec.replaceFirstChar { it.uppercase() },
+                label = label ?: spec.replaceFirstChar { it.uppercase() },
+                secondaryLabel = secondaryLabel,
             )
         _tilesFlow.value = _tilesFlow.value + (widgetId to data)
         context.updateWidget(widgetId, data)

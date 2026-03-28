@@ -19,7 +19,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.android.axion.widgets.AxionWidgetProvider
-import com.android.axion.widgets.data.TileData
 
 class AxTileReceiver : AxionWidgetProvider() {
 
@@ -48,15 +47,7 @@ class AxTileReceiver : AxionWidgetProvider() {
         if (tileData != null) {
             context.updateWidget(appWidgetId, tileData)
         } else {
-            val data =
-                TileData(
-                    spec = spec,
-                    isActive = false,
-                    iconRes = TileIcons.getIcon(spec, false),
-                    widgetId = appWidgetId,
-                    label = spec.replaceFirstChar { it.uppercase() },
-                )
-            context.updateWidget(appWidgetId, data)
+            manager.setTileForWidget(appWidgetId, spec)
         }
     }
 

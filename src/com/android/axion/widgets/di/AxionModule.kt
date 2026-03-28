@@ -124,8 +124,9 @@ object TileModule {
     fun provideTileManager(
         @ApplicationContext context: Context,
         repository: TileRepository,
+        bridge: AxPlatformBridge,
         @IoScope scope: CoroutineScope,
-    ): TileManager = TileManager(context, repository, scope)
+    ): TileManager = TileManager(context, repository, bridge, scope)
 
     @Provides
     @Singleton

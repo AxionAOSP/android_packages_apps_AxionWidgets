@@ -188,6 +188,12 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
         }
 
         scope.launch {
+            tileRepository.dataFlow.distinctUntilChanged().collect { tiles ->
+                tiles?.let { tileManager.tilesFlow = it }
+            }
+        }
+
+        scope.launch {
             mediaPlayerProvider.dataFlow.distinctUntilChanged().collect { data ->
                 AxMediaPlayerReceiver.update(applicationContext, data)
             }

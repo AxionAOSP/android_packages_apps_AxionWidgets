@@ -18,6 +18,7 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.*
 import android.graphics.Color
+import android.util.SizeF
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -27,15 +28,31 @@ import com.android.axion.widgets.provider.AodState
 
 const val ACTION_TILE_CLICK = "com.android.axion.widgets.ACTION_TILE_CLICK"
 const val EXTRA_WIDGET_ID = "extra_widget_id"
-private const val PILL_ASPECT_RATIO = 1.5f
-private const val TILE_MAX_SIZE = 72
-private const val PILL_WIDTH_MULTIPLIER = 2.25f
+
+private const val PILL_ASPECT_RATIO = 1.4f
+private const val LAUNCHER_WIDGET_PADDING = 12f
+private const val CIRCLE_RATIO = 0.70f
+private const val CIRCLE_MAX_SIZE = 65f
+private const val ICON_RATIO = 0.33f
+private const val PILL_ICON_RATIO = 0.40f
+private const val PILL_TEXT_RATIO = 0.22f
+private const val PILL_PAD_START_RATIO = 0.22f
+
+private fun getWidgetSize(options: android.os.Bundle): SizeF {
+    val sizes = options.getParcelableArrayList(
+        AppWidgetManager.OPTION_APPWIDGET_SIZES,
+        SizeF::class.java,
+    )
+    if (!sizes.isNullOrEmpty()) return sizes.first()
+    val maxW = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, 0).toFloat()
+    val maxH = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, 0).toFloat()
+    return SizeF(maxW, maxH)
+}
 
 fun Context.isPillSize(widgetId: Int): Boolean {
     val options = AppWidgetManager.getInstance(this).getAppWidgetOptions(widgetId)
-    val minW = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0)
-    val minH = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 0)
-    return minW > 0 && minH > 0 && minW.toFloat() / minH > PILL_ASPECT_RATIO
+    val size = getWidgetSize(options)
+    return size.width > 0 && size.height > 0 && size.width / size.height > PILL_ASPECT_RATIO
 }
 
 fun Context.updateWidget(widgetId: Int, data: TileData) {
@@ -46,7 +63,6 @@ fun Context.updateWidget(widgetId: Int, data: TileData) {
     val aod = AodState.isAod
 
     if (aod) {
-
         views.setViewVisibility(R.id.overlay_active_tile_view, View.GONE)
         views.setViewVisibility(R.id.tile_active_view, View.GONE)
         views.setViewVisibility(R.id.tile_view, View.VISIBLE)
@@ -78,53 +94,12 @@ fun Context.updateWidget(widgetId: Int, data: TileData) {
     }
 
     val options = appWidgetManager.getAppWidgetOptions(widgetId)
+    val widgetSize = getWidgetSize(options)
 
     if (isPill) {
-        val maxH = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, TILE_MAX_SIZE)
-        val h = maxH.coerceAtMost(TILE_MAX_SIZE).toFloat()
-        val w = h * PILL_WIDTH_MULTIPLIER
-
-        views.setViewLayoutHeight(R.id.tile_view_root, h, TypedValue.COMPLEX_UNIT_DIP)
-        views.setViewLayoutWidth(R.id.tile_view_root, w, TypedValue.COMPLEX_UNIT_DIP)
-
-        val label = data.label ?: data.spec
-        val activeLabel = data.secondaryLabel?.takeIf { it.isNotEmpty() } ?: label
-        views.setTextViewText(R.id.tile_label, label)
-        views.setTextViewText(R.id.tile_label_active, activeLabel)
-        if (aod) {
-            views.setViewVisibility(R.id.tile_label, View.VISIBLE)
-            views.setViewVisibility(R.id.tile_label_active, View.GONE)
-            views.setTextColor(R.id.tile_label, Color.WHITE)
-        } else {
-            val ov = if (data.isActive) View.VISIBLE else View.GONE
-            val tl = if (data.isActive) View.GONE else View.VISIBLE
-            views.setViewVisibility(R.id.tile_label, tl)
-            views.setViewVisibility(R.id.tile_label_active, ov)
-            views.setTextColor(R.id.tile_label, getColor(R.color.battery_device_primary_color))
-            views.setTextColor(
-                R.id.tile_label_active,
-                getColor(R.color.device_primary_color_inverse),
-            )
-        }
-
-        val iconSize = h * 0.4f
-        for (id in intArrayOf(R.id.tile_view, R.id.tile_active_view)) {
-            views.setViewLayoutWidth(id, iconSize, TypedValue.COMPLEX_UNIT_DIP)
-            views.setViewLayoutHeight(id, iconSize, TypedValue.COMPLEX_UNIT_DIP)
-        }
-
-        val textSize = h * 0.22f
-        views.setTextViewTextSize(R.id.tile_label, TypedValue.COMPLEX_UNIT_DIP, textSize)
-        views.setTextViewTextSize(R.id.tile_label_active, TypedValue.COMPLEX_UNIT_DIP, textSize)
-        val padStart = dpToPx(h * 0.22f)
-        views.setViewPadding(R.id.tile_content, padStart, 0, 0, 0)
+        applyPillSizing(views, widgetSize, data, aod)
     } else {
-        val maxW = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH, TILE_MAX_SIZE)
-        val maxH = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT, TILE_MAX_SIZE)
-        val size = minOf(maxW, maxH).coerceAtMost(TILE_MAX_SIZE).toFloat()
-
-        views.setViewLayoutWidth(R.id.tile_circle, size, TypedValue.COMPLEX_UNIT_DIP)
-        views.setViewLayoutHeight(R.id.tile_circle, size, TypedValue.COMPLEX_UNIT_DIP)
+        applyTileSizing(views, widgetSize)
     }
 
     val pendingIntent =
@@ -137,6 +112,69 @@ fun Context.updateWidget(widgetId: Int, data: TileData) {
     views.setOnClickPendingIntent(R.id.tile_view_root, pendingIntent)
 
     appWidgetManager.updateAppWidget(widgetId, views)
+}
+
+private fun Context.applyTileSizing(views: RemoteViews, widgetSize: SizeF) {
+    val w = widgetSize.width
+    val h = widgetSize.height
+    if (w <= 0f || h <= 0f) return
+
+    val cellH = h + LAUNCHER_WIDGET_PADDING
+    val circleSize = (cellH * CIRCLE_RATIO).coerceAtMost(CIRCLE_MAX_SIZE)
+    views.setViewLayoutWidth(R.id.tile_circle, circleSize, TypedValue.COMPLEX_UNIT_DIP)
+    views.setViewLayoutHeight(R.id.tile_circle, circleSize, TypedValue.COMPLEX_UNIT_DIP)
+
+    val iconMax = CIRCLE_MAX_SIZE * ICON_RATIO
+    val iconSize = (cellH * ICON_RATIO).coerceAtMost(iconMax)
+    for (id in intArrayOf(R.id.tile_view, R.id.tile_active_view)) {
+        views.setViewLayoutWidth(id, iconSize, TypedValue.COMPLEX_UNIT_DIP)
+        views.setViewLayoutHeight(id, iconSize, TypedValue.COMPLEX_UNIT_DIP)
+    }
+}
+
+private fun Context.applyPillSizing(
+    views: RemoteViews,
+    widgetSize: SizeF,
+    data: TileData,
+    aod: Boolean,
+) {
+    val h = widgetSize.height
+    if (h <= 0f) return
+
+    val cellH = h + LAUNCHER_WIDGET_PADDING
+
+    val label = data.label ?: data.spec
+    val activeLabel = data.secondaryLabel?.takeIf { it.isNotEmpty() } ?: label
+    views.setTextViewText(R.id.tile_label, label)
+    views.setTextViewText(R.id.tile_label_active, activeLabel)
+
+    if (aod) {
+        views.setViewVisibility(R.id.tile_label, View.VISIBLE)
+        views.setViewVisibility(R.id.tile_label_active, View.GONE)
+        views.setTextColor(R.id.tile_label, Color.WHITE)
+    } else {
+        val ov = if (data.isActive) View.VISIBLE else View.GONE
+        val tl = if (data.isActive) View.GONE else View.VISIBLE
+        views.setViewVisibility(R.id.tile_label, tl)
+        views.setViewVisibility(R.id.tile_label_active, ov)
+        views.setTextColor(R.id.tile_label, getColor(R.color.battery_device_primary_color))
+        views.setTextColor(
+            R.id.tile_label_active,
+            getColor(R.color.device_primary_color_inverse),
+        )
+    }
+
+    val iconSize = cellH * PILL_ICON_RATIO
+    for (id in intArrayOf(R.id.tile_view, R.id.tile_active_view)) {
+        views.setViewLayoutWidth(id, iconSize, TypedValue.COMPLEX_UNIT_DIP)
+        views.setViewLayoutHeight(id, iconSize, TypedValue.COMPLEX_UNIT_DIP)
+    }
+
+    val textSize = cellH * PILL_TEXT_RATIO
+    views.setTextViewTextSize(R.id.tile_label, TypedValue.COMPLEX_UNIT_DIP, textSize)
+    views.setTextViewTextSize(R.id.tile_label_active, TypedValue.COMPLEX_UNIT_DIP, textSize)
+    val padStart = dpToPx(cellH * PILL_PAD_START_RATIO)
+    views.setViewPadding(R.id.tile_content, padStart, 0, 0, 0)
 }
 
 private fun Context.dpToPx(dp: Float): Int =
