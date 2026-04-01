@@ -47,6 +47,12 @@ constructor(
     fun updateState(widgetId: Int) {
         val spec = WidgetPrefs.getWidgetAction(context, widgetId) ?: return
         repository.toggle(spec)
+        val current = _tilesFlow.value[widgetId] ?: return
+        val toggled = current.copy(
+            isActive = !current.isActive,
+            iconRes = getIconForTile(spec, !current.isActive),
+        )
+        tilesFlow = _tilesFlow.value + (widgetId to toggled)
     }
 
     fun getIconForTile(spec: String, active: Boolean): Int {

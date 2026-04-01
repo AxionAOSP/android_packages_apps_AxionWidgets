@@ -101,18 +101,18 @@ class PedometerProvider @Inject constructor(@ApplicationContext private val cont
 
         val dailySteps: Int
         if (baselineDate != today) {
-
             PedometerPrefs.setBaseline(context, rawSteps, today)
+            PedometerPrefs.setOffset(context, 0)
             PedometerPrefs.setDailySteps(context, 0)
             dailySteps = 0
         } else if (storedBaseline < 0 || rawSteps < storedBaseline) {
-
             val carryOver = PedometerPrefs.getDailySteps(context)
             PedometerPrefs.setBaseline(context, rawSteps, today)
+            PedometerPrefs.setOffset(context, carryOver)
             dailySteps = carryOver
         } else {
-
-            dailySteps = (rawSteps - storedBaseline).toInt().coerceAtLeast(0)
+            val offset = PedometerPrefs.getOffset(context)
+            dailySteps = offset + (rawSteps - storedBaseline).toInt().coerceAtLeast(0)
         }
 
         val now = SystemClock.elapsedRealtime()

@@ -24,6 +24,7 @@ object PedometerPrefs {
     private const val KEY_BASELINE = "baseline"
     private const val KEY_BASELINE_DATE = "baseline_date"
     private const val KEY_DAILY_STEPS = "daily_steps"
+    private const val KEY_OFFSET = "step_offset"
     private const val DEFAULT_GOAL = 10000
 
     private fun getPrefs(context: Context): SharedPreferences =
@@ -59,5 +60,11 @@ object PedometerPrefs {
 
     fun setDailySteps(context: Context, steps: Int) {
         getPrefs(context).edit().putInt(KEY_DAILY_STEPS, steps).apply()
+    }
+
+    fun getOffset(context: Context): Int = getPrefs(context).getInt(KEY_OFFSET, 0)
+
+    fun setOffset(context: Context, offset: Int) {
+        getPrefs(context).edit().putInt(KEY_OFFSET, offset).apply()
     }
 }

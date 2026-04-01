@@ -32,8 +32,8 @@ const val EXTRA_WIDGET_ID = "extra_widget_id"
 private const val PILL_ASPECT_RATIO = 1.4f
 private const val LAUNCHER_WIDGET_PADDING = 12f
 private const val CIRCLE_RATIO = 0.70f
-private const val CIRCLE_MAX_SIZE = 65f
 private const val ICON_RATIO = 0.33f
+private const val ICON_MAX_SIZE = 24f
 private const val PILL_ICON_RATIO = 0.40f
 private const val PILL_TEXT_RATIO = 0.22f
 private const val PILL_PAD_START_RATIO = 0.22f
@@ -120,12 +120,11 @@ private fun Context.applyTileSizing(views: RemoteViews, widgetSize: SizeF) {
     if (w <= 0f || h <= 0f) return
 
     val cellH = h + LAUNCHER_WIDGET_PADDING
-    val circleSize = (cellH * CIRCLE_RATIO).coerceAtMost(CIRCLE_MAX_SIZE)
+    val circleSize = cellH * CIRCLE_RATIO
     views.setViewLayoutWidth(R.id.tile_circle, circleSize, TypedValue.COMPLEX_UNIT_DIP)
     views.setViewLayoutHeight(R.id.tile_circle, circleSize, TypedValue.COMPLEX_UNIT_DIP)
 
-    val iconMax = CIRCLE_MAX_SIZE * ICON_RATIO
-    val iconSize = (cellH * ICON_RATIO).coerceAtMost(iconMax)
+    val iconSize = (cellH * ICON_RATIO).coerceAtMost(ICON_MAX_SIZE)
     for (id in intArrayOf(R.id.tile_view, R.id.tile_active_view)) {
         views.setViewLayoutWidth(id, iconSize, TypedValue.COMPLEX_UNIT_DIP)
         views.setViewLayoutHeight(id, iconSize, TypedValue.COMPLEX_UNIT_DIP)
