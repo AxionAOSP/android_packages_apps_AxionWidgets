@@ -22,6 +22,7 @@ import com.android.axion.widgets.manager.QuickLookDataManager
 import com.android.axion.widgets.platform.AxPlatformBridge
 import com.android.axion.widgets.provider.BatteryStatusProvider
 import com.android.axion.widgets.provider.CompassProvider
+import com.android.axion.widgets.provider.DateProvider
 import com.android.axion.widgets.provider.DozeStateProvider
 import com.android.axion.widgets.provider.MediaPlayerProvider
 import com.android.axion.widgets.provider.PedometerProvider
@@ -108,6 +109,11 @@ object AxionModule {
         @ApplicationContext context: Context,
         @IoScope scope: CoroutineScope,
     ): CompassProvider = CompassProvider(context, scope)
+
+    @Provides
+    @Singleton
+    fun provideDateProvider(@ApplicationContext context: Context): DateProvider =
+        DateProvider(context)
 
     @Provides
     @Singleton

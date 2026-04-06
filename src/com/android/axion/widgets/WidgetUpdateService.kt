@@ -71,6 +71,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     @Inject lateinit var compassProvider: CompassProvider
     @Inject lateinit var dozeStateProvider: DozeStateProvider
     @Inject lateinit var messageProvider: MessageProvider
+    @Inject lateinit var dateProvider: DateProvider
 
     private val photoCache = mutableMapOf<Int, PhotoWidgetData>()
     private var providersStarted = false
@@ -210,6 +211,12 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
         scope.launch {
             compassProvider.dataFlow.distinctUntilChanged().collect { data ->
                 AxCompassReceiver.update(applicationContext, data)
+            }
+        }
+
+        scope.launch {
+            dateProvider.dateFlow.collect {
+                quickLookDataManager.onDataUpdated()
             }
         }
 
