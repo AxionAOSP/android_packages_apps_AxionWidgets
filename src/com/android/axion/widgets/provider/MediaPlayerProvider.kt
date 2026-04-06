@@ -119,14 +119,18 @@ constructor(
 
         val title = metadata?.getString(MediaMetadata.METADATA_KEY_TITLE)
         val artist = metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST)
-        val current = _data.value
 
-        if (title == null && artist == null && current?.title != null) {
-            _data.value =
-                current.copy(
-                    isPlaying = state?.state == PlaybackState.STATE_PLAYING,
-                    position = state?.position ?: current.position,
-                )
+        if (title == null && artist == null) {
+            val current = _data.value ?: return
+            if (current.packageName == controller.packageName) {
+                _data.value =
+                    current.copy(
+                        isPlaying = state?.state == PlaybackState.STATE_PLAYING,
+                        position = state?.position ?: current.position,
+                    )
+            } else {
+                _data.value = null
+            }
             return
         }
 
