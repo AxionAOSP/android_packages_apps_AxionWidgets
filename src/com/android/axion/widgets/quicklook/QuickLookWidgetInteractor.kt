@@ -53,8 +53,13 @@ constructor(
         val showDate = QuickLookPrefs.showDate(context)
         val dateText = if (showDate) data.dateText ?: getDateFormat().format(Date()) else null
         views.setTextOrHide(R.id.date_text, dateText)
-        views.setTextOrHide(R.id.primary_text_info, data.primaryText)
-        views.setTextOrHide(R.id.secondary_text_info, data.secondaryText)
+
+        val merged =
+            listOfNotNull(data.primaryText, data.secondaryText)
+                .filter { it.isNotEmpty() }
+                .joinToString(" ")
+                .ifEmpty { null }
+        views.setTextOrHide(R.id.primary_text_info, merged)
 
         val iconIds = listOf(R.id.media_icon, R.id.secondary_icon, R.id.weather_icon)
         iconIds.forEach { views.setViewVisibility(it, View.GONE) }

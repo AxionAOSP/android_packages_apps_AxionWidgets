@@ -32,21 +32,6 @@
             android:layout_marginTop="@dimen/secondary_container_margin_top"
             android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/primary_text_info"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="@dimen/quicklook_secondary_info_margin_horizontal"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="12sp"
-                android:autoSizeMaxTextSize="24sp"
-                android:autoSizeStepGranularity="1sp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                style="@style/PrimaryTextInfoStyle"
-                android:text="@string/placeholder" />
-
             <ImageView
                 android:id="@+id/media_icon"
                 style="@style/IconStyle"
@@ -66,17 +51,19 @@
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/secondary_text_info"
-                android:layout_width="wrap_content"
+                android:id="@+id/primary_text_info"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/quicklook_secondary_info_margin_horizontal"
+                android:layout_weight="1"
+                android:gravity="start"
                 android:autoSizeTextType="uniform"
                 android:autoSizeMinTextSize="12sp"
                 android:autoSizeMaxTextSize="24sp"
                 android:autoSizeStepGranularity="1sp"
                 android:ellipsize="end"
                 android:maxLines="2"
-                style="@style/SecondaryTextInfoStyle" />
+                style="@style/PrimaryTextInfoStyle"
+                android:text="@string/placeholder" />
         </LinearLayout>
 
     </LinearLayout>

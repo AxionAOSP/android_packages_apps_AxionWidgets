@@ -47,64 +47,67 @@ class QuickLookServiceClient @Inject constructor(@ApplicationContext private val
 
     private val _targetsFlow = MutableStateFlow<List<QuickLookTarget>>(emptyList())
 
-    val weatherProvider =
-        object : AxionProvider<QuickLookData.Weather> {
-            override val dataFlow: Flow<QuickLookData.Weather?> =
-                _targetsFlow.map { targets ->
-                    targets
-                        .firstOrNull { it.targetType == QuickLookTarget.TYPE_WEATHER }
-                        ?.weatherData
-                        ?.let { w ->
-                            QuickLookData.Weather(
-                                temp = w.temp,
-                                condition = w.condition,
-                                conditionCode = w.conditionCode,
-                                iconBytes = w.iconBytes,
-                            )
-                        }
+    inner class WeatherProvider : AxionProvider<QuickLookData.Weather> {
+        override val dataFlow: Flow<QuickLookData.Weather?> =
+            _targetsFlow.map { targets ->
+                val weatherTargets =
+                    targets.filter { it.targetType == QuickLookTarget.TYPE_WEATHER }
+                val chosen =
+                    weatherTargets.firstOrNull { it.weatherData?.condition?.isNotEmpty() == true }
+                        ?: weatherTargets.firstOrNull()
+                chosen?.weatherData?.let { w ->
+                    QuickLookData.Weather(
+                        temp = w.temp,
+                        condition = w.condition,
+                        conditionCode = w.conditionCode,
+                        iconBytes = w.iconBytes,
+                    )
                 }
-        }
+            }
+    }
 
-    val calendarProvider =
-        object : AxionProvider<QuickLookData.CalendarEvent> {
-            override val dataFlow: Flow<QuickLookData.CalendarEvent?> =
-                _targetsFlow.map { targets ->
-                    targets
-                        .firstOrNull { it.targetType == QuickLookTarget.TYPE_CALENDAR }
-                        ?.calendarData
-                        ?.let { c ->
-                            val formatter = DateFormat.getTimeFormat(context)
-                            val start = formatter.format(Date(c.startTime))
-                            val end = formatter.format(Date(c.endTime))
-                            QuickLookData.CalendarEvent(
-                                id = c.id,
-                                title = c.title ?: "",
-                                startTime = c.startTime,
-                                endTime = c.endTime,
-                                location = c.location ?: "",
-                                desc = c.description.ifEmpty { "$start - $end" },
-                            )
-                        }
-                }
-        }
+    inner class CalendarProvider : AxionProvider<QuickLookData.CalendarEvent> {
+        override val dataFlow: Flow<QuickLookData.CalendarEvent?> =
+            _targetsFlow.map { targets ->
+                targets
+                    .firstOrNull { it.targetType == QuickLookTarget.TYPE_CALENDAR }
+                    ?.calendarData
+                    ?.let { c ->
+                        val formatter = DateFormat.getTimeFormat(context)
+                        val start = formatter.format(Date(c.startTime))
+                        val end = formatter.format(Date(c.endTime))
+                        QuickLookData.CalendarEvent(
+                            id = c.id,
+                            title = c.title ?: "",
+                            startTime = c.startTime,
+                            endTime = c.endTime,
+                            location = c.location ?: "",
+                            desc = c.description.ifEmpty { "$start - $end" },
+                        )
+                    }
+            }
+    }
 
-    val mediaProvider =
-        object : AxionProvider<QuickLookData.Media> {
-            override val dataFlow: Flow<QuickLookData.Media?> =
-                _targetsFlow.map { targets ->
-                    targets
-                        .firstOrNull { it.targetType == QuickLookTarget.TYPE_MEDIA }
-                        ?.mediaData
-                        ?.let { m ->
-                            QuickLookData.Media(
-                                title = m.track,
-                                artist = m.artist,
-                                packageName = m.packageName,
-                                active = m.isPlaying,
-                            )
-                        }
-                }
-        }
+    inner class MediaProvider : AxionProvider<QuickLookData.Media> {
+        override val dataFlow: Flow<QuickLookData.Media?> =
+            _targetsFlow.map { targets ->
+                targets
+                    .firstOrNull { it.targetType == QuickLookTarget.TYPE_MEDIA }
+                    ?.mediaData
+                    ?.let { m ->
+                        QuickLookData.Media(
+                            title = m.track,
+                            artist = m.artist,
+                            packageName = m.packageName,
+                            active = m.isPlaying,
+                        )
+                    }
+            }
+    }
+
+    val weatherProvider = WeatherProvider()
+    val calendarProvider = CalendarProvider()
+    val mediaProvider = MediaProvider()
 
     private val callback =
         object : IQuickLookCallback.Stub() {
@@ -123,6 +126,7 @@ class QuickLookServiceClient @Inject constructor(@ApplicationContext private val
                 if (initial != null) {
                     _targetsFlow.value = initial.toList()
                 }
+                runCatching { service?.requestUpdate() }
                 this.logger("AxQuickLook service connected")
             }
 
