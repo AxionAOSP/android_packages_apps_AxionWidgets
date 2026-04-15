@@ -239,4 +239,17 @@
         <item>need for speed ;)</item>
         <item>a is for axion</item>
     </string-array>
+
+    <string name="tile_selection_group_title">Tile</string>
+    <string name="tile_select_title">Select tile</string>
+    <string name="tile_select_summary">Choose a quick setting</string>
+    <string name="tile_size_group_title">Sizing</string>
+    <string name="tile_circle_size_title">Tile size</string>
+    <string name="tile_circle_size_summary">Diameter of the circular tile</string>
+    <string name="pill_height_title">Pill height</string>
+    <string name="pill_height_summary">Height of the pill form</string>
+    <string name="pill_width_title">Pill width</string>
+    <string name="pill_width_summary">Width of the pill form</string>
+    <string name="pill_autofit_title">Auto-fit pill width</string>
+    <string name="pill_autofit_summary">Size pill to fit label text</string>
 </resources>

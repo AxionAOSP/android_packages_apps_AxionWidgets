@@ -21,6 +21,23 @@ object WidgetPrefs {
 
     private const val PREFS_NAME = "tile_widget_prefs"
 
+    const val DEFAULT_TILE_SIZE_DP = 72
+    const val DEFAULT_PILL_HEIGHT_DP = 72
+    const val DEFAULT_PILL_WIDTH_DP = 171
+    const val DEFAULT_PILL_AUTOFIT = true
+
+    const val MIN_TILE_SIZE_DP = 40
+    const val MAX_TILE_SIZE_DP = 120
+    const val MIN_PILL_HEIGHT_DP = 40
+    const val MAX_PILL_HEIGHT_DP = 120
+    const val MIN_PILL_WIDTH_DP = 80
+    const val MAX_PILL_WIDTH_DP = 400
+
+    private const val KEY_TILE_SIZE_PREFIX = "tile_size_dp_"
+    private const val KEY_PILL_HEIGHT_PREFIX = "pill_h_dp_"
+    private const val KEY_PILL_WIDTH_PREFIX = "pill_w_dp_"
+    private const val KEY_PILL_AUTOFIT_PREFIX = "pill_autofit_"
+
     private fun getPrefs(context: Context): SharedPreferences =
         context
             .createDeviceProtectedStorageContext()
@@ -34,8 +51,58 @@ object WidgetPrefs {
         return getPrefs(context).getString(widgetId.toString(), null)
     }
 
+    fun setTileSizeDp(context: Context, widgetId: Int, dp: Int) {
+        getPrefs(context)
+            .edit()
+            .putInt(KEY_TILE_SIZE_PREFIX + widgetId, dp.coerceIn(MIN_TILE_SIZE_DP, MAX_TILE_SIZE_DP))
+            .apply()
+    }
+
+    fun getTileSizeDp(context: Context, widgetId: Int): Int =
+        getPrefs(context).getInt(KEY_TILE_SIZE_PREFIX + widgetId, DEFAULT_TILE_SIZE_DP)
+
+    fun setPillHeightDp(context: Context, widgetId: Int, dp: Int) {
+        getPrefs(context)
+            .edit()
+            .putInt(
+                KEY_PILL_HEIGHT_PREFIX + widgetId,
+                dp.coerceIn(MIN_PILL_HEIGHT_DP, MAX_PILL_HEIGHT_DP),
+            )
+            .apply()
+    }
+
+    fun getPillHeightDp(context: Context, widgetId: Int): Int =
+        getPrefs(context).getInt(KEY_PILL_HEIGHT_PREFIX + widgetId, DEFAULT_PILL_HEIGHT_DP)
+
+    fun setPillWidthDp(context: Context, widgetId: Int, dp: Int) {
+        getPrefs(context)
+            .edit()
+            .putInt(
+                KEY_PILL_WIDTH_PREFIX + widgetId,
+                dp.coerceIn(MIN_PILL_WIDTH_DP, MAX_PILL_WIDTH_DP),
+            )
+            .apply()
+    }
+
+    fun getPillWidthDp(context: Context, widgetId: Int): Int =
+        getPrefs(context).getInt(KEY_PILL_WIDTH_PREFIX + widgetId, DEFAULT_PILL_WIDTH_DP)
+
+    fun setPillAutoFitWidth(context: Context, widgetId: Int, enabled: Boolean) {
+        getPrefs(context).edit().putBoolean(KEY_PILL_AUTOFIT_PREFIX + widgetId, enabled).apply()
+    }
+
+    fun isPillAutoFitWidth(context: Context, widgetId: Int): Boolean =
+        getPrefs(context).getBoolean(KEY_PILL_AUTOFIT_PREFIX + widgetId, DEFAULT_PILL_AUTOFIT)
+
     fun removeWidget(context: Context, widgetId: Int) {
-        getPrefs(context).edit().remove(widgetId.toString()).apply()
+        getPrefs(context)
+            .edit()
+            .remove(widgetId.toString())
+            .remove(KEY_TILE_SIZE_PREFIX + widgetId)
+            .remove(KEY_PILL_HEIGHT_PREFIX + widgetId)
+            .remove(KEY_PILL_WIDTH_PREFIX + widgetId)
+            .remove(KEY_PILL_AUTOFIT_PREFIX + widgetId)
+            .apply()
     }
 
     fun getAllWidgetIds(context: Context): List<Int> {

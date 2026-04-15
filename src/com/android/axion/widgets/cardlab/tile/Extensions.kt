@@ -18,6 +18,7 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.*
 import android.graphics.Color
+import android.graphics.Paint
 import android.util.SizeF
 import android.util.TypedValue
 import android.view.View
@@ -31,9 +32,7 @@ const val EXTRA_WIDGET_ID = "extra_widget_id"
 
 private const val PILL_ASPECT_RATIO = 1.4f
 private const val LAUNCHER_WIDGET_PADDING = 12f
-private const val CIRCLE_RATIO = 0.70f
-private const val ICON_RATIO = 0.33f
-private const val ICON_MAX_SIZE = 24f
+private const val TILE_ICON_IN_CIRCLE_RATIO = 0.47f
 private const val PILL_ICON_RATIO = 0.40f
 private const val PILL_TEXT_RATIO = 0.22f
 private const val PILL_PAD_START_RATIO = 0.22f
@@ -97,9 +96,9 @@ fun Context.updateWidget(widgetId: Int, data: TileData) {
     val widgetSize = getWidgetSize(options)
 
     if (isPill) {
-        applyPillSizing(views, widgetSize, data, aod)
+        applyPillSizing(views, widgetSize, data, aod, widgetId)
     } else {
-        applyTileSizing(views, widgetSize)
+        applyTileSizing(views, widgetSize, widgetId)
     }
 
     val pendingIntent =
@@ -114,17 +113,16 @@ fun Context.updateWidget(widgetId: Int, data: TileData) {
     appWidgetManager.updateAppWidget(widgetId, views)
 }
 
-private fun Context.applyTileSizing(views: RemoteViews, widgetSize: SizeF) {
+private fun Context.applyTileSizing(views: RemoteViews, widgetSize: SizeF, widgetId: Int) {
     val w = widgetSize.width
     val h = widgetSize.height
     if (w <= 0f || h <= 0f) return
 
-    val cellH = h + LAUNCHER_WIDGET_PADDING
-    val circleSize = cellH * CIRCLE_RATIO
+    val circleSize = WidgetPrefs.getTileSizeDp(this, widgetId).toFloat()
     views.setViewLayoutWidth(R.id.tile_circle, circleSize, TypedValue.COMPLEX_UNIT_DIP)
     views.setViewLayoutHeight(R.id.tile_circle, circleSize, TypedValue.COMPLEX_UNIT_DIP)
 
-    val iconSize = (cellH * ICON_RATIO).coerceAtMost(ICON_MAX_SIZE)
+    val iconSize = circleSize * TILE_ICON_IN_CIRCLE_RATIO
     for (id in intArrayOf(R.id.tile_view, R.id.tile_active_view)) {
         views.setViewLayoutWidth(id, iconSize, TypedValue.COMPLEX_UNIT_DIP)
         views.setViewLayoutHeight(id, iconSize, TypedValue.COMPLEX_UNIT_DIP)
@@ -136,11 +134,15 @@ private fun Context.applyPillSizing(
     widgetSize: SizeF,
     data: TileData,
     aod: Boolean,
+    widgetId: Int,
 ) {
+    val w = widgetSize.width
     val h = widgetSize.height
     if (h <= 0f) return
 
-    val cellH = h + LAUNCHER_WIDGET_PADDING
+    val pillHeight = WidgetPrefs.getPillHeightDp(this, widgetId).toFloat()
+    val pillWidthPref = WidgetPrefs.getPillWidthDp(this, widgetId).toFloat()
+    val cellH = pillHeight + LAUNCHER_WIDGET_PADDING
 
     val label = data.label ?: data.spec
     val activeLabel = data.secondaryLabel?.takeIf { it.isNotEmpty() } ?: label
@@ -174,6 +176,48 @@ private fun Context.applyPillSizing(
     views.setTextViewTextSize(R.id.tile_label_active, TypedValue.COMPLEX_UNIT_DIP, textSize)
     val padStart = dpToPx(cellH * PILL_PAD_START_RATIO)
     views.setViewPadding(R.id.tile_content, padStart, 0, 0, 0)
+
+    val autoFit = WidgetPrefs.isPillAutoFitWidth(this, widgetId)
+    val cellMaxWidth = if (w > 0f) w else Float.MAX_VALUE
+    val targetWidth =
+        if (autoFit) {
+            val longer = if (activeLabel.length >= label.length) activeLabel else label
+            autoFitPillWidth(longer, textSize, iconSize, cellH * PILL_PAD_START_RATIO)
+                .coerceAtMost(cellMaxWidth)
+        } else {
+            pillWidthPref.coerceAtMost(cellMaxWidth)
+        }
+    views.setViewLayoutWidth(R.id.tile_view_root, targetWidth, TypedValue.COMPLEX_UNIT_DIP)
+    views.setViewLayoutHeight(R.id.tile_view_root, pillHeight, TypedValue.COMPLEX_UNIT_DIP)
+}
+
+private fun Context.autoFitPillWidth(
+    label: String,
+    textSizeDp: Float,
+    iconSizeDp: Float,
+    padStartDp: Float,
+): Float {
+    val textSizePx = dpToPx(textSizeDp).toFloat()
+    val paint = Paint().apply { textSize = textSizePx }
+    val textWidthPx = paint.measureText(label)
+    val textWidthDp = textWidthPx / resources.displayMetrics.density
+
+    val labelMarginStartDp =
+        resources.getDimension(R.dimen.widget_label_frame_margin_start) /
+            resources.displayMetrics.density
+    val labelPadEndDp =
+        resources.getDimension(R.dimen.widget_pill_label_padding_end) /
+            resources.displayMetrics.density
+    val outerPadHorizDp =
+        resources.getDimension(R.dimen.pill_widget_padding_horizontal) /
+            resources.displayMetrics.density
+
+    return padStartDp +
+        iconSizeDp +
+        labelMarginStartDp +
+        textWidthDp +
+        labelPadEndDp +
+        outerPadHorizDp * 2f
 }
 
 private fun Context.dpToPx(dp: Float): Int =
