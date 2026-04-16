@@ -26,7 +26,7 @@
     <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
     <string name="quick_look_widget_calendar_no_title">(No title event)</string>
     <!-- Battery -->
-    <string name="battery_widget">バッテリー</string>
+    <string name="battery_widget">Battery</string>
     <string name="full_charge">Charged</string>
     <string name="charging">Charging</string>
     <string name="minutes_left">%1$d min left</string>
@@ -39,17 +39,17 @@
     <string name="shuffle_interval">Shuffle Interval</string>
     <string name="select_interval">Select Interval</string>
     <string name="select_shuffle_interval">Select Shuffle Interval</string>
-    <string name="cancel">キャンセル</string>
+    <string name="cancel">Cancel</string>
     <string name="save_changes">Save Changes</string>
     <string name="manage_photos">Manage Photos</string>
-    <string name="back">戻る</string>
+    <string name="back">Back</string>
     <string name="delete_selected">Delete Selected</string>
-    <string name="edit">編集</string>
+    <string name="edit">Chỉnh sửa</string>
     <string name="no_photos_selected">No photos selected</string>
     <string name="photo">Photo</string>
     <string name="confirm_delete_title">Confirm Delete</string>
     <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
-    <string name="delete">消去</string>
+    <string name="delete">Xóa</string>
     <string name="interval_1_minute">1 minute</string>
     <string name="interval_5_minutes">5 minutes</string>
     <string name="interval_15_minutes">15 minutes</string>
@@ -59,23 +59,23 @@
     <string name="bluetooth">Bluetooth</string>
     <string name="airplane_mode">Airplane</string>
     <string name="dark_theme">Dark Theme</string>
-    <string name="torch">懐中電灯</string>
-    <string name="dnd">サイレントモード</string>
+    <string name="torch">Torch</string>
+    <string name="dnd">DND</string>
     <string name="priority">Priority</string>
     <string name="alarms_only">Alarms Only</string>
     <string name="total_silence">Total Silence</string>
-    <string name="auto_rotate">自動回転</string>
-    <string name="ringer_normal">着信音</string>
-    <string name="ringer_vibrate">バイブレーション</string>
-    <string name="ringer_silent">サイレント</string>
-    <string name="ringer_unknown">不明</string>
-    <string name="mobile_data">モバイルデータ</string>
+    <string name="auto_rotate">Auto Rotate</string>
+    <string name="ringer_normal">Ringer</string>
+    <string name="ringer_vibrate">Vibrate</string>
+    <string name="ringer_silent">Silent</string>
+    <string name="ringer_unknown">Không xác định</string>
+    <string name="mobile_data">Mobile Data</string>
     <string name="label_year_progress">Year Progress</string>
     <string name="label_digital_clock">Digital Clock</string>
     <string name="label_analog_clock">Analog Clock</string>
     <string name="label_world_clock">World Clock</string>
     <string name="label_countdown">Countdown</string>
-    <string name="label_date">日付</string>
+    <string name="label_date">Date</string>
     <string name="label_pedometer">Pedometer</string>
     <string name="label_compass">Compass</string>
     <string name="label_bottle_spinner">Bottle Spinner</string>
@@ -86,7 +86,7 @@
     <string name="ql_show_date">Show date</string>
     <string name="ql_show_date_desc">Show date on the top line</string>
     <string name="ql_date_format">Date format</string>
-    <string name="ql_date_default">デフォルト</string>
+    <string name="ql_date_default">Default</string>
     <string name="ql_date_short">Short (Mon, Jan 1)</string>
     <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
     <string name="ql_cal_lookahead">Calendar lookahead</string>
@@ -100,7 +100,7 @@
     <string name="ql_source_calendar_desc">Show upcoming events</string>
     <string name="ql_source_media">Media</string>
     <string name="ql_source_media_desc">Show now playing info</string>
-    <string name="ql_source_battery">バッテリー</string>
+    <string name="ql_source_battery">Battery</string>
     <string name="ql_source_battery_desc">Show charging status</string>
     <string name="ql_source_weather">Weather</string>
     <string name="ql_source_weather_desc">Show current conditions</string>
@@ -113,7 +113,7 @@
     <string name="ql_msg_3h">3 hours</string>
     <string name="ql_msg_6h">6 hours</string>
     <string name="ql_msg_daily">Daily</string>
-    <string name="ql_apply">保存</string>
+    <string name="ql_apply">Save</string>
     <string-array name="quicklook_messages">
         <item>stay hydrated \u2014 drink some water</item>
         <item>take a deep breath and stretch</item>
