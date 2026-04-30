@@ -4,15 +4,15 @@
         <item quantity="other">%d photos already exist and were omitted.</item>
     </plurals>
     <!-- Manifest -->
-    <string name="app_name">Axion Widgets</string>
-    <string name="label_photo">Photo</string>
+    <string name="app_name">Axion 小工具</string>
+    <string name="label_photo">相片</string>
     <string name="label_tile">Tile</string>
     <string name="label_media_notification_listener">Media Notification Listener</string>
-    <string name="label_screentime">Screen time</string>
-    <string name="label_media_player">Media Player</string>
+    <string name="label_screentime">裝置使用時間</string>
+    <string name="label_media_player">媒體播放器</string>
     <!-- Settings -->
-    <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
-    <string name="loading_text">Loading...</string>
+    <string name="welcome_message">歡迎來到 Axion，點這裡來設定 QuickLock。</string>
+    <string name="loading_text">載入中……</string>
     <string name="toast_calendar_permission_required">Calendar permission is required</string>
     <string name="allow_notification_access">Allow notification access</string>
     <string name="allow_calendar_access">Allow calendar access</string>
@@ -31,7 +31,7 @@
     <string name="charging">充電中</string>
     <string name="minutes_left">%1$d min left</string>
     <!-- Photo -->
-    <string name="photo_title">Photo</string>
+    <string name="photo_title">相片</string>
     <string name="add_photos">Add Photos</string>
     <string name="add_photos_cd">Add Photos</string>
     <string name="display_options">Display Options</string>
@@ -46,7 +46,7 @@
     <string name="delete_selected">Delete Selected</string>
     <string name="edit">編輯</string>
     <string name="no_photos_selected">No photos selected</string>
-    <string name="photo">Photo</string>
+    <string name="photo">相片</string>
     <string name="confirm_delete_title">Confirm Delete</string>
     <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
     <string name="delete">刪除</string>
