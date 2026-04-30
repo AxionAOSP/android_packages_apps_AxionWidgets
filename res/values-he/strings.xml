@@ -42,12 +42,12 @@
     <string name="shuffle_interval">Shuffle Interval</string>
     <string name="select_interval">Select Interval</string>
     <string name="select_shuffle_interval">Select Shuffle Interval</string>
-    <string name="cancel">Cancel</string>
+    <string name="cancel">ביטול</string>
     <string name="save_changes">Save Changes</string>
     <string name="manage_photos">Manage Photos</string>
-    <string name="back">Back</string>
+    <string name="back">חזרה</string>
     <string name="delete_selected">Delete Selected</string>
-    <string name="edit">Edit</string>
+    <string name="edit">עריכה</string>
     <string name="no_photos_selected">No photos selected</string>
     <string name="photo">Photo</string>
     <string name="confirm_delete_title">Confirm Delete</string>
@@ -78,7 +78,7 @@
     <string name="label_analog_clock">Analog Clock</string>
     <string name="label_world_clock">World Clock</string>
     <string name="label_countdown">Countdown</string>
-    <string name="label_date">Date</string>
+    <string name="label_date">תאריך</string>
     <string name="label_pedometer">Pedometer</string>
     <string name="label_compass">Compass</string>
     <string name="label_bottle_spinner">Bottle Spinner</string>
@@ -116,7 +116,7 @@
     <string name="ql_msg_3h">3 hours</string>
     <string name="ql_msg_6h">6 hours</string>
     <string name="ql_msg_daily">Daily</string>
-    <string name="ql_apply">Save</string>
+    <string name="ql_apply">שמירה</string>
     <string-array name="quicklook_messages">
         <item>stay hydrated \u2014 drink some water</item>
         <item>take a deep breath and stretch</item>
