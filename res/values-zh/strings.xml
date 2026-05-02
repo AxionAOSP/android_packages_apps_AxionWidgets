@@ -4,15 +4,15 @@
         <item quantity="other">%d photos already exist and were omitted.</item>
     </plurals>
     <!-- Manifest -->
-    <string name="app_name">Axion 小工具</string>
-    <string name="label_photo">相片</string>
+    <string name="app_name">Axion Widgets</string>
+    <string name="label_photo">Photo</string>
     <string name="label_tile">Tile</string>
     <string name="label_media_notification_listener">Media Notification Listener</string>
-    <string name="label_screentime">裝置使用時間</string>
-    <string name="label_media_player">媒體播放器</string>
+    <string name="label_screentime">Screen time</string>
+    <string name="label_media_player">Media Player</string>
     <!-- Settings -->
-    <string name="welcome_message">歡迎來到 Axion，點這裡來設定 QuickLock。</string>
-    <string name="loading_text">載入中……</string>
+    <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
+    <string name="loading_text">Loading...</string>
     <string name="toast_calendar_permission_required">Calendar permission is required</string>
     <string name="allow_notification_access">Allow notification access</string>
     <string name="allow_calendar_access">Allow calendar access</string>
@@ -26,12 +26,12 @@
     <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
     <string name="quick_look_widget_calendar_no_title">(No title event)</string>
     <!-- Battery -->
-    <string name="battery_widget">省電</string>
+    <string name="battery_widget">省电</string>
     <string name="full_charge">Charged</string>
-    <string name="charging">充電中</string>
+    <string name="charging">充电中</string>
     <string name="minutes_left">%1$d min left</string>
     <!-- Photo -->
-    <string name="photo_title">相片</string>
+    <string name="photo_title">Photo</string>
     <string name="add_photos">Add Photos</string>
     <string name="add_photos_cd">Add Photos</string>
     <string name="display_options">Display Options</string>
@@ -44,32 +44,32 @@
     <string name="manage_photos">Manage Photos</string>
     <string name="back">返回</string>
     <string name="delete_selected">Delete Selected</string>
-    <string name="edit">編輯</string>
+    <string name="edit">编辑</string>
     <string name="no_photos_selected">No photos selected</string>
-    <string name="photo">相片</string>
+    <string name="photo">Photo</string>
     <string name="confirm_delete_title">Confirm Delete</string>
     <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
-    <string name="delete">刪除</string>
+    <string name="delete">删除</string>
     <string name="interval_1_minute">1 minute</string>
     <string name="interval_5_minutes">5 minutes</string>
     <string name="interval_15_minutes">15 minutes</string>
     <string name="interval_1_hour">1 hour</string>
     <!-- Tiles -->
     <string name="wifi">Wifi</string>
-    <string name="bluetooth">藍牙</string>
+    <string name="bluetooth">蓝牙</string>
     <string name="airplane_mode">Airplane</string>
     <string name="dark_theme">Dark Theme</string>
-    <string name="torch">手電筒</string>
-    <string name="dnd">勿擾模式</string>
+    <string name="torch">手电筒</string>
+    <string name="dnd">勿扰模式</string>
     <string name="priority">Priority</string>
     <string name="alarms_only">Alarms Only</string>
     <string name="total_silence">Total Silence</string>
-    <string name="auto_rotate">自動旋轉</string>
-    <string name="ringer_normal">響鈴</string>
-    <string name="ringer_vibrate">震動</string>
-    <string name="ringer_silent">靜音</string>
-    <string name="ringer_unknown">不明</string>
-    <string name="mobile_data">行動數據</string>
+    <string name="auto_rotate">自动旋转</string>
+    <string name="ringer_normal">铃声</string>
+    <string name="ringer_vibrate">振动</string>
+    <string name="ringer_silent">静音</string>
+    <string name="ringer_unknown">未知</string>
+    <string name="mobile_data">移动数据</string>
     <string name="label_year_progress">Year Progress</string>
     <string name="label_digital_clock">Digital Clock</string>
     <string name="label_analog_clock">Analog Clock</string>
@@ -82,11 +82,11 @@
     <string name="bottle_spinner_tap">tap to spin</string>
     <string name="label_rps">Rock Paper Scissors</string>
     <string name="rps_tap">tap to play</string>
-    <string name="ql_display">螢幕</string>
+    <string name="ql_display">界面设置</string>
     <string name="ql_show_date">Show date</string>
     <string name="ql_show_date_desc">Show date on the top line</string>
     <string name="ql_date_format">Date format</string>
-    <string name="ql_date_default">預設</string>
+    <string name="ql_date_default">默认</string>
     <string name="ql_date_short">Short (Mon, Jan 1)</string>
     <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
     <string name="ql_cal_lookahead">Calendar lookahead</string>
@@ -98,9 +98,9 @@
     <string name="ql_cal_settings">Calendar</string>
     <string name="ql_source_calendar">Calendar</string>
     <string name="ql_source_calendar_desc">Show upcoming events</string>
-    <string name="ql_source_media">媒體</string>
+    <string name="ql_source_media">媒体</string>
     <string name="ql_source_media_desc">Show now playing info</string>
-    <string name="ql_source_battery">省電</string>
+    <string name="ql_source_battery">省电</string>
     <string name="ql_source_battery_desc">Show charging status</string>
     <string name="ql_source_weather">Weather</string>
     <string name="ql_source_weather_desc">Show current conditions</string>
@@ -113,7 +113,7 @@
     <string name="ql_msg_3h">3 hours</string>
     <string name="ql_msg_6h">6 hours</string>
     <string name="ql_msg_daily">Daily</string>
-    <string name="ql_apply">儲存</string>
+    <string name="ql_apply">保存</string>
     <string-array name="quicklook_messages">
         <item>stay hydrated \u2014 drink some water</item>
         <item>take a deep breath and stretch</item>
