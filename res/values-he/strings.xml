@@ -165,10 +165,10 @@
         <item>update your passwords if it\'s been a while</item>
         <item>clean your phone screen \u2014 it\'s dirtier than you think</item>
         <item>organize one folder or drawer today</item>
-        <item>check your storage \u2014 delete what you don\'t need</item>
+        <item>כדאי לבדוק את שטח האחסון \u2014 טוב למחוק מה שלא צריכים</item>
         <item>מצב הטיסה הוא כלי מצוין לשיפור המיקוד</item>
         <item>כדאי לתכנן משהו כיפי להשבוע</item>
-        <item>write down three things you\'re grateful for</item>
+        <item>לכתוב שלושה דברים שברצונך להודות עליהם</item>
         <item>honey never spoils \u2014 3000-year-old jars were found edible</item>
         <item>לתמנונים יש שלושה לבבות ודם כחול</item>
         <item>bananas are berries, but strawberries aren\'t</item>
@@ -203,13 +203,13 @@
         <item>the amazon rainforest produces 20% of the world\'s oxygen</item>
         <item>a jiffy is an actual unit of time \u2014 1/100th of a second</item>
         <item>the eiffel tower can be 15 cm taller during summer due to heat expansion</item>
-        <item>butterflies taste with their feet</item>
+        <item>פרפרים טועמים בעזרת הרגליים שלהם</item>
         <item>sea otters hold hands while sleeping so they don\'t drift apart</item>
         <item>the inventor of the pringles can is buried in one</item>
         <item>a photon takes 100,000 years to travel from the sun\'s core to its surface</item>
         <item>the total length of your blood vessels could circle earth twice</item>
-        <item>there are more trees on earth than stars in the milky way</item>
-        <item>the oldest known joke is from 1900 BC sumeria</item>
+        <item>בכדור הארץ יש יותר עצים מאשר כוכבים בשביל החלב</item>
+        <item>הבדיחה הידועה העתיקה ביותר היא משוּמֵר, מ־1900 לפני ספירת הנוצרים</item>
         <item>a teaspoon of a neutron star weighs about 6 billion tons</item>
         <item>the longest hiccuping spree lasted 68 years</item>
         <item>ליבו של לווייתן כחול הוא בגודל של מכונית קטנה</item>
@@ -220,7 +220,7 @@
         <item>time for some axion :)</item>
         <item>need more ram? subscribe to axion premium and download ram!</item>
         <item>need for speed ;)</item>
-        <item>a is for axion</item>
+        <item>‏a זה axion‏</item>
     </string-array>
     <string name="tile_selection_group_title">אריח</string>
     <string name="tile_select_title">Select tile</string>
