@@ -8,15 +8,15 @@
     </plurals>
     <!-- Manifest -->
     <string name="app_name">Axion Widgets</string>
-    <string name="label_photo">Photo</string>
-    <string name="label_tile">Tile</string>
+    <string name="label_photo">תמונה</string>
+    <string name="label_tile">אריח</string>
     <string name="label_media_notification_listener">Media Notification Listener</string>
-    <string name="label_screentime">Screen time</string>
-    <string name="label_media_player">Media Player</string>
+    <string name="label_screentime">זמן מסך</string>
+    <string name="label_media_player">נגן מדיה</string>
     <!-- Settings -->
     <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
-    <string name="loading_text">Loading...</string>
-    <string name="toast_calendar_permission_required">Calendar permission is required</string>
+    <string name="loading_text">בטעינה...</string>
+    <string name="toast_calendar_permission_required">נחוצה הרשאת גישה ליומן</string>
     <string name="allow_notification_access">Allow notification access</string>
     <string name="allow_calendar_access">Allow calendar access</string>
     <string name="access_granted">Access granted</string>
@@ -24,9 +24,9 @@
     <string name="needed_for_calendar_events">Needed for calendar events</string>
     <!-- Calendar -->
     <string name="quick_look_widget_calendar_in_time">in %d min</string>
-    <string name="quick_look_widget_calendar_now">now</string>
-    <string name="quick_look_widget_calendar_tomorrow">Tomorrow</string>
-    <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
+    <string name="quick_look_widget_calendar_now">עכשיו</string>
+    <string name="quick_look_widget_calendar_tomorrow">מחר</string>
+    <string name="quick_look_widget_calendar_yesterday">אתמול</string>
     <string name="quick_look_widget_calendar_no_title">(No title event)</string>
     <!-- Battery -->
     <string name="battery_widget">Battery</string>
@@ -34,9 +34,9 @@
     <string name="charging">Charging</string>
     <string name="minutes_left">%1$d min left</string>
     <!-- Photo -->
-    <string name="photo_title">Photo</string>
-    <string name="add_photos">Add Photos</string>
-    <string name="add_photos_cd">Add Photos</string>
+    <string name="photo_title">תמונה</string>
+    <string name="add_photos">הוספת תמונות</string>
+    <string name="add_photos_cd">הוספת תמונות</string>
     <string name="display_options">Display Options</string>
     <string name="grayscale_mode">Grayscale Mode</string>
     <string name="shuffle_interval">Shuffle Interval</string>
@@ -49,7 +49,7 @@
     <string name="delete_selected">Delete Selected</string>
     <string name="edit">עריכה</string>
     <string name="no_photos_selected">No photos selected</string>
-    <string name="photo">Photo</string>
+    <string name="photo">תמונה</string>
     <string name="confirm_delete_title">Confirm Delete</string>
     <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
     <string name="delete">Delete</string>
@@ -58,9 +58,9 @@
     <string name="interval_15_minutes">15 minutes</string>
     <string name="interval_1_hour">1 hour</string>
     <!-- Tiles -->
-    <string name="wifi">Wifi</string>
+    <string name="wifi">רשת אלחוטית</string>
     <string name="bluetooth">Bluetooth</string>
-    <string name="airplane_mode">Airplane</string>
+    <string name="airplane_mode">מצב טיסה</string>
     <string name="dark_theme">Dark Theme</string>
     <string name="torch">Torch</string>
     <string name="dnd">DND</string>
@@ -79,7 +79,7 @@
     <string name="label_world_clock">World Clock</string>
     <string name="label_countdown">Countdown</string>
     <string name="label_date">תאריך</string>
-    <string name="label_pedometer">Pedometer</string>
+    <string name="label_pedometer">מד צעדים</string>
     <string name="label_compass">Compass</string>
     <string name="label_bottle_spinner">Bottle Spinner</string>
     <string name="bottle_spinner_tap">tap to spin</string>
@@ -97,19 +97,19 @@
     <string name="ql_lookahead_30">30 minutes</string>
     <string name="ql_lookahead_60">1 hour</string>
     <string name="ql_lookahead_120">2 hours</string>
-    <string name="ql_data_sources">Data Sources</string>
-    <string name="ql_cal_settings">Calendar</string>
-    <string name="ql_source_calendar">Calendar</string>
+    <string name="ql_data_sources">מקורות נתונים</string>
+    <string name="ql_cal_settings">לוח שנה</string>
+    <string name="ql_source_calendar">לוח שנה</string>
     <string name="ql_source_calendar_desc">Show upcoming events</string>
     <string name="ql_source_media">Media</string>
     <string name="ql_source_media_desc">Show now playing info</string>
     <string name="ql_source_battery">Battery</string>
     <string name="ql_source_battery_desc">Show charging status</string>
-    <string name="ql_source_weather">Weather</string>
-    <string name="ql_source_weather_desc">Show current conditions</string>
+    <string name="ql_source_weather">מזג אוויר</string>
+    <string name="ql_source_weather_desc">הצגת התנאים העכשוויים</string>
     <string name="ql_source_messages">Random Messages</string>
     <string name="ql_source_messages_desc">Show tips and fun facts</string>
-    <string name="ql_msg_settings">Messages</string>
+    <string name="ql_msg_settings">הודעות</string>
     <string name="ql_msg_interval">Rotation interval</string>
     <string name="ql_msg_30m">30 minutes</string>
     <string name="ql_msg_1h">1 hour</string>
@@ -119,13 +119,13 @@
     <string name="ql_apply">שמירה</string>
     <string-array name="quicklook_messages">
         <item>stay hydrated \u2014 drink some water</item>
-        <item>take a deep breath and stretch</item>
+        <item>לקחת נשימה עמוקה ולהתמתח</item>
         <item>good posture makes a difference</item>
-        <item>time for a screen break?</item>
-        <item>a walk outside can reset your mood</item>
+        <item>זמן להפסקה מהמסך?</item>
+        <item>סיבוב בחוץ מסוגל לשפר את מצב הרוח</item>
         <item>don\'t forget to eat well</item>
-        <item>rest is productive too</item>
-        <item>sleep is the best recovery tool</item>
+        <item>גם מנוחה טובה לביצועים</item>
+        <item>השינה היא כלי ההחלמה הטוב ביותר</item>
         <item>your eyes need a break \u2014 look at something far away</item>
         <item>standing up for a minute helps circulation</item>
         <item>unclench your jaw and relax your shoulders</item>
@@ -151,7 +151,7 @@
         <item>every expert was once a beginner</item>
         <item>mistakes are data, not failures</item>
         <item>focus on what you can control</item>
-        <item>celebrate small wins</item>
+        <item>לחגוג את הניצחונות הקטנים</item>
         <item>your comfort zone is not where growth happens</item>
         <item>check in on someone you care about</item>
         <item>music makes everything better</item>
@@ -166,37 +166,37 @@
         <item>clean your phone screen \u2014 it\'s dirtier than you think</item>
         <item>organize one folder or drawer today</item>
         <item>check your storage \u2014 delete what you don\'t need</item>
-        <item>airplane mode is a great focus tool</item>
-        <item>schedule something fun for this week</item>
+        <item>מצב הטיסה הוא כלי מצוין לשיפור המיקוד</item>
+        <item>כדאי לתכנן משהו כיפי להשבוע</item>
         <item>write down three things you\'re grateful for</item>
         <item>honey never spoils \u2014 3000-year-old jars were found edible</item>
-        <item>octopuses have three hearts and blue blood</item>
+        <item>לתמנונים יש שלושה לבבות ודם כחול</item>
         <item>bananas are berries, but strawberries aren\'t</item>
         <item>a group of flamingos is called a flamboyance</item>
-        <item>the moon drifts 3.8 cm farther from earth each year</item>
-        <item>venus spins backwards compared to other planets</item>
-        <item>sunlight takes 8 minutes and 20 seconds to reach earth</item>
+        <item>הירח מתרחק 3.8 ס״מ מכדור הארץ בכל שנה</item>
+        <item>כוכב הלכת נוגה מסתובב בכיוון ההפוך ביחס לכוכבי הלכת האחרים</item>
+        <item>לאור השמש לוקח 8 דקות ו־20 שניות בשביל להגיע לכדור הארץ</item>
         <item>sharks have been around longer than trees</item>
         <item>footprints on the moon can last millions of years</item>
         <item>wombat poop is cube-shaped</item>
-        <item>your body has more bacterial cells than human cells</item>
-        <item>a day on venus is longer than a year on venus</item>
-        <item>the shortest war in history lasted 38 minutes</item>
-        <item>earth\'s core is as hot as the surface of the sun</item>
+        <item>בגוף האדם יש יותר תאים חיידקיים מתאים אנושיים</item>
+        <item>יום בכוכב הלכת נוגה ארוך יותר משנה בנוגה</item>
+        <item>המלחמה הקצרה בהיסטוריה ארכה 38 דקות</item>
+        <item>הליבה של כדור הארץ חמה כמו פני השמש</item>
         <item>there are more stars than grains of sand on earth</item>
         <item>water can boil and freeze at the same time \u2014 it\'s called the triple point</item>
         <item>neutron stars are so dense a teaspoon weighs billions of tons</item>
         <item>tardigrades can survive in outer space</item>
-        <item>your brain uses about 20% of your body\'s energy</item>
-        <item>the great wall of china is not visible from space with the naked eye</item>
-        <item>humans share about 60% of their DNA with bananas</item>
-        <item>a cloud can weigh more than a million pounds</item>
-        <item>there are more possible chess games than atoms in the universe</item>
+        <item>המוח שלך משתמש ב־20‏% לערך מהאנרגיה של גופך</item>
+        <item>לא ניתן לראות את החומה הגדולה של סין מהחלל בעין לא מזוינת</item>
+        <item>המין האנושי חולק כ־60‏% מהדנ״א שלו עם בננות</item>
+        <item>ענן יכול לשקול יותר ממיליון קילוגרם</item>
+        <item>ביקום יש יותר משחקי שחמט מאשר אטומים</item>
         <item>the mantis shrimp can punch as fast as a bullet</item>
-        <item>dolphins sleep with one eye open</item>
-        <item>the average person walks about 100,000 miles in a lifetime</item>
-        <item>lightning strikes the earth about 100 times per second</item>
-        <item>scotland\'s national animal is the unicorn</item>
+        <item>דולפינים ישנים עם עין אחת פקוחה</item>
+        <item>האדם הממוצע צועד בסביבות 100,000 מיל במשך כל חייו</item>
+        <item>ברקים פוגעים בכדור הארץ בערך 100 פעמים בשנייה</item>
+        <item>החיה הלאומית של סקוטלנד היא חד־קרן</item>
         <item>a single bolt of lightning contains enough energy to toast 100,000 slices of bread</item>
         <item>the human nose can detect over 1 trillion different scents</item>
         <item>crows can recognize human faces and hold grudges</item>
@@ -212,7 +212,7 @@
         <item>the oldest known joke is from 1900 BC sumeria</item>
         <item>a teaspoon of a neutron star weighs about 6 billion tons</item>
         <item>the longest hiccuping spree lasted 68 years</item>
-        <item>the heart of a blue whale is the size of a small car</item>
+        <item>ליבו של לווייתן כחול הוא בגודל של מכונית קטנה</item>
         <item>you can\'t hum while holding your nose \u2014 try it</item>
         <item>oxford university is older than the aztec empire</item>
         <item>cleopatra lived closer in time to the moon landing than to the building of the pyramids</item>
@@ -222,7 +222,7 @@
         <item>need for speed ;)</item>
         <item>a is for axion</item>
     </string-array>
-    <string name="tile_selection_group_title">Tile</string>
+    <string name="tile_selection_group_title">אריח</string>
     <string name="tile_select_title">Select tile</string>
     <string name="tile_select_summary">Choose a quick setting</string>
     <string name="tile_size_group_title">Sizing</string>
