@@ -84,66 +84,66 @@
     <string name="rps_tap">輕觸以開始</string>
     <string name="ql_display">螢幕</string>
     <string name="ql_show_date">顯示日期</string>
-    <string name="ql_show_date_desc">Show date on the top line</string>
-    <string name="ql_date_format">Date format</string>
+    <string name="ql_show_date_desc">在頂端顯示日期</string>
+    <string name="ql_date_format">日期格式</string>
     <string name="ql_date_default">預設</string>
-    <string name="ql_date_short">Short (Mon, Jan 1)</string>
-    <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
-    <string name="ql_cal_lookahead">Calendar lookahead</string>
+    <string name="ql_date_short">簡短（Mon, Jan 1）</string>
+    <string name="ql_date_full">完整（Monday, January 1, 2026）</string>
+    <string name="ql_cal_lookahead">日曆預覽時間</string>
     <string name="ql_lookahead_15">15 分鐘</string>
-    <string name="ql_lookahead_30">30 minutes</string>
+    <string name="ql_lookahead_30">30 分鐘</string>
     <string name="ql_lookahead_60">1 小時</string>
-    <string name="ql_lookahead_120">2 hours</string>
-    <string name="ql_data_sources">Data Sources</string>
-    <string name="ql_cal_settings">Calendar</string>
-    <string name="ql_source_calendar">Calendar</string>
-    <string name="ql_source_calendar_desc">Show upcoming events</string>
+    <string name="ql_lookahead_120">2 小時</string>
+    <string name="ql_data_sources">資料來源</string>
+    <string name="ql_cal_settings">日曆</string>
+    <string name="ql_source_calendar">日曆</string>
+    <string name="ql_source_calendar_desc">顯示即將到來的活動</string>
     <string name="ql_source_media">媒體</string>
-    <string name="ql_source_media_desc">Show now playing info</string>
+    <string name="ql_source_media_desc">顯示 Now Playing 的資訊</string>
     <string name="ql_source_battery">省電</string>
-    <string name="ql_source_battery_desc">Show charging status</string>
-    <string name="ql_source_weather">Weather</string>
-    <string name="ql_source_weather_desc">Show current conditions</string>
-    <string name="ql_source_messages">Random Messages</string>
-    <string name="ql_source_messages_desc">Show tips and fun facts</string>
-    <string name="ql_msg_settings">Messages</string>
-    <string name="ql_msg_interval">Rotation interval</string>
-    <string name="ql_msg_30m">30 minutes</string>
+    <string name="ql_source_battery_desc">顯示充電狀態</string>
+    <string name="ql_source_weather">天氣</string>
+    <string name="ql_source_weather_desc">顯示目前的天氣狀況</string>
+    <string name="ql_source_messages">隨機訊息</string>
+    <string name="ql_source_messages_desc">顯示提示和趣味小知識</string>
+    <string name="ql_msg_settings">訊息</string>
+    <string name="ql_msg_interval">輪替間隔</string>
+    <string name="ql_msg_30m">30 分鐘</string>
     <string name="ql_msg_1h">1 小時</string>
-    <string name="ql_msg_3h">3 hours</string>
-    <string name="ql_msg_6h">6 hours</string>
-    <string name="ql_msg_daily">Daily</string>
+    <string name="ql_msg_3h">3 小時</string>
+    <string name="ql_msg_6h">6 小時</string>
+    <string name="ql_msg_daily">每天</string>
     <string name="ql_apply">儲存</string>
     <string-array name="quicklook_messages">
-        <item>stay hydrated \u2014 drink some water</item>
-        <item>take a deep breath and stretch</item>
-        <item>good posture makes a difference</item>
-        <item>time for a screen break?</item>
-        <item>a walk outside can reset your mood</item>
-        <item>don\'t forget to eat well</item>
-        <item>rest is productive too</item>
-        <item>sleep is the best recovery tool</item>
-        <item>your eyes need a break \u2014 look at something far away</item>
-        <item>standing up for a minute helps circulation</item>
-        <item>unclench your jaw and relax your shoulders</item>
-        <item>take three slow breaths right now</item>
-        <item>fresh air does wonders for focus</item>
-        <item>a 20-minute nap can boost creativity</item>
-        <item>sunlight in the morning helps set your body clock</item>
-        <item>you\'re doing great today</item>
-        <item>small steps lead to big changes</item>
-        <item>today is a good day to learn something new</item>
-        <item>be kind to yourself</item>
-        <item>progress, not perfection</item>
-        <item>the best time to start is now</item>
-        <item>less scrolling, more living</item>
-        <item>what would make today great?</item>
-        <item>gratitude changes perspective</item>
-        <item>done is better than perfect</item>
-        <item>your future self will thank you</item>
-        <item>consistency beats intensity</item>
-        <item>you don\'t need motivation \u2014 just start</item>
-        <item>compare yourself to yesterday, not to others</item>
+        <item>記得補充水分 \u2014 喝點水吧</item>
+        <item>做個深呼吸，伸展一下</item>
+        <item>良好的姿勢大有幫助</item>
+        <item>該讓眼睛休息一下了嗎？</item>
+        <item>出門散步能讓心情煥然一新</item>
+        <item>別忘了好好吃飯</item>
+        <item>休息也是一種生產力</item>
+        <item>睡眠是最好的恢復方式</item>
+        <item>讓眼睛休息一下 \u2014 看看遠方吧</item>
+        <item>起身站一分鐘有助於促進血液循環</item>
+        <item>放鬆下顎，舒展肩膀</item>
+        <item>現在就慢慢深呼吸三次</item>
+        <item>新鮮空氣對專注力大有益處</item>
+        <item>小睡 20 分鐘有助於激發創造力</item>
+        <item>早晨的陽光有助於調節生理時鐘</item>
+        <item>你今天表現很棒</item>
+        <item>積少成多，小步驟帶來大改變</item>
+        <item>今天是學習新知的好日子</item>
+        <item>善待自己</item>
+        <item>追求進步，不求完美</item>
+        <item>開始的最佳時機就是現在</item>
+        <item>少滑手機，多活在當下</item>
+        <item>怎麼做能讓今天更美好？</item>
+        <item>感恩能改變看事情的角度</item>
+        <item>完成勝過完美</item>
+        <item>未來的你會感謝現在的自己</item>
+        <item>持之以恆勝過短期衝刺</item>
+        <item>你不需要動力 \u2014 只要開始就好</item>
+        <item>跟昨天的自己比，而不是和別人比</item>
         <item>最難的部分通常是開始</item>
         <item>每位專家都曾是初學者</item>
         <item>錯誤是經驗，不是失敗</item>
@@ -194,7 +194,7 @@
         <item>一個人一生平均走約 16 萬公里</item>
         <item>閃電每秒大約擊中地球 100 次</item>
         <item>蘇格蘭的國獸是獨角獸</item>
-        <item>a single bolt of lightning contains enough energy to toast 100,000 slices of bread</item>
+        <item>一道閃電包含的能量足以烤 10 萬片麵包</item>
         <item>人類的鼻子能辨識超過 1 兆種不同的氣味</item>
         <item>烏鴉能辨認人臉，而且會記仇</item>
         <item>亞馬遜雨林製造了全球 20% 的氧氣</item>
@@ -220,15 +220,15 @@
         <item>A 代表 Axion</item>
     </string-array>
     <string name="tile_selection_group_title">方塊</string>
-    <string name="tile_select_title">Select tile</string>
-    <string name="tile_select_summary">Choose a quick setting</string>
-    <string name="tile_size_group_title">Sizing</string>
-    <string name="tile_circle_size_title">Tile size</string>
-    <string name="tile_circle_size_summary">Diameter of the circular tile</string>
-    <string name="pill_height_title">Pill height</string>
-    <string name="pill_height_summary">Height of the pill form</string>
-    <string name="pill_width_title">Pill width</string>
-    <string name="pill_width_summary">Width of the pill form</string>
-    <string name="pill_autofit_title">Auto-fit pill width</string>
-    <string name="pill_autofit_summary">Size pill to fit label text</string>
+    <string name="tile_select_title">選取快捷方塊</string>
+    <string name="tile_select_summary">選擇一個快速設定</string>
+    <string name="tile_size_group_title">尺寸</string>
+    <string name="tile_circle_size_title">快捷方塊大小</string>
+    <string name="tile_circle_size_summary">圓形方塊的直徑</string>
+    <string name="pill_height_title">膠囊高度</string>
+    <string name="pill_height_summary">膠囊形狀的高度</string>
+    <string name="pill_width_title">膠囊寬度</string>
+    <string name="pill_width_summary">膠囊形狀的寬度</string>
+    <string name="pill_autofit_title">自動調整膠囊寬度</string>
+    <string name="pill_autofit_summary">依標籤文字調整膠囊大小</string>
 </resources>
