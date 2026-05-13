@@ -62,13 +62,13 @@
     <string name="bluetooth">Bluetooth</string>
     <string name="airplane_mode">Airplane</string>
     <string name="dark_theme">Dark Theme</string>
-    <string name="torch">Torch</string>
+    <string name="torch">Ліхтарик</string>
     <string name="dnd">Не турбувати</string>
     <string name="priority">Priority</string>
     <string name="alarms_only">Alarms Only</string>
     <string name="total_silence">Total Silence</string>
     <string name="auto_rotate">Автоповорот</string>
-    <string name="ringer_normal">Ringer</string>
+    <string name="ringer_normal">Дзвінок</string>
     <string name="ringer_vibrate">Vibrate</string>
     <string name="ringer_silent">Silent</string>
     <string name="ringer_unknown">Невідомо</string>
