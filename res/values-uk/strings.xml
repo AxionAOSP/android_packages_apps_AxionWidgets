@@ -85,7 +85,7 @@
     <string name="bottle_spinner_tap">tap to spin</string>
     <string name="label_rps">Rock Paper Scissors</string>
     <string name="rps_tap">tap to play</string>
-    <string name="ql_display">Display</string>
+    <string name="ql_display">Дисплей</string>
     <string name="ql_show_date">Show date</string>
     <string name="ql_show_date_desc">Show date on the top line</string>
     <string name="ql_date_format">Date format</string>
