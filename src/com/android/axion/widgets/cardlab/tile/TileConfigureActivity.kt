@@ -20,7 +20,6 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -28,15 +27,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.*
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.*
+import com.android.axion.compose.scaffold.AxionScaffold
+import com.android.axion.compose.theme.AxionTheme
 import com.android.axion.compose.preferences.ListPreference
 import com.android.axion.compose.preferences.PreferenceGroup
 import com.android.axion.compose.preferences.SliderPreference
@@ -74,7 +72,7 @@ class TileConfigureActivity : ComponentActivity() {
         initDependencies(this)
 
         setContent {
-            TileConfigureTheme {
+            AxionTheme {
                 WidgetConfigScreen(
                     widgetId = widgetId,
                     tileRepository = tileRepository,
@@ -104,25 +102,6 @@ class TileConfigureActivity : ComponentActivity() {
 }
 
 @Composable
-fun TileConfigureTheme(content: @Composable () -> Unit) {
-    val isDarkTheme = isSystemInDarkTheme()
-
-    val dynamicColorScheme =
-        if (isDarkTheme) {
-            darkColorScheme(background = colorResource(id = android.R.color.system_neutral1_900))
-        } else {
-            lightColorScheme(background = colorResource(id = android.R.color.system_neutral1_50))
-        }
-
-    MaterialExpressiveTheme(
-        colorScheme = dynamicColorScheme,
-        motionScheme = MotionScheme.expressive(),
-        typography = Typography(),
-        content = content,
-    )
-}
-
-@Composable
 fun WidgetConfigScreen(
     widgetId: Int,
     tileRepository: TileRepository,
@@ -132,59 +111,41 @@ fun WidgetConfigScreen(
     val context = LocalContext.current
     val availableTiles by tileRepository.queryAvailableTiles().collectAsState(initial = emptyList())
 
-    Scaffold(
-        topBar = {
-            LargeTopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.quick_settings),
-                        fontSize = 32.sp,
-                        fontFamily = FontFamily(Typeface.create("nothingdot57", Typeface.NORMAL)),
+    AxionScaffold(
+        title = stringResource(R.string.quick_settings),
+        onBackClick = { (context as? Activity)?.finish() },
+        collapsedByDefault = false,
+        containerColor = MaterialTheme.colorScheme.background,
+    ) { innerPadding ->
+        if (availableTiles.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                contentAlignment = Alignment.Center,
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            LazyColumn(
+                modifier =
+                    Modifier.fillMaxSize()
+                        .padding(innerPadding)
+                        .background(MaterialTheme.colorScheme.background),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                item {
+                    TileSelectionSection(
+                        widgetId = widgetId,
+                        tiles = availableTiles,
+                        onTileSelected = onTileSelected,
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { (context as? Activity)?.finish() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                colors =
-                    TopAppBarDefaults.largeTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background
-                    ),
-                scrollBehavior = null,
-            )
-        },
-        content = { innerPadding ->
-            if (availableTiles.isEmpty()) {
-                Box(
-                    modifier = Modifier.fillMaxSize().padding(innerPadding),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator()
                 }
-            } else {
-                LazyColumn(
-                    modifier =
-                        Modifier.fillMaxSize()
-                            .padding(innerPadding)
-                            .background(MaterialTheme.colorScheme.background),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
-                    item {
-                        TileSelectionSection(
-                            widgetId = widgetId,
-                            tiles = availableTiles,
-                            onTileSelected = onTileSelected,
-                        )
-                    }
-                    item {
-                        SizingSection(widgetId = widgetId, onChanged = onSizingChanged)
-                    }
+                item {
+                    SizingSection(widgetId = widgetId, onChanged = onSizingChanged)
                 }
             }
-        },
-    )
+        }
+    }
 }
 
 @Composable

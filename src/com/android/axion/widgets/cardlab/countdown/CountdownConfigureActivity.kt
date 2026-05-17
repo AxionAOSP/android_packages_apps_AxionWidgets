@@ -19,7 +19,6 @@ package com.android.axion.widgets.cardlab.countdown
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,8 +32,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.*
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.*
+import com.android.axion.compose.scaffold.AxionScaffold
+import com.android.axion.compose.theme.AxionTheme
+import com.android.axion.widgets.R
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -63,7 +64,7 @@ class CountdownConfigureActivity : ComponentActivity() {
         val existing = CountdownPrefs.get(this, widgetId)
 
         setContent {
-            CountdownTheme {
+            AxionTheme {
                 CountdownConfigScreen(existing) { config ->
                     CountdownPrefs.set(this, widgetId, config)
                     AxCountdownReceiver.updateWidget(this, widgetId, config)
@@ -75,23 +76,6 @@ class CountdownConfigureActivity : ComponentActivity() {
             }
         }
     }
-}
-
-@Composable
-private fun CountdownTheme(content: @Composable () -> Unit) {
-    val isDarkTheme = isSystemInDarkTheme()
-    val colorScheme =
-        if (isDarkTheme) {
-            darkColorScheme(background = colorResource(id = android.R.color.system_neutral1_900))
-        } else {
-            lightColorScheme(background = colorResource(id = android.R.color.system_neutral1_50))
-        }
-    MaterialExpressiveTheme(
-        colorScheme = colorScheme,
-        motionScheme = MotionScheme.expressive(),
-        typography = Typography(),
-        content = content,
-    )
 }
 
 @Composable
@@ -115,27 +99,11 @@ private fun CountdownConfigScreen(existing: CountdownConfig?, onSave: (Countdown
             Instant.ofEpochMilli(selectedDateMillis).atZone(ZoneId.systemDefault()).toLocalDate()
         }
 
-    Scaffold(
-        topBar = {
-            LargeTopAppBar(
-                title = {
-                    Text(
-                        text = "Countdown",
-                        fontSize = 32.sp,
-                        fontFamily = FontFamily(Typeface.create("nothingdot57", Typeface.NORMAL)),
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { (context as? Activity)?.finish() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                colors =
-                    TopAppBarDefaults.largeTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background
-                    ),
-            )
-        }
+    AxionScaffold(
+        title = stringResource(R.string.label_countdown),
+        onBackClick = { (context as? Activity)?.finish() },
+        collapsedByDefault = false,
+        containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         Column(
             modifier =

@@ -54,6 +54,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
+import com.android.axion.compose.scaffold.AxionPinnedTopAppBar
 import com.android.axion.widgets.R
 import kotlinx.coroutines.*
 
@@ -542,17 +543,23 @@ fun PhotoManageTopBar(
     onBack: () -> Unit,
     onDeleteClicked: () -> Unit,
 ) {
-    TopAppBar(
-        title = { Text(stringResource(R.string.manage_photos)) },
+    AxionPinnedTopAppBar(
+        title = stringResource(R.string.manage_photos),
         navigationIcon = {
             IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = stringResource(R.string.back),
+                )
             }
         },
         actions = {
             if (selectionMode && hasSelection) {
                 IconButton(onClick = onDeleteClicked) {
-                    Icon(Icons.Default.Delete, contentDescription = "Delete")
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = stringResource(R.string.delete),
+                    )
                 }
             }
         },

@@ -36,6 +36,9 @@ import androidx.compose.ui.res.*
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.*
+import com.android.axion.compose.scaffold.AxionScaffold
+import com.android.axion.compose.theme.AxionTheme
+import com.android.axion.widgets.R
 import java.text.NumberFormat
 import kotlin.math.roundToInt
 
@@ -63,7 +66,7 @@ class PedometerConfigureActivity : ComponentActivity() {
         val existingGoal = PedometerPrefs.getGoal(this, widgetId)
 
         setContent {
-            PedometerTheme {
+            AxionTheme {
                 PedometerConfigScreen(existingGoal) { goal ->
                     PedometerPrefs.setGoal(this, widgetId, goal)
                     AxPedometerReceiver.updateWidget(this, widgetId)
@@ -78,50 +81,17 @@ class PedometerConfigureActivity : ComponentActivity() {
 }
 
 @Composable
-private fun PedometerTheme(content: @Composable () -> Unit) {
-    val isDarkTheme = isSystemInDarkTheme()
-    val colorScheme =
-        if (isDarkTheme) {
-            darkColorScheme(background = colorResource(id = android.R.color.system_neutral1_900))
-        } else {
-            lightColorScheme(background = colorResource(id = android.R.color.system_neutral1_50))
-        }
-    MaterialExpressiveTheme(
-        colorScheme = colorScheme,
-        motionScheme = MotionScheme.expressive(),
-        typography = Typography(),
-        content = content,
-    )
-}
-
-@Composable
 private fun PedometerConfigScreen(initialGoal: Int, onSave: (Int) -> Unit) {
     val context = LocalContext.current
     val numberFormat = remember { NumberFormat.getNumberInstance() }
     var sliderValue by remember { mutableFloatStateOf(initialGoal.toFloat()) }
     val goal = sliderValue.roundToInt()
 
-    Scaffold(
-        topBar = {
-            LargeTopAppBar(
-                title = {
-                    Text(
-                        text = "Pedometer",
-                        fontSize = 32.sp,
-                        fontFamily = FontFamily(Typeface.create("nothingdot57", Typeface.NORMAL)),
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { (context as? Activity)?.finish() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                colors =
-                    TopAppBarDefaults.largeTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background
-                    ),
-            )
-        }
+    AxionScaffold(
+        title = stringResource(R.string.label_pedometer),
+        onBackClick = { (context as? Activity)?.finish() },
+        collapsedByDefault = false,
+        containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         Column(
             modifier =

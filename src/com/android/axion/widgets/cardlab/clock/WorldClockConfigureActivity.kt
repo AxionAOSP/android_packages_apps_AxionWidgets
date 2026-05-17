@@ -19,7 +19,6 @@ package com.android.axion.widgets.cardlab.clock
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.graphics.Typeface
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,8 +34,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.platform.*
 import androidx.compose.ui.res.*
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.*
+import com.android.axion.compose.scaffold.AxionScaffold
+import com.android.axion.compose.theme.AxionTheme
+import com.android.axion.widgets.R
 import java.util.TimeZone
 
 class WorldClockConfigureActivity : ComponentActivity() {
@@ -61,7 +62,7 @@ class WorldClockConfigureActivity : ComponentActivity() {
         }
 
         setContent {
-            WorldClockTheme {
+            AxionTheme {
                 WorldClockConfigScreen { config ->
                     WorldClockPrefs.set(this, widgetId, config)
                     AxWorldClockReceiver.updateWidget(this, widgetId, config)
@@ -73,23 +74,6 @@ class WorldClockConfigureActivity : ComponentActivity() {
             }
         }
     }
-}
-
-@Composable
-private fun WorldClockTheme(content: @Composable () -> Unit) {
-    val isDarkTheme = isSystemInDarkTheme()
-    val colorScheme =
-        if (isDarkTheme) {
-            darkColorScheme(background = colorResource(id = android.R.color.system_neutral1_900))
-        } else {
-            lightColorScheme(background = colorResource(id = android.R.color.system_neutral1_50))
-        }
-    MaterialExpressiveTheme(
-        colorScheme = colorScheme,
-        motionScheme = MotionScheme.expressive(),
-        typography = Typography(),
-        content = content,
-    )
 }
 
 private data class TimeZoneCity(val id: String, val cityName: String, val gmtOffset: String)
@@ -131,27 +115,11 @@ private fun WorldClockConfigScreen(onSelected: (WorldClockConfig) -> Unit) {
                 }
         }
 
-    Scaffold(
-        topBar = {
-            LargeTopAppBar(
-                title = {
-                    Text(
-                        text = "World Clock",
-                        fontSize = 32.sp,
-                        fontFamily = FontFamily(Typeface.create("nothingdot57", Typeface.NORMAL)),
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { (context as? Activity)?.finish() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                },
-                colors =
-                    TopAppBarDefaults.largeTopAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background
-                    ),
-            )
-        }
+    AxionScaffold(
+        title = stringResource(R.string.label_world_clock),
+        onBackClick = { (context as? Activity)?.finish() },
+        collapsedByDefault = false,
+        containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         Column(
             modifier =
