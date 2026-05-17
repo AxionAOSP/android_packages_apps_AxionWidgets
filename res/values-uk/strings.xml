@@ -29,7 +29,7 @@
     <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
     <string name="quick_look_widget_calendar_no_title">(No title event)</string>
     <!-- Battery -->
-    <string name="battery_widget">Battery</string>
+    <string name="battery_widget">Акумулятор</string>
     <string name="full_charge">Charged</string>
     <string name="charging">Charging</string>
     <string name="minutes_left">%1$d min left</string>
@@ -69,8 +69,8 @@
     <string name="total_silence">Total Silence</string>
     <string name="auto_rotate">Автоповорот</string>
     <string name="ringer_normal">Дзвінок</string>
-    <string name="ringer_vibrate">Vibrate</string>
-    <string name="ringer_silent">Silent</string>
+    <string name="ringer_vibrate">Вібросигнал</string>
+    <string name="ringer_silent">Режим тиші</string>
     <string name="ringer_unknown">Невідомо</string>
     <string name="mobile_data">Мобільні дані</string>
     <string name="label_year_progress">Year Progress</string>
@@ -103,7 +103,7 @@
     <string name="ql_source_calendar_desc">Show upcoming events</string>
     <string name="ql_source_media">Media</string>
     <string name="ql_source_media_desc">Show now playing info</string>
-    <string name="ql_source_battery">Battery</string>
+    <string name="ql_source_battery">Акумулятор</string>
     <string name="ql_source_battery_desc">Show charging status</string>
     <string name="ql_source_weather">Weather</string>
     <string name="ql_source_weather_desc">Show current conditions</string>
