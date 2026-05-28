@@ -28,7 +28,7 @@
     <!-- Battery -->
     <string name="battery_widget">省電</string>
     <string name="full_charge">已充飽</string>
-    <string name="charging">充電中</string>
+    <string name="charging">充电中</string>
     <string name="minutes_left">剩餘 %1$d 分鐘</string>
     <!-- Photo -->
     <string name="photo_title">相片</string>
@@ -82,7 +82,7 @@
     <string name="bottle_spinner_tap">輕觸以旋轉</string>
     <string name="label_rps">猜拳</string>
     <string name="rps_tap">輕觸以開始</string>
-    <string name="ql_display">螢幕</string>
+    <string name="ql_display">界面设置</string>
     <string name="ql_show_date">顯示日期</string>
     <string name="ql_show_date_desc">在頂端顯示日期</string>
     <string name="ql_date_format">日期格式</string>
@@ -98,7 +98,7 @@
     <string name="ql_cal_settings">日曆</string>
     <string name="ql_source_calendar">日曆</string>
     <string name="ql_source_calendar_desc">顯示即將到來的活動</string>
-    <string name="ql_source_media">媒體</string>
+    <string name="ql_source_media">媒体</string>
     <string name="ql_source_media_desc">顯示 Now Playing 的資訊</string>
     <string name="ql_source_battery">省電</string>
     <string name="ql_source_battery_desc">顯示充電狀態</string>
