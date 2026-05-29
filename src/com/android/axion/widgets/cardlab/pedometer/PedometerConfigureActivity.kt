@@ -91,13 +91,12 @@ private fun PedometerConfigScreen(initialGoal: Int, onSave: (Int) -> Unit) {
         title = stringResource(R.string.label_pedometer),
         onBackClick = { (context as? Activity)?.finish() },
         collapsedByDefault = false,
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
     ) { innerPadding ->
         Column(
             modifier =
                 Modifier.fillMaxSize()
                     .padding(innerPadding)
-                    .background(MaterialTheme.colorScheme.background)
                     .padding(horizontal = 16.dp)
                     .verticalScroll(rememberScrollState())
         ) {

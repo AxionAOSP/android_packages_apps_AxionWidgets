@@ -119,13 +119,12 @@ private fun WorldClockConfigScreen(onSelected: (WorldClockConfig) -> Unit) {
         title = stringResource(R.string.label_world_clock),
         onBackClick = { (context as? Activity)?.finish() },
         collapsedByDefault = false,
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
     ) { innerPadding ->
         Column(
             modifier =
                 Modifier.fillMaxSize()
                     .padding(innerPadding)
-                    .background(MaterialTheme.colorScheme.background)
         ) {
             OutlinedTextField(
                 value = searchQuery,

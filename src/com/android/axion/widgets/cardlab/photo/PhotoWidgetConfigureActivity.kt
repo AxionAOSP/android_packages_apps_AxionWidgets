@@ -92,7 +92,7 @@ class PhotoWidgetConfigureActivity : ComponentActivity() {
             ) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
+                    color = MaterialTheme.colorScheme.surfaceContainer,
                 ) {
                     PhotoWidgetConfigureScreen(widgetId, interactor) { success ->
                         if (success) {
