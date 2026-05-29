@@ -24,7 +24,8 @@
         android:hasCode="true"
         android:persistent="true"
         android:allowBackup="false"
-        android:directBootAware="true">
+        android:directBootAware="true"
+        android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
 
         <receiver
             android:name="com.android.axion.widgets.quicklook.AxQuickLookReceiver"
@@ -73,7 +74,7 @@
         <activity
             android:name=".cardlab.photo.PhotoWidgetConfigureActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -95,7 +96,7 @@
         <activity
             android:name=".cardlab.tile.TileConfigureActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -194,7 +195,7 @@
         <activity
             android:name=".cardlab.clock.WorldClockConfigureActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -221,7 +222,7 @@
         <activity
             android:name=".cardlab.countdown.CountdownConfigureActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -263,7 +264,7 @@
         <activity
             android:name=".cardlab.pedometer.PedometerConfigureActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -346,6 +347,7 @@
             <intent-filter android:priority="0">
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+                <action android:name="android.intent.action.CONFIGURATION_CHANGED"/>
             </intent-filter>
         </receiver>
 

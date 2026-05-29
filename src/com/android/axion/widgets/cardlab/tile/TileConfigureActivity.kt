@@ -115,7 +115,7 @@ fun WidgetConfigScreen(
         title = stringResource(R.string.quick_settings),
         onBackClick = { (context as? Activity)?.finish() },
         collapsedByDefault = false,
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
     ) { innerPadding ->
         if (availableTiles.isEmpty()) {
             Box(
@@ -128,8 +128,7 @@ fun WidgetConfigScreen(
             LazyColumn(
                 modifier =
                     Modifier.fillMaxSize()
-                        .padding(innerPadding)
-                        .background(MaterialTheme.colorScheme.background),
+                        .padding(innerPadding),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
