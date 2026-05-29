@@ -29,7 +29,13 @@ class AxTileReceiver : AxionWidgetProvider() {
         if (intent.action == ACTION_TILE_CLICK) {
             val widgetId = intent.getIntExtra(EXTRA_WIDGET_ID, -1)
             if (widgetId != -1) {
-                TileManager.get(context).updateState(widgetId)
+                val ringerMode =
+                    if (intent.hasExtra(EXTRA_RINGER_MODE)) {
+                        intent.getIntExtra(EXTRA_RINGER_MODE, -1)
+                    } else {
+                        null
+                    }
+                TileManager.get(context).updateState(widgetId, ringerMode)
             }
         }
     }

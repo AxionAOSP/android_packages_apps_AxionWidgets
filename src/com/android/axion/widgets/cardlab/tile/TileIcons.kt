@@ -14,11 +14,14 @@
 
 package com.android.axion.widgets.cardlab.tile
 
+import android.media.AudioManager
 import com.android.axion.widgets.R
 
 object TileIcons {
 
     private data class IconPair(val active: Int, val inactive: Int)
+
+    private val ringerSpecs = setOf("ringer", "ringer_mode", "sound", "sound_mode")
 
     private val iconMap =
         mapOf(
@@ -61,7 +64,14 @@ object TileIcons {
         )
 
     fun getIcon(spec: String, active: Boolean): Int {
+        return getIcon(spec, active, null)
+    }
+
+    fun getIcon(spec: String, active: Boolean, ringerMode: Int?): Int {
         val normalizedSpec = spec.lowercase()
+        if (isRingerSpec(normalizedSpec)) {
+            return getRingerIcon(active, ringerMode)
+        }
         val pair = iconMap.entries.firstOrNull { (key, _) -> normalizedSpec.contains(key) }?.value
         return if (active) pair?.active ?: R.drawable.ic_unknown
         else pair?.inactive ?: R.drawable.ic_unknown
@@ -69,6 +79,19 @@ object TileIcons {
 
     fun hasIcon(spec: String): Boolean {
         val normalizedSpec = spec.lowercase()
-        return iconMap.keys.any { normalizedSpec.contains(it) }
+        return isRingerSpec(normalizedSpec) || iconMap.keys.any { normalizedSpec.contains(it) }
     }
+
+    fun isRingerSpec(spec: String): Boolean {
+        val normalizedSpec = spec.lowercase()
+        return ringerSpecs.any { normalizedSpec.contains(it) }
+    }
+
+    private fun getRingerIcon(active: Boolean, ringerMode: Int?): Int =
+        when (ringerMode) {
+            AudioManager.RINGER_MODE_NORMAL -> R.drawable.ic_ringer_on
+            AudioManager.RINGER_MODE_VIBRATE -> R.drawable.ic_ringer_vibrate
+            AudioManager.RINGER_MODE_SILENT -> R.drawable.ic_ringer_silent
+            else -> if (active) R.drawable.ic_ringer_on else R.drawable.ic_ringer_off
+        }
 }

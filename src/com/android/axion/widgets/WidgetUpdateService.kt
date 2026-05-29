@@ -267,15 +267,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
                 } else {
                     WidgetPrefs.getAllWidgetIds(ctx).forEach { widgetId ->
                         val spec = WidgetPrefs.getWidgetAction(ctx, widgetId) ?: return@forEach
-                        val data =
-                            TileData(
-                                spec = spec,
-                                isActive = false,
-                                iconRes = TileIcons.getIcon(spec, false),
-                                widgetId = widgetId,
-                                label = spec.replaceFirstChar { it.uppercase() },
-                            )
-                        ctx.updateWidget(widgetId, data)
+                        tileManager.setTileForWidget(widgetId, spec)
                     }
                 }
             }

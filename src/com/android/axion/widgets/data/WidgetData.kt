@@ -67,6 +67,8 @@ data class TileData(
     val widgetId: Int,
     val label: String? = null,
     val secondaryLabel: String? = null,
+    val ringerMode: Int? = null,
+    val hasVibrator: Boolean = true,
 )
 
 data class UsageData(

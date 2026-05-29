@@ -16,6 +16,7 @@ package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Vibrator
 import com.android.axion.platform.AxPlatformClient
 import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.AxionProvider
@@ -55,6 +56,8 @@ constructor(
         val label: String? = null,
         val secondaryLabel: String? = null,
         val tileState: Int = AxPlatformClient.TILE_STATE_INACTIVE,
+        val ringerMode: Int? = null,
+        val hasVibrator: Boolean = true,
     )
 
     override val dataFlow: Flow<TilesData?> = _tileStates.map { states -> buildActiveTiles(states) }
@@ -75,13 +78,14 @@ constructor(
         scope.launch {
             bridge.stateFlow(feature).collect { bundle ->
                 if (bundle.isEmpty) return@collect
-                val info = parseFeatureBundle(spec, feature, bundle)
+                val info = parseFeatureBundle(spec, bundle)
                 _tileStates.update { current -> current + (spec to info) }
             }
         }
     }
 
-    private fun parseFeatureBundle(spec: String, feature: String, bundle: Bundle): TileStateInfo {
+    private fun parseFeatureBundle(spec: String, bundle: Bundle): TileStateInfo {
+        val isRingerSpec = TileIcons.isRingerSpec(spec)
         return TileStateInfo(
             spec = spec,
             isActive = bundle.getBoolean("active", false),
@@ -89,6 +93,18 @@ constructor(
             label = AxPlatformClient.getLabel(bundle),
             secondaryLabel = AxPlatformClient.getSecondaryLabel(bundle),
             tileState = AxPlatformClient.getTileState(bundle),
+            ringerMode =
+                if (isRingerSpec) {
+                    bundle.takeIf { it.containsKey("ringerMode") }?.getInt("ringerMode")
+                } else {
+                    null
+                },
+            hasVibrator =
+                if (isRingerSpec) {
+                    bundle.getBoolean("hasVibrator", true) && hasVibrator()
+                } else {
+                    true
+                },
         )
     }
 
@@ -104,14 +120,24 @@ constructor(
                 val spec = WidgetPrefs.getWidgetAction(context, widgetId) ?: return@mapNotNull null
                 val info = states[spec]
                 val isActive = info?.isActive == true
+                val ringerMode = info?.ringerMode
+                val hasVibrator =
+                    if (TileIcons.isRingerSpec(spec)) {
+                        (info?.hasVibrator ?: true) && hasVibrator()
+                    } else {
+                        true
+                    }
+                val label = buildTileLabel(spec, info?.label, info?.secondaryLabel, ringerMode)
                 widgetId to
                     TileData(
                         spec = spec,
                         isActive = isActive,
-                        iconRes = TileIcons.getIcon(spec, isActive),
+                        iconRes = TileIcons.getIcon(spec, isActive, ringerMode),
                         widgetId = widgetId,
-                        label = info?.label ?: spec.replaceFirstChar { it.uppercase() },
+                        label = label,
                         secondaryLabel = info?.secondaryLabel,
+                        ringerMode = ringerMode,
+                        hasVibrator = hasVibrator,
                     )
             }
             .toMap()
@@ -121,6 +147,14 @@ constructor(
         val feature = specToFeature(spec) ?: return
         bridge.toggle(feature)
     }
+
+    fun setValue(spec: String, value: Int) {
+        val feature = specToFeature(spec) ?: return
+        bridge.setValue(feature, value)
+    }
+
+    private fun hasVibrator(): Boolean =
+        context.getSystemService(Vibrator::class.java)?.hasVibrator() == true
 
     data class AvailableTile(val spec: String, val label: String, val category: String? = null)
 
@@ -138,5 +172,19 @@ constructor(
                 )
             }
         )
+    }
+}
+
+internal fun buildTileLabel(
+    spec: String,
+    label: String?,
+    secondaryLabel: String?,
+    ringerMode: Int?,
+): String {
+    val baseLabel = label ?: spec.replaceFirstChar { it.uppercase() }
+    return if (ringerMode != null) {
+        secondaryLabel?.takeIf { it.isNotEmpty() } ?: baseLabel
+    } else {
+        baseLabel
     }
 }

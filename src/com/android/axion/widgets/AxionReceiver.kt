@@ -28,16 +28,25 @@ class AxionReceiver : BroadcastReceiver() {
             Intent.ACTION_BOOT_COMPLETED,
             Intent.ACTION_LOCKED_BOOT_COMPLETED,
             Intent.ACTION_MY_PACKAGE_REPLACED -> {
-                Log.d(TAG, "Starting WidgetUpdateService")
-
-                try {
-                    val serviceIntent = Intent(context, WidgetUpdateService::class.java)
-                    context.startService(serviceIntent)
-                    Log.d(TAG, "WidgetUpdateService started successfully")
-                } catch (e: Exception) {
-                    Log.e(TAG, "Failed to start WidgetUpdateService", e)
-                }
+                startWidgetService(context)
             }
+            Intent.ACTION_CONFIGURATION_CHANGED -> {
+                startWidgetService(context, WidgetUpdateService.ACTION_UPDATE)
+            }
+        }
+    }
+
+    private fun startWidgetService(context: Context, serviceAction: String? = null) {
+        Log.d(TAG, "Starting WidgetUpdateService")
+        try {
+            val serviceIntent =
+                Intent(context, WidgetUpdateService::class.java).apply {
+                    serviceAction?.let { action = it }
+                }
+            context.startService(serviceIntent)
+            Log.d(TAG, "WidgetUpdateService started successfully")
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to start WidgetUpdateService", e)
         }
     }
 

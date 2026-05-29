@@ -15,6 +15,8 @@
 package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
+import android.media.AudioManager
+import android.os.Vibrator
 import com.android.axion.platform.AxPlatformClient
 import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.data.*
@@ -44,40 +46,115 @@ constructor(
             }
         }
 
-    fun updateState(widgetId: Int) {
+    fun updateState(widgetId: Int, requestedRingerMode: Int? = null) {
         val spec = WidgetPrefs.getWidgetAction(context, widgetId) ?: return
+        val current = _tilesFlow.value[widgetId] ?: createTileData(widgetId, spec)
+        if (TileIcons.isRingerSpec(spec)) {
+            val ringerMode = targetRingerMode(requestedRingerMode, current)
+            val isActive = ringerMode == AudioManager.RINGER_MODE_NORMAL
+            val updated =
+                current.copy(
+                    isActive = isActive,
+                    iconRes = getIconForTile(spec, isActive, ringerMode),
+                    ringerMode = ringerMode,
+                )
+            repository.setValue(spec, ringerMode)
+            tilesFlow = _tilesFlow.value + (widgetId to updated)
+            return
+        }
+        val updated =
+            current.copy(
+                isActive = !current.isActive,
+                iconRes = getIconForTile(spec, !current.isActive),
+            )
         repository.toggle(spec)
-        val current = _tilesFlow.value[widgetId] ?: return
-        val toggled = current.copy(
-            isActive = !current.isActive,
-            iconRes = getIconForTile(spec, !current.isActive),
-        )
-        tilesFlow = _tilesFlow.value + (widgetId to toggled)
+        tilesFlow = _tilesFlow.value + (widgetId to updated)
     }
 
-    fun getIconForTile(spec: String, active: Boolean): Int {
-        return TileIcons.getIcon(spec, active)
-    }
+    fun getIconForTile(spec: String, active: Boolean, ringerMode: Int? = null): Int =
+        TileIcons.getIcon(spec, active, ringerMode)
 
     fun setTileForWidget(widgetId: Int, spec: String) {
         repository.startObservingSpec(spec)
-        val feature = TileRepository.specToFeature(spec)
-        val state = feature?.let { bridge.getState(it) }
-        val isActive = state?.getBoolean("active", false) ?: false
-        val label = state?.let { AxPlatformClient.getLabel(it) }
-        val secondaryLabel = state?.let { AxPlatformClient.getSecondaryLabel(it) }
-        val data =
-            TileData(
-                spec = spec,
-                isActive = isActive,
-                iconRes = TileIcons.getIcon(spec, isActive),
-                widgetId = widgetId,
-                label = label ?: spec.replaceFirstChar { it.uppercase() },
-                secondaryLabel = secondaryLabel,
-            )
+        val data = createTileData(widgetId, spec)
         _tilesFlow.value = _tilesFlow.value + (widgetId to data)
         context.updateWidget(widgetId, data)
     }
+
+    private fun createTileData(widgetId: Int, spec: String): TileData {
+        val isRingerSpec = TileIcons.isRingerSpec(spec)
+        val feature = TileRepository.specToFeature(spec)
+        val state = feature?.let { bridge.getState(it) }
+        val label = state?.let { AxPlatformClient.getLabel(it) }
+        val secondaryLabel = state?.let { AxPlatformClient.getSecondaryLabel(it) }
+        val hasVibrator =
+            if (isRingerSpec) {
+                val platformHasVibrator =
+                    state?.takeIf { it.containsKey("hasVibrator") }?.getBoolean("hasVibrator")
+                        ?: true
+                platformHasVibrator && hasVibrator()
+            } else {
+                true
+            }
+        val ringerMode =
+            if (isRingerSpec) {
+                state?.takeIf { it.containsKey("ringerMode") }?.getInt("ringerMode")
+                    ?: localRingerMode()
+            } else {
+                null
+            }
+        val isActive =
+            ringerMode?.let { it == AudioManager.RINGER_MODE_NORMAL }
+                ?: state?.getBoolean("active", false)
+                ?: false
+        return TileData(
+            spec = spec,
+            isActive = isActive,
+            iconRes = TileIcons.getIcon(spec, isActive, ringerMode),
+            widgetId = widgetId,
+            label = buildTileLabel(spec, label, secondaryLabel, ringerMode),
+            secondaryLabel = secondaryLabel,
+            ringerMode = ringerMode,
+            hasVibrator = hasVibrator,
+        )
+    }
+
+    private fun targetRingerMode(
+        requestedRingerMode: Int?,
+        current: TileData,
+    ): Int {
+        val canVibrate = current.hasVibrator && hasVibrator()
+        return sanitizeRingerMode(requestedRingerMode, canVibrate)
+            ?: nextRingerMode(current.ringerMode ?: localRingerMode(), canVibrate)
+    }
+
+    private fun sanitizeRingerMode(ringerMode: Int?, hasVibrator: Boolean): Int? =
+        when (ringerMode) {
+            AudioManager.RINGER_MODE_NORMAL,
+            AudioManager.RINGER_MODE_SILENT -> ringerMode
+            AudioManager.RINGER_MODE_VIBRATE ->
+                if (hasVibrator) AudioManager.RINGER_MODE_VIBRATE
+                else AudioManager.RINGER_MODE_SILENT
+            else -> null
+        }
+
+    private fun nextRingerMode(ringerMode: Int?, hasVibrator: Boolean): Int =
+        when (ringerMode) {
+            AudioManager.RINGER_MODE_NORMAL ->
+                if (hasVibrator) {
+                    AudioManager.RINGER_MODE_VIBRATE
+                } else {
+                    AudioManager.RINGER_MODE_SILENT
+                }
+            AudioManager.RINGER_MODE_VIBRATE -> AudioManager.RINGER_MODE_SILENT
+            else -> AudioManager.RINGER_MODE_NORMAL
+        }
+
+    private fun localRingerMode(): Int? =
+        context.getSystemService(AudioManager::class.java)?.ringerMode
+
+    private fun hasVibrator(): Boolean =
+        context.getSystemService(Vibrator::class.java)?.hasVibrator() == true
 
     companion object {
         fun get(context: Context): TileManager {

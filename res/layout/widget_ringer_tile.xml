@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tile_view_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/pill_widget_padding_horizontal"
+    android:paddingVertical="@dimen/pill_widget_padding_vertical">
+
+    <View
+        android:id="@+id/ringer_slider_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_widget_tile"
+        android:clickable="false"
+        android:focusable="false" />
+
+    <LinearLayout
+        android:id="@+id/ringer_slider_slots"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/ringer_slot_normal"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <View
+                android:id="@+id/ringer_dot_normal"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_ringer_slider_dot"
+                android:clickable="false"
+                android:focusable="false" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/ringer_slot_vibrate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <View
+                android:id="@+id/ringer_dot_vibrate"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_ringer_slider_dot"
+                android:clickable="false"
+                android:focusable="false" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/ringer_slot_silent"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <View
+                android:id="@+id/ringer_dot_silent"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_ringer_slider_dot"
+                android:clickable="false"
+                android:focusable="false" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/ringer_thumb_normal"
+        android:layout_width="@dimen/pill_widget_height"
+        android:layout_height="@dimen/pill_widget_height"
+        android:layout_gravity="start|center_vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/ringer_thumb_bg_normal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_widget_tile"
+            android:clickable="false"
+            android:focusable="false" />
+
+        <ImageView
+            android:id="@+id/ringer_icon_normal"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_ringer_on"
+            android:clickable="false"
+            android:focusable="false" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/ringer_thumb_vibrate"
+        android:layout_width="@dimen/pill_widget_height"
+        android:layout_height="@dimen/pill_widget_height"
+        android:layout_gravity="center"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/ringer_thumb_bg_vibrate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_widget_tile"
+            android:clickable="false"
+            android:focusable="false" />
+
+        <ImageView
+            android:id="@+id/ringer_icon_vibrate"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_ringer_vibrate"
+            android:clickable="false"
+            android:focusable="false" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/ringer_thumb_silent"
+        android:layout_width="@dimen/pill_widget_height"
+        android:layout_height="@dimen/pill_widget_height"
+        android:layout_gravity="end|center_vertical"
+        android:padding="8dp"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/ringer_thumb_bg_silent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_widget_tile"
+            android:clickable="false"
+            android:focusable="false" />
+
+        <ImageView
+            android:id="@+id/ringer_icon_silent"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_ringer_silent"
+            android:clickable="false"
+            android:focusable="false" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/ringer_click_zones_three"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/ringer_click_normal_three"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="false" />
+
+        <View
+            android:id="@+id/ringer_click_vibrate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="false" />
+
+        <View
+            android:id="@+id/ringer_click_silent_three"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="false" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ringer_click_zones_two"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/ringer_click_normal_two"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="false" />
+
+        <View
+            android:id="@+id/ringer_click_silent_two"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="false" />
+    </LinearLayout>
+</FrameLayout>
