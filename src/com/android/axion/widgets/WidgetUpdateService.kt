@@ -73,6 +73,8 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     @Inject lateinit var messageProvider: MessageProvider
     @Inject lateinit var dateProvider: DateProvider
 
+    private val serviceJob = SupervisorJob()
+
     private val photoCache = mutableMapOf<Int, PhotoWidgetData>()
     private var providersStarted = false
 
@@ -111,7 +113,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        scope.launch(Dispatchers.Default + CoroutineName("WidgetUpdateBackground")) {
+        scope.launch(serviceJob + Dispatchers.Default + CoroutineName("WidgetUpdateBackground")) {
             Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
             Process.setThreadGroupAndCpuset(Process.myPid(), 9)
         }
@@ -130,7 +132,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         if (providersStarted) {
-            scope.launch { refreshAllWidgets() }
+            scope.launch(serviceJob) { refreshAllWidgets() }
         }
     }
 
@@ -138,8 +140,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
 
     override fun onDestroy() {
         logger("WidgetUpdateService destroyed")
-        scope.cancel()
-        mainScope.cancel()
+        serviceJob.cancel()
         quickLookClient.unbind()
         mediaPlayerProvider.stop()
         pedometerProvider.stop()
@@ -188,40 +189,40 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
             }
         }
 
-        scope.launch {
+        scope.launch(serviceJob) {
             tileRepository.dataFlow.distinctUntilChanged().collect { tiles ->
                 tiles?.let { tileManager.tilesFlow = it }
             }
         }
 
-        scope.launch {
+        scope.launch(serviceJob) {
             mediaPlayerProvider.dataFlow.distinctUntilChanged().collect { data ->
                 AxMediaPlayerReceiver.update(applicationContext, data)
             }
         }
 
         pedometerProvider.start()
-        scope.launch {
+        scope.launch(serviceJob) {
             pedometerProvider.dataFlow.distinctUntilChanged().collect { data ->
                 AxPedometerReceiver.update(applicationContext, data)
             }
         }
 
         compassProvider.start()
-        scope.launch {
+        scope.launch(serviceJob) {
             compassProvider.dataFlow.distinctUntilChanged().collect { data ->
                 AxCompassReceiver.update(applicationContext, data)
             }
         }
 
-        scope.launch {
+        scope.launch(serviceJob) {
             dateProvider.dateFlow.collect {
                 quickLookDataManager.onDataUpdated()
             }
         }
 
         if (AodState.DOZE_TRANSPARENCY_ENABLED) {
-            scope.launch {
+            scope.launch(serviceJob) {
                 dozeStateProvider.dozeFlow.distinctUntilChanged().collect { state ->
                     val wasAod = AodState.isAod
                     AodState.isAod = state.isAod
@@ -239,28 +240,28 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
         fun active(cls: Class<out AxionWidgetProvider>) = WidgetUsageManager.isActive(cls)
 
         if (active(AxBatteryReceiver::class.java))
-            scope.launch { AxBatteryReceiver.update(ctx, quickLookDataManager.batteryData) }
+            scope.launch(serviceJob) { AxBatteryReceiver.update(ctx, quickLookDataManager.batteryData) }
         if (active(AxScreenTimeReceiver::class.java))
-            scope.launch { AxScreenTimeReceiver.update(ctx, null, true) }
+            scope.launch(serviceJob) { AxScreenTimeReceiver.update(ctx, null, true) }
         if (active(AxYearProgressReceiver::class.java))
-            scope.launch { AxYearProgressReceiver.update(ctx) }
+            scope.launch(serviceJob) { AxYearProgressReceiver.update(ctx) }
         if (active(AxDigitalClockReceiver::class.java))
-            scope.launch { AxDigitalClockReceiver.update(ctx) }
+            scope.launch(serviceJob) { AxDigitalClockReceiver.update(ctx) }
         if (active(AxAnalogClockReceiver::class.java))
-            scope.launch { AxAnalogClockReceiver.update(ctx) }
+            scope.launch(serviceJob) { AxAnalogClockReceiver.update(ctx) }
         if (active(AxWorldClockReceiver::class.java))
-            scope.launch { AxWorldClockReceiver.update(ctx) }
+            scope.launch(serviceJob) { AxWorldClockReceiver.update(ctx) }
         if (active(AxCountdownReceiver::class.java))
-            scope.launch { AxCountdownReceiver.update(ctx) }
-        if (active(AxDateReceiver::class.java)) scope.launch { AxDateReceiver.update(ctx) }
+            scope.launch(serviceJob) { AxCountdownReceiver.update(ctx) }
+        if (active(AxDateReceiver::class.java)) scope.launch(serviceJob) { AxDateReceiver.update(ctx) }
         if (active(AxMediaPlayerReceiver::class.java))
-            scope.launch { AxMediaPlayerReceiver.update(ctx, mediaPlayerProvider.currentData) }
+            scope.launch(serviceJob) { AxMediaPlayerReceiver.update(ctx, mediaPlayerProvider.currentData) }
         if (active(AxPedometerReceiver::class.java))
-            scope.launch { AxPedometerReceiver.update(ctx, null) }
+            scope.launch(serviceJob) { AxPedometerReceiver.update(ctx, null) }
         if (active(AxCompassReceiver::class.java))
-            scope.launch { AxCompassReceiver.update(ctx, null) }
+            scope.launch(serviceJob) { AxCompassReceiver.update(ctx, null) }
         if (active(AxTileReceiver::class.java))
-            scope.launch {
+            scope.launch(serviceJob) {
                 val tiles = tileManager.tilesFlow
                 if (tiles.isNotEmpty()) {
                     tiles.values.forEach { data -> ctx.updateWidget(data.widgetId, data) }
@@ -272,16 +273,16 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
                 }
             }
         if (active(AxBottleSpinnerReceiver::class.java))
-            scope.launch { AxBottleSpinnerReceiver.update(ctx) }
-        if (active(AxRpsReceiver::class.java)) scope.launch { AxRpsReceiver.update(ctx) }
+            scope.launch(serviceJob) { AxBottleSpinnerReceiver.update(ctx) }
+        if (active(AxRpsReceiver::class.java)) scope.launch(serviceJob) { AxRpsReceiver.update(ctx) }
         if (active(AxPhotoReceiver::class.java))
-            scope.launch {
+            scope.launch(serviceJob) {
                 photoCache.values.forEach { photo -> AxPhotoReceiver.update(ctx, photo) }
             }
     }
 
     private fun update() {
-        scope.launch(Dispatchers.IO + CoroutineName("WidgetUpdateIO")) {
+        scope.launch(serviceJob + Dispatchers.IO + CoroutineName("WidgetUpdateIO")) {
             Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
             Process.setThreadGroupAndCpuset(Process.myPid(), 9)
             refreshAllWidgets()
