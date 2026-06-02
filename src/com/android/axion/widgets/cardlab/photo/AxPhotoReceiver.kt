@@ -17,10 +17,14 @@ package com.android.axion.widgets.cardlab.photo
 import android.appwidget.AppWidgetManager
 import android.content.*
 import com.android.axion.widgets.AxionWidgetProvider
+import com.android.axion.widgets.WidgetUpdateService
 import com.android.axion.widgets.data.PhotoWidgetData
 import com.android.axion.widgets.utils.logger
 
 class AxPhotoReceiver : AxionWidgetProvider() {
+
+    override fun refresh(context: Context, service: WidgetUpdateService) =
+        service.cachedPhotos.forEach { update(context, it) }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         val interactor = PhotoInteractor(context)

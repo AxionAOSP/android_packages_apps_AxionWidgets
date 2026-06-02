@@ -22,11 +22,15 @@ import android.util.TypedValue
 import android.view.View
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
+import com.android.axion.widgets.WidgetUpdateService
 import com.android.axion.widgets.data.UsageData
 import com.android.axion.widgets.provider.AodState
 import com.android.axion.widgets.provider.UsageStatsProvider
 
 class AxScreenTimeReceiver : AxionWidgetProvider() {
+
+    override fun refresh(context: Context, service: WidgetUpdateService) =
+        update(context, null, true)
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)

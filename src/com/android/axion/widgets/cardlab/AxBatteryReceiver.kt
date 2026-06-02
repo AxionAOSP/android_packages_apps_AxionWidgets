@@ -25,6 +25,7 @@ import android.view.View
 import android.widget.RemoteViews
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
+import com.android.axion.widgets.WidgetUpdateService
 import com.android.axion.widgets.data.QuickLookData
 import com.android.axion.widgets.manager.QuickLookDataManager
 import com.android.axion.widgets.provider.AodState
@@ -33,6 +34,9 @@ import com.android.axion.widgets.provider.BatteryStatusProvider
 class AxBatteryReceiver : AxionWidgetProvider() {
 
     override fun requiredProviders() = listOf(BatteryStatusProvider::class)
+
+    override fun refresh(context: Context, service: WidgetUpdateService) =
+        update(context, service.quickLookDataManager.batteryData)
 
     override fun onAppWidgetOptionsChanged(
         context: Context,

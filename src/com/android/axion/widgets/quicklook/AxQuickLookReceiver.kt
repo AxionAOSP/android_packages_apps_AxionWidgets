@@ -19,6 +19,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.android.axion.widgets.AxionWidgetProvider
+import com.android.axion.widgets.WidgetUpdateService
 import com.android.axion.widgets.data.QuickLookData
 import com.android.axion.widgets.manager.QuickLookDataManager
 import com.android.axion.widgets.provider.BatteryStatusProvider
@@ -34,6 +35,9 @@ class AxQuickLookReceiver : AxionWidgetProvider() {
             QuickLookServiceClient.CalendarProvider::class,
             QuickLookServiceClient.MediaProvider::class,
         )
+
+    override fun refresh(context: Context, service: WidgetUpdateService) =
+        update(context, service.quickLookDataManager.quickLookData)
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)

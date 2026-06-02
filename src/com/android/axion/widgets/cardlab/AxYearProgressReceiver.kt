@@ -21,11 +21,14 @@ import android.util.TypedValue
 import android.view.View
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
+import com.android.axion.widgets.WidgetUpdateService
 import com.android.axion.widgets.provider.AodState
 import java.time.LocalDate
 import java.time.YearMonth
 
 class AxYearProgressReceiver : AxionWidgetProvider() {
+
+    override fun refresh(context: Context, service: WidgetUpdateService) = update(context)
 
     override fun onUpdate(
         context: Context,

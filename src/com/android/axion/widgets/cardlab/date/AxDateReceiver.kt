@@ -24,6 +24,7 @@ import android.provider.CalendarContract
 import android.widget.RemoteViews
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
+import com.android.axion.widgets.WidgetUpdateService
 import com.android.axion.widgets.provider.AodState
 import java.time.Instant
 import java.time.LocalDate
@@ -34,6 +35,8 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 class AxDateReceiver : AxionWidgetProvider() {
+
+    override fun refresh(context: Context, service: WidgetUpdateService) = update(context)
 
     override fun onUpdate(
         context: Context,

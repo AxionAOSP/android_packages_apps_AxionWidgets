@@ -19,10 +19,25 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.android.axion.widgets.AxionWidgetProvider
+import com.android.axion.widgets.WidgetUpdateService
 
 class AxTileReceiver : AxionWidgetProvider() {
 
     override fun requiredProviders() = listOf(TileRepository::class)
+
+    override fun refresh(context: Context, service: WidgetUpdateService) {
+        val manager = service.tileManager
+        val tiles = manager.tilesFlow
+        WidgetPrefs.getAllWidgetIds(context).forEach { widgetId ->
+            val tile = tiles[widgetId]
+            if (tile != null) {
+                context.updateWidget(widgetId, tile)
+            } else {
+                val spec = WidgetPrefs.getWidgetAction(context, widgetId) ?: return@forEach
+                manager.setTileForWidget(widgetId, spec)
+            }
+        }
+    }
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)

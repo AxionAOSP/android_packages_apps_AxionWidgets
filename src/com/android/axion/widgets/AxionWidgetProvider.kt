@@ -106,4 +106,6 @@ abstract class AxionWidgetProvider : AppWidgetProvider() {
     }
 
     open fun requiredProviders(): List<KClass<out AxionProvider<*>>> = emptyList()
+
+    abstract fun refresh(context: Context, service: WidgetUpdateService)
 }

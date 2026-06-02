@@ -38,12 +38,12 @@ object AodState {
 class DozeStateProvider(private val bridge: AxPlatformBridge) {
 
     val dozeFlow: Flow<DozeState> =
-        bridge.stateFlow(AxPlatformClient.KEY_DOZE).map { bundle ->
-            if (bundle.isEmpty) return@map DozeState()
+        bridge.stateFlow(AxPlatformClient.KEY_DOZE).map { state ->
+            if (state.isEmpty) return@map DozeState()
             DozeState(
-                isDozing = bundle.getBoolean("isDozing", false),
-                dozeAmount = bundle.getFloat("dozeAmount", 0f),
-                aodEnabled = bundle.getBoolean("aodEnabled", false),
+                isDozing = state.getBoolean("isDozing", false),
+                dozeAmount = state.getFloat("dozeAmount", 0f),
+                aodEnabled = state.getBoolean("aodEnabled", false),
             )
         }
 

@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.widget.RemoteViews
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
+import com.android.axion.widgets.WidgetUpdateService
 import com.android.axion.widgets.data.PedometerData
 import com.android.axion.widgets.provider.AodState
 import com.android.axion.widgets.provider.PedometerProvider
@@ -30,6 +31,8 @@ import kotlinx.coroutines.flow.StateFlow
 class AxPedometerReceiver : AxionWidgetProvider() {
 
     override fun requiredProviders() = listOf(PedometerProvider::class)
+
+    override fun refresh(context: Context, service: WidgetUpdateService) = update(context, null)
 
     override fun onAppWidgetOptionsChanged(
         context: Context,

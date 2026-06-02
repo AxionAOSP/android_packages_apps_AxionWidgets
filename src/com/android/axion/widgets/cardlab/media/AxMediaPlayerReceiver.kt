@@ -24,6 +24,7 @@ import android.view.View
 import android.widget.RemoteViews
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
+import com.android.axion.widgets.WidgetUpdateService
 import com.android.axion.widgets.data.MediaPlayerData
 import com.android.axion.widgets.provider.AodState
 import com.android.axion.widgets.provider.MediaPlayerProvider
@@ -31,6 +32,9 @@ import com.android.axion.widgets.provider.MediaPlayerProvider
 class AxMediaPlayerReceiver : AxionWidgetProvider() {
 
     override fun requiredProviders() = listOf(MediaPlayerProvider::class)
+
+    override fun refresh(context: Context, service: WidgetUpdateService) =
+        update(context, service.mediaPlayerProvider.currentData)
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)

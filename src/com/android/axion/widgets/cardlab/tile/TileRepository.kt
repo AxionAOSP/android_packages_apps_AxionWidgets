@@ -15,9 +15,9 @@
 package com.android.axion.widgets.cardlab.tile
 
 import android.content.Context
-import android.os.Bundle
 import android.os.Vibrator
-import com.android.axion.platform.AxPlatformClient
+import com.android.axion.platform.AxFeatureState
+import com.android.axion.platform.AxPlatformFeature
 import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.AxionProvider
 import com.android.axion.widgets.data.*
@@ -38,7 +38,7 @@ constructor(
 ) : AxionProvider<TilesData> {
 
     companion object {
-        fun specToFeature(spec: String): String? = AxPlatformClient.resolveFeature(spec)
+        fun specToFeature(spec: String): String? = AxPlatformFeature.resolve(spec)
 
         fun get(context: Context): TileRepository {
             val app = context.applicationContext as AxionApp
@@ -50,12 +50,9 @@ constructor(
     private val observedFeatures = mutableSetOf<String>()
 
     data class TileStateInfo(
-        val spec: String,
         val isActive: Boolean = false,
-        val isAvailable: Boolean = true,
         val label: String? = null,
         val secondaryLabel: String? = null,
-        val tileState: Int = AxPlatformClient.TILE_STATE_INACTIVE,
         val ringerMode: Int? = null,
         val hasVibrator: Boolean = true,
     )
@@ -76,32 +73,29 @@ constructor(
         val feature = specToFeature(spec) ?: return
         if (!observedFeatures.add(feature)) return
         scope.launch {
-            bridge.stateFlow(feature).collect { bundle ->
-                if (bundle.isEmpty) return@collect
-                val info = parseFeatureBundle(spec, bundle)
-                _tileStates.update { current -> current + (spec to info) }
+            bridge.stateFlow(feature).collect { state ->
+                if (state.isEmpty) return@collect
+                val info = parseFeatureState(feature, state)
+                _tileStates.update { current -> current + (feature to info) }
             }
         }
     }
 
-    private fun parseFeatureBundle(spec: String, bundle: Bundle): TileStateInfo {
-        val isRingerSpec = TileIcons.isRingerSpec(spec)
+    private fun parseFeatureState(feature: String, state: AxFeatureState): TileStateInfo {
+        val isRingerSpec = feature == AxPlatformFeature.RINGER_MODE
         return TileStateInfo(
-            spec = spec,
-            isActive = bundle.getBoolean("active", false),
-            isAvailable = bundle.getBoolean("available", true),
-            label = AxPlatformClient.getLabel(bundle),
-            secondaryLabel = AxPlatformClient.getSecondaryLabel(bundle),
-            tileState = AxPlatformClient.getTileState(bundle),
+            isActive = state.isActive,
+            label = state.label,
+            secondaryLabel = state.secondaryLabel,
             ringerMode =
                 if (isRingerSpec) {
-                    bundle.takeIf { it.containsKey("ringerMode") }?.getInt("ringerMode")
+                    state.takeIf { it.hasRingerMode() }?.getRingerMode(0)
                 } else {
                     null
                 },
             hasVibrator =
                 if (isRingerSpec) {
-                    bundle.getBoolean("hasVibrator", true) && hasVibrator()
+                    state.hasVibrator() && hasVibrator()
                 } else {
                     true
                 },
@@ -109,7 +103,6 @@ constructor(
     }
 
     fun startObservingSpec(spec: String) {
-        if (_tileStates.value.containsKey(spec)) return
         observeSpec(spec)
     }
 
@@ -118,7 +111,8 @@ constructor(
         return widgetIds
             .mapNotNull { widgetId ->
                 val spec = WidgetPrefs.getWidgetAction(context, widgetId) ?: return@mapNotNull null
-                val info = states[spec]
+                val feature = specToFeature(spec)
+                val info = feature?.let { states[it] }
                 val isActive = info?.isActive == true
                 val ringerMode = info?.ringerMode
                 val hasVibrator =
@@ -166,9 +160,8 @@ constructor(
                 AvailableTile(
                     spec = feature,
                     label =
-                        AxPlatformClient.getLabel(state)
-                            ?: feature.replaceFirstChar { it.uppercase() },
-                    category = AxPlatformClient.getCategory(feature),
+                        state.label ?: feature.replaceFirstChar { it.uppercase() },
+                    category = state.category ?: AxPlatformFeature.getCategory(feature),
                 )
             }
         )

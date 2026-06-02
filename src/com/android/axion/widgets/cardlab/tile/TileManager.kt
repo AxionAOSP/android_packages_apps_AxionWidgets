@@ -17,7 +17,7 @@ package com.android.axion.widgets.cardlab.tile
 import android.content.Context
 import android.media.AudioManager
 import android.os.Vibrator
-import com.android.axion.platform.AxPlatformClient
+import com.android.axion.platform.AxFeatureState
 import com.android.axion.widgets.AxionApp
 import com.android.axion.widgets.data.*
 import com.android.axion.widgets.platform.AxPlatformBridge
@@ -85,12 +85,14 @@ constructor(
         val isRingerSpec = TileIcons.isRingerSpec(spec)
         val feature = TileRepository.specToFeature(spec)
         val state = feature?.let { bridge.getState(it) }
-        val label = state?.let { AxPlatformClient.getLabel(it) }
-        val secondaryLabel = state?.let { AxPlatformClient.getSecondaryLabel(it) }
+        val label = state?.label
+        val secondaryLabel = state?.secondaryLabel
         val hasVibrator =
             if (isRingerSpec) {
                 val platformHasVibrator =
-                    state?.takeIf { it.containsKey("hasVibrator") }?.getBoolean("hasVibrator")
+                    state
+                        ?.takeIf { it.containsKey(AxFeatureState.KEY_HAS_VIBRATOR) }
+                        ?.hasVibrator()
                         ?: true
                 platformHasVibrator && hasVibrator()
             } else {
@@ -98,14 +100,16 @@ constructor(
             }
         val ringerMode =
             if (isRingerSpec) {
-                state?.takeIf { it.containsKey("ringerMode") }?.getInt("ringerMode")
+                state
+                    ?.takeIf { it.hasRingerMode() }
+                    ?.getRingerMode(AudioManager.RINGER_MODE_NORMAL)
                     ?: localRingerMode()
             } else {
                 null
             }
         val isActive =
             ringerMode?.let { it == AudioManager.RINGER_MODE_NORMAL }
-                ?: state?.getBoolean("active", false)
+                ?: state?.isActive
                 ?: false
         return TileData(
             spec = spec,

@@ -19,6 +19,7 @@ import android.content.Context
 import android.widget.RemoteViews
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
+import com.android.axion.widgets.WidgetUpdateService
 import com.android.axion.widgets.data.CompassData
 import com.android.axion.widgets.provider.AodState
 import com.android.axion.widgets.provider.CompassProvider
@@ -26,6 +27,8 @@ import com.android.axion.widgets.provider.CompassProvider
 class AxCompassReceiver : AxionWidgetProvider() {
 
     override fun requiredProviders() = listOf(CompassProvider::class)
+
+    override fun refresh(context: Context, service: WidgetUpdateService) = update(context, null)
 
     override fun onUpdate(
         context: Context,

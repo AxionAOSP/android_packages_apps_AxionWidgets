@@ -23,9 +23,12 @@ import android.os.Bundle
 import android.widget.RemoteViews
 import com.android.axion.widgets.AxionWidgetProvider
 import com.android.axion.widgets.R
+import com.android.axion.widgets.WidgetUpdateService
 import com.android.axion.widgets.provider.AodState
 
 class AxAnalogClockReceiver : AxionWidgetProvider() {
+
+    override fun refresh(context: Context, service: WidgetUpdateService) = update(context)
 
     override fun onUpdate(
         context: Context,

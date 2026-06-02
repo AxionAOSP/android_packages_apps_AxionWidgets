@@ -37,15 +37,19 @@ object WidgetUsageManager {
     }
 
     fun <T : AxionWidgetProvider> updateWidgetStatus(context: Context, widgetClass: Class<T>) {
+        updateWidgetActive(context, widgetClass)
+        recalcProviderRequirements()
+        stopServiceIfIdle(context)
+    }
+
+    private fun updateWidgetActive(
+        context: Context,
+        widgetClass: Class<out AxionWidgetProvider>,
+    ) {
         val manager = AppWidgetManager.getInstance(context)
         val ids = manager.getAppWidgetIds(ComponentName(context, widgetClass))
         val hasWidgets = ids.isNotEmpty()
         widgetActiveMap.getOrPut(widgetClass.kotlin) { MutableStateFlow(false) }.value = hasWidgets
-        recalcProviderRequirements(context)
-
-        if (widgetActiveMap.values.none { it.value }) {
-            context.stopService(Intent(context, WidgetUpdateService::class.java))
-        }
     }
 
     fun getActiveWidgets(): Set<KClass<out AxionWidgetProvider>> =
@@ -55,7 +59,7 @@ object WidgetUsageManager {
         return providerRequiredFlows.getOrPut(providerClass) { MutableStateFlow(false) }
     }
 
-    private fun recalcProviderRequirements(context: Context) {
+    private fun recalcProviderRequirements() {
         val activeWidgets = getActiveWidgets()
         val activeProviders =
             activeWidgets
@@ -76,14 +80,24 @@ object WidgetUsageManager {
     }
 
     fun refreshAll(context: Context) {
-        widgetActiveMap.keys.forEach { cls -> updateWidgetStatus(context, cls.java) }
+        widgetActiveMap.keys.forEach { cls -> updateWidgetActive(context, cls.java) }
+        recalcProviderRequirements()
+        stopServiceIfIdle(context)
     }
 
     fun refreshAll(context: Context, allClasses: List<Class<out AxionWidgetProvider>>) {
-        allClasses.forEach { updateWidgetStatus(context, it) }
+        allClasses.forEach { updateWidgetActive(context, it) }
+        recalcProviderRequirements()
+        stopServiceIfIdle(context)
     }
 
     fun isActive(widgetClass: Class<out AxionWidgetProvider>): Boolean {
         return widgetActiveMap[widgetClass.kotlin]?.value == true
+    }
+
+    private fun stopServiceIfIdle(context: Context) {
+        if (widgetActiveMap.values.none { it.value }) {
+            context.stopService(Intent(context, WidgetUpdateService::class.java))
+        }
     }
 }

@@ -14,39 +14,55 @@
 
 package com.android.axion.widgets
 
-import android.app.*
 import android.app.Service
-import android.content.*
+import android.appwidget.AppWidgetManager
+import android.content.Context
+import android.content.Intent
 import android.content.res.Configuration
-import android.os.*
+import android.os.IBinder
+import android.os.Process
 import android.os.UserManager
 import com.android.axion.widgets.cardlab.AxBatteryReceiver
 import com.android.axion.widgets.cardlab.AxYearProgressReceiver
-import com.android.axion.widgets.cardlab.clock.AxAnalogClockReceiver
-import com.android.axion.widgets.cardlab.clock.AxDigitalClockReceiver
-import com.android.axion.widgets.cardlab.clock.AxWorldClockReceiver
 import com.android.axion.widgets.cardlab.compass.AxCompassReceiver
-import com.android.axion.widgets.cardlab.countdown.AxCountdownReceiver
-import com.android.axion.widgets.cardlab.date.AxDateReceiver
-import com.android.axion.widgets.cardlab.fidget.AxBottleSpinnerReceiver
-import com.android.axion.widgets.cardlab.fidget.AxRpsReceiver
 import com.android.axion.widgets.cardlab.media.AxMediaPlayerReceiver
 import com.android.axion.widgets.cardlab.pedometer.AxPedometerReceiver
-import com.android.axion.widgets.cardlab.photo.*
-import com.android.axion.widgets.cardlab.screentime.*
-import com.android.axion.widgets.cardlab.tile.*
-import com.android.axion.widgets.data.*
-import com.android.axion.widgets.di.*
-import com.android.axion.widgets.manager.*
-import com.android.axion.widgets.provider.*
+import com.android.axion.widgets.cardlab.photo.AxPhotoReceiver
+import com.android.axion.widgets.cardlab.photo.PhotoProvider
+import com.android.axion.widgets.cardlab.screentime.AxScreenTimeReceiver
+import com.android.axion.widgets.cardlab.tile.TileManager
+import com.android.axion.widgets.cardlab.tile.TileRepository
+import com.android.axion.widgets.data.PhotoWidgetData
+import com.android.axion.widgets.di.IoScope
+import com.android.axion.widgets.di.MainScope
+import com.android.axion.widgets.manager.QuickLookDataManager
+import com.android.axion.widgets.manager.WidgetUsageManager
+import com.android.axion.widgets.provider.AodState
+import com.android.axion.widgets.provider.BatteryStatusProvider
+import com.android.axion.widgets.provider.CompassProvider
+import com.android.axion.widgets.provider.DateProvider
+import com.android.axion.widgets.provider.DozeStateProvider
+import com.android.axion.widgets.provider.MediaPlayerProvider
+import com.android.axion.widgets.provider.PedometerProvider
+import com.android.axion.widgets.provider.QuickLookServiceClient
+import com.android.axion.widgets.provider.UsageStatsProvider
 import com.android.axion.widgets.quicklook.MessageProvider
 import com.android.axion.widgets.quicklook.QuickLookPrefs
-import com.android.axion.widgets.utils.*
+import com.android.axion.widgets.utils.Tracker
+import com.android.axion.widgets.utils.WidgetFlows
+import com.android.axion.widgets.utils.combinedCollect
+import com.android.axion.widgets.utils.logger
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
 
 interface AxionProvider<T> {
     val dataFlow: Flow<T?>
@@ -73,10 +89,16 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     @Inject lateinit var messageProvider: MessageProvider
     @Inject lateinit var dateProvider: DateProvider
 
-    private val serviceJob = SupervisorJob()
+    private val serviceJob by lazy { SupervisorJob(scope.coroutineContext[Job]) }
+    private val serviceScope by lazy { CoroutineScope(scope.coroutineContext + serviceJob) }
+    private val managedReceivers by lazy { loadManagedReceivers() }
+    private val managedReceiverClasses by lazy { managedReceivers.map { it::class.java } }
 
     private val photoCache = mutableMapOf<Int, PhotoWidgetData>()
     private var providersStarted = false
+
+    internal val cachedPhotos: Collection<PhotoWidgetData>
+        get() = photoCache.values
 
     override fun onCreate() {
         super.onCreate()
@@ -101,29 +123,28 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
         }
     }
 
-    private fun initProviders() {
-        if (providersStarted) return
+    private fun initProviders(): Boolean {
+        if (providersStarted) return false
         providersStarted = true
         quickLookClient.bind()
-        WidgetUsageManager.refreshAll(applicationContext, ALL_RECEIVERS)
+        refreshWidgetUsage()
         startProviders()
+        scheduleRefreshAllWidgets()
         if (QuickLookPrefs.isEnabled(applicationContext, QuickLookPrefs.SOURCE_MESSAGES)) {
             messageProvider.scheduleRotation()
         }
+        return true
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        scope.launch(serviceJob + Dispatchers.Default + CoroutineName("WidgetUpdateBackground")) {
-            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
-            Process.setThreadGroupAndCpuset(Process.myPid(), 9)
-        }
-
         when (intent?.action) {
             ACTION_UPDATE -> {
                 if (!getSystemService(UserManager::class.java).isUserUnlocked) return START_STICKY
-                initProviders()
+                if (!initProviders()) {
+                    refreshWidgetUsage()
+                    scheduleRefreshAllWidgets()
+                }
                 logger("Update requested from widget provider")
-                update()
             }
         }
         return START_STICKY
@@ -132,7 +153,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         if (providersStarted) {
-            scope.launch(serviceJob) { refreshAllWidgets() }
+            scheduleRefreshAllWidgets()
         }
     }
 
@@ -153,7 +174,7 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
     }
 
     private fun startProviders() {
-        scope.combinedCollect(
+        serviceScope.combinedCollect(
             combinedFlow =
                 WidgetFlows(
                     batteryProvider,
@@ -165,153 +186,121 @@ class WidgetUpdateService : Hilt_WidgetUpdateService() {
                     usageStatsProvider,
                 )
         ) { data ->
-            data?.let { d ->
-                AxBatteryReceiver.update(applicationContext, d.battery)
-                AxScreenTimeReceiver.update(applicationContext, d.usage)
-                AxYearProgressReceiver.update(applicationContext)
-                d.photos?.let { photos ->
-                    val activeIds = photos.map { it.widgetId }.toSet()
-                    photoCache.keys.retainAll(activeIds)
-                    photos.forEach { photo ->
-                        AxPhotoReceiver.update(applicationContext, photo)
-                        photoCache[photo.widgetId] = photo
-                    }
+            val d = data ?: return@combinedCollect
+            AxBatteryReceiver.update(applicationContext, d.battery)
+            AxScreenTimeReceiver.update(applicationContext, d.usage)
+            AxYearProgressReceiver.update(applicationContext)
+            d.photos?.let { photos ->
+                val activeIds = photos.map { it.widgetId }.toSet()
+                photoCache.keys.retainAll(activeIds)
+                photos.forEach { photo ->
+                    AxPhotoReceiver.update(applicationContext, photo)
+                    photoCache[photo.widgetId] = photo
                 }
-
-                quickLookDataManager.apply {
-                    batteryData = d.battery
-                    calendarData = d.calendar
-                    mediaData = d.media
-                    weatherData = d.weather
-                }
-
-                d.tiles?.let { tileManager.tilesFlow = it }
             }
+
+            quickLookDataManager.apply {
+                batteryData = d.battery
+                calendarData = d.calendar
+                mediaData = d.media
+                weatherData = d.weather
+            }
+
+            d.tiles?.let { tileManager.tilesFlow = it }
         }
 
-        scope.launch(serviceJob) {
+        serviceScope.launch {
             tileRepository.dataFlow.distinctUntilChanged().collect { tiles ->
                 tiles?.let { tileManager.tilesFlow = it }
             }
         }
 
-        scope.launch(serviceJob) {
+        serviceScope.launch {
             mediaPlayerProvider.dataFlow.distinctUntilChanged().collect { data ->
                 AxMediaPlayerReceiver.update(applicationContext, data)
             }
         }
 
         pedometerProvider.start()
-        scope.launch(serviceJob) {
+        serviceScope.launch {
             pedometerProvider.dataFlow.distinctUntilChanged().collect { data ->
                 AxPedometerReceiver.update(applicationContext, data)
             }
         }
 
         compassProvider.start()
-        scope.launch(serviceJob) {
+        serviceScope.launch {
             compassProvider.dataFlow.distinctUntilChanged().collect { data ->
                 AxCompassReceiver.update(applicationContext, data)
             }
         }
 
-        scope.launch(serviceJob) {
+        serviceScope.launch {
             dateProvider.dateFlow.collect {
                 quickLookDataManager.onDataUpdated()
             }
         }
 
         if (AodState.DOZE_TRANSPARENCY_ENABLED) {
-            scope.launch(serviceJob) {
+            serviceScope.launch {
                 dozeStateProvider.dozeFlow.distinctUntilChanged().collect { state ->
                     val wasAod = AodState.isAod
                     AodState.isAod = state.isAod
                     if (wasAod != state.isAod) {
                         logger("AOD state changed: ${state.isAod}")
-                        refreshAllWidgets()
+                        scheduleRefreshAllWidgets()
                     }
                 }
             }
         }
     }
 
-    private fun refreshAllWidgets() {
+    private fun scheduleRefreshAllWidgets() {
         val ctx = applicationContext
-        fun active(cls: Class<out AxionWidgetProvider>) = WidgetUsageManager.isActive(cls)
-
-        if (active(AxBatteryReceiver::class.java))
-            scope.launch(serviceJob) { AxBatteryReceiver.update(ctx, quickLookDataManager.batteryData) }
-        if (active(AxScreenTimeReceiver::class.java))
-            scope.launch(serviceJob) { AxScreenTimeReceiver.update(ctx, null, true) }
-        if (active(AxYearProgressReceiver::class.java))
-            scope.launch(serviceJob) { AxYearProgressReceiver.update(ctx) }
-        if (active(AxDigitalClockReceiver::class.java))
-            scope.launch(serviceJob) { AxDigitalClockReceiver.update(ctx) }
-        if (active(AxAnalogClockReceiver::class.java))
-            scope.launch(serviceJob) { AxAnalogClockReceiver.update(ctx) }
-        if (active(AxWorldClockReceiver::class.java))
-            scope.launch(serviceJob) { AxWorldClockReceiver.update(ctx) }
-        if (active(AxCountdownReceiver::class.java))
-            scope.launch(serviceJob) { AxCountdownReceiver.update(ctx) }
-        if (active(AxDateReceiver::class.java)) scope.launch(serviceJob) { AxDateReceiver.update(ctx) }
-        if (active(AxMediaPlayerReceiver::class.java))
-            scope.launch(serviceJob) { AxMediaPlayerReceiver.update(ctx, mediaPlayerProvider.currentData) }
-        if (active(AxPedometerReceiver::class.java))
-            scope.launch(serviceJob) { AxPedometerReceiver.update(ctx, null) }
-        if (active(AxCompassReceiver::class.java))
-            scope.launch(serviceJob) { AxCompassReceiver.update(ctx, null) }
-        if (active(AxTileReceiver::class.java))
-            scope.launch(serviceJob) {
-                val tiles = tileManager.tilesFlow
-                if (tiles.isNotEmpty()) {
-                    tiles.values.forEach { data -> ctx.updateWidget(data.widgetId, data) }
-                } else {
-                    WidgetPrefs.getAllWidgetIds(ctx).forEach { widgetId ->
-                        val spec = WidgetPrefs.getWidgetAction(ctx, widgetId) ?: return@forEach
-                        tileManager.setTileForWidget(widgetId, spec)
-                    }
+        managedReceivers
+            .filter { WidgetUsageManager.isActive(it::class.java) }
+            .forEach { receiver ->
+                serviceScope.launch(
+                    CoroutineName("WidgetRefresh:${receiver::class.java.simpleName}")
+                ) {
+                    receiver.refresh(ctx, this@WidgetUpdateService)
                 }
             }
-        if (active(AxBottleSpinnerReceiver::class.java))
-            scope.launch(serviceJob) { AxBottleSpinnerReceiver.update(ctx) }
-        if (active(AxRpsReceiver::class.java)) scope.launch(serviceJob) { AxRpsReceiver.update(ctx) }
-        if (active(AxPhotoReceiver::class.java))
-            scope.launch(serviceJob) {
-                photoCache.values.forEach { photo -> AxPhotoReceiver.update(ctx, photo) }
-            }
     }
 
-    private fun update() {
-        scope.launch(serviceJob + Dispatchers.IO + CoroutineName("WidgetUpdateIO")) {
-            Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)
-            Process.setThreadGroupAndCpuset(Process.myPid(), 9)
-            refreshAllWidgets()
+    private fun refreshWidgetUsage() =
+        WidgetUsageManager.refreshAll(applicationContext, managedReceiverClasses)
+
+    private fun loadManagedReceivers(): List<AxionWidgetProvider> =
+        loadReceiverClassNames().mapNotNull(::instantiateReceiver)
+
+    private fun loadReceiverClassNames(): List<String> =
+        AppWidgetManager.getInstance(applicationContext)
+            .installedProviders
+            .asSequence()
+            .map { it.provider }
+            .filter { it.packageName == packageName }
+            .map { it.className }
+            .toList()
+
+    private fun instantiateReceiver(className: String): AxionWidgetProvider? =
+        try {
+            Class.forName(className)
+                .asSubclass(AxionWidgetProvider::class.java)
+                .getDeclaredConstructor()
+                .newInstance()
+        } catch (e: ReflectiveOperationException) {
+            logger("Failed to load widget receiver $className: ${e.message}")
+            null
+        } catch (e: ClassCastException) {
+            logger("Failed to load widget receiver $className: ${e.message}")
+            null
         }
-    }
 
     companion object {
         @Volatile var isRunning = false
 
         const val ACTION_UPDATE = "com.android.axion.widgets.ACTION_UPDATE"
-
-        val ALL_RECEIVERS: List<Class<out AxionWidgetProvider>> =
-            listOf(
-                AxBatteryReceiver::class.java,
-                AxScreenTimeReceiver::class.java,
-                AxYearProgressReceiver::class.java,
-                AxDigitalClockReceiver::class.java,
-                AxAnalogClockReceiver::class.java,
-                AxWorldClockReceiver::class.java,
-                AxCountdownReceiver::class.java,
-                AxDateReceiver::class.java,
-                AxMediaPlayerReceiver::class.java,
-                AxPedometerReceiver::class.java,
-                AxCompassReceiver::class.java,
-                AxTileReceiver::class.java,
-                AxPhotoReceiver::class.java,
-                AxBottleSpinnerReceiver::class.java,
-                AxRpsReceiver::class.java,
-            )
 
         fun update(context: Context) {
             val intent =

@@ -28,12 +28,12 @@ class BatteryStatusProvider @Inject constructor(private val bridge: AxPlatformBr
     AxionProvider<QuickLookData.Battery> {
 
     override val dataFlow: Flow<QuickLookData.Battery?> =
-        bridge.stateFlow(AxPlatformClient.KEY_BATTERY).map { bundle ->
-            if (bundle.isEmpty) return@map null
-            val level = bundle.getInt("level", -1)
-            val isCharging = bundle.getBoolean("isCharging", false)
-            val isPluggedIn = bundle.getBoolean("isPluggedIn", false)
-            val estimateStr = bundle.getString("batteryTimeRemainingEstimate", "")
+        bridge.stateFlow(AxPlatformClient.KEY_BATTERY).map { state ->
+            if (state.isEmpty) return@map null
+            val level = state.getInt("level", -1)
+            val isCharging = state.getBoolean("isCharging", false)
+            val isPluggedIn = state.getBoolean("isPluggedIn", false)
+            val estimateStr = state.getString("batteryTimeRemainingEstimate", "")
             val timeRemaining = estimateStr?.toLongOrNull()
             QuickLookData.Battery(
                 isCharging = isCharging || isPluggedIn,
