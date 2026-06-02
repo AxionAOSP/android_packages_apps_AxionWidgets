@@ -3,8 +3,6 @@
     android:id="@+id/year_progress_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="@dimen/card_padding_horizontal"
-    android:layout_marginVertical="@dimen/card_padding_vertical"
     android:background="@drawable/bg_widget_card"
     android:gravity="center"
     android:orientation="vertical"
