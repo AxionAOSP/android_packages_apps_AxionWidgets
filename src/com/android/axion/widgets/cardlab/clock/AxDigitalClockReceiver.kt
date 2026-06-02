@@ -46,16 +46,30 @@ class AxDigitalClockReceiver : AxionWidgetProvider() {
         newOptions: Bundle,
     ) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        appWidgetManager.updateAppWidget(appWidgetId, buildViews(context))
+        appWidgetManager.updateAppWidget(appWidgetId, buildViews(context, appWidgetId))
+    }
+
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        super.onDeleted(context, appWidgetIds)
+        appWidgetIds.forEach { ClockPrefs.remove(context, it) }
     }
 
     companion object {
         fun update(context: Context) {
-            updateAllWidgets(context, AxDigitalClockReceiver::class.java, buildViews(context))
+            doForAllWidgets(context, AxDigitalClockReceiver::class.java) { widgetId ->
+                AppWidgetManager.getInstance(context)
+                    .updateAppWidget(widgetId, buildViews(context, widgetId))
+            }
         }
 
-        private fun buildViews(context: Context): RemoteViews {
+        fun updateWidget(context: Context, widgetId: Int) {
+            AppWidgetManager.getInstance(context)
+                .updateAppWidget(widgetId, buildViews(context, widgetId))
+        }
+
+        private fun buildViews(context: Context, widgetId: Int): RemoteViews {
             val views = RemoteViews(context.packageName, R.layout.widget_digital_clock)
+            val bgType = ClockPrefs.getBackground(context, widgetId)
 
             if (AodState.isAod) {
                 views.setInt(
@@ -66,10 +80,15 @@ class AxDigitalClockReceiver : AxionWidgetProvider() {
                 views.setTextColor(R.id.digital_clock_time, Color.WHITE)
                 views.setTextColor(R.id.digital_clock_date, Color.WHITE)
             } else {
+                val bgRes = if (bgType == ClockBackground.TRANSPARENT) {
+                    android.R.color.transparent
+                } else {
+                    R.color.battery_bg_color
+                }
                 views.setInt(
                     R.id.digital_clock_root,
                     "setBackgroundResource",
-                    R.color.battery_bg_color,
+                    bgRes,
                 )
                 views.setTextColor(
                     R.id.digital_clock_time,

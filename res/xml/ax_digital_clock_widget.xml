@@ -10,4 +10,6 @@
     android:initialLayout="@layout/widget_digital_clock"
     android:previewLayout="@layout/widget_digital_clock"
     android:widgetCategory="home_screen"
-    android:resizeMode="horizontal|vertical" />
+    android:resizeMode="horizontal|vertical"
+    android:configure="com.android.axion.widgets.cardlab.clock.DigitalClockConfigureActivity"
+    android:widgetFeatures="reconfigurable" />
