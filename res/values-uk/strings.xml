@@ -29,7 +29,7 @@
     <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
     <string name="quick_look_widget_calendar_no_title">(No title event)</string>
     <!-- Battery -->
-    <string name="battery_widget">Battery</string>
+    <string name="battery_widget">Акумулятор</string>
     <string name="full_charge">Charged</string>
     <string name="charging">Charging</string>
     <string name="minutes_left">%1$d min left</string>
@@ -62,15 +62,15 @@
     <string name="bluetooth">Bluetooth</string>
     <string name="airplane_mode">Airplane</string>
     <string name="dark_theme">Dark Theme</string>
-    <string name="torch">Torch</string>
+    <string name="torch">Ліхтарик</string>
     <string name="dnd">Не турбувати</string>
     <string name="priority">Priority</string>
     <string name="alarms_only">Alarms Only</string>
     <string name="total_silence">Total Silence</string>
     <string name="auto_rotate">Автоповорот</string>
-    <string name="ringer_normal">Ringer</string>
-    <string name="ringer_vibrate">Vibrate</string>
-    <string name="ringer_silent">Silent</string>
+    <string name="ringer_normal">Дзвінок</string>
+    <string name="ringer_vibrate">Вібросигнал</string>
+    <string name="ringer_silent">Режим тиші</string>
     <string name="ringer_unknown">Невідомо</string>
     <string name="mobile_data">Мобільні дані</string>
     <string name="label_year_progress">Year Progress</string>
@@ -85,7 +85,7 @@
     <string name="bottle_spinner_tap">tap to spin</string>
     <string name="label_rps">Rock Paper Scissors</string>
     <string name="rps_tap">tap to play</string>
-    <string name="ql_display">Display</string>
+    <string name="ql_display">Дисплей</string>
     <string name="ql_show_date">Show date</string>
     <string name="ql_show_date_desc">Show date on the top line</string>
     <string name="ql_date_format">Date format</string>
@@ -103,7 +103,7 @@
     <string name="ql_source_calendar_desc">Show upcoming events</string>
     <string name="ql_source_media">Media</string>
     <string name="ql_source_media_desc">Show now playing info</string>
-    <string name="ql_source_battery">Battery</string>
+    <string name="ql_source_battery">Акумулятор</string>
     <string name="ql_source_battery_desc">Show charging status</string>
     <string name="ql_source_weather">Weather</string>
     <string name="ql_source_weather_desc">Show current conditions</string>
@@ -234,4 +234,10 @@
     <string name="pill_width_summary">Width of the pill form</string>
     <string name="pill_autofit_title">Auto-fit pill width</string>
     <string name="pill_autofit_summary">Size pill to fit label text</string>
+    <!-- Clock Configuration -->
+    <string name="clock_bg_translucent">Translucent background</string>
+    <string name="clock_bg_translucent_desc">A rounded solid background matching system colors</string>
+    <string name="clock_bg_transparent">Transparent background</string>
+    <string name="clock_bg_transparent_desc">No card background behind the clock</string>
+    <string name="clock_style_section">Widget Background</string>
 </resources>

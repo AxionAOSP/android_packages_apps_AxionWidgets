@@ -236,4 +236,10 @@
     <string name="pill_width_summary">Width of the pill form</string>
     <string name="pill_autofit_title">Auto-fit pill width</string>
     <string name="pill_autofit_summary">Size pill to fit label text</string>
+    <!-- Clock Configuration -->
+    <string name="clock_bg_translucent">Translucent background</string>
+    <string name="clock_bg_translucent_desc">A rounded solid background matching system colors</string>
+    <string name="clock_bg_transparent">Transparent background</string>
+    <string name="clock_bg_transparent_desc">No card background behind the clock</string>
+    <string name="clock_style_section">Widget Background</string>
 </resources>
