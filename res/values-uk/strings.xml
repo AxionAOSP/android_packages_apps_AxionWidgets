@@ -31,7 +31,7 @@
     <!-- Battery -->
     <string name="battery_widget">Акумулятор</string>
     <string name="full_charge">Charged</string>
-    <string name="charging">Charging</string>
+    <string name="charging">Заряджання</string>
     <string name="minutes_left">%1$d min left</string>
     <!-- Photo -->
     <string name="photo_title">Photo</string>
