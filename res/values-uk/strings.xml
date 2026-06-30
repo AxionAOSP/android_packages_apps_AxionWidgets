@@ -101,7 +101,7 @@
     <string name="ql_cal_settings">Calendar</string>
     <string name="ql_source_calendar">Calendar</string>
     <string name="ql_source_calendar_desc">Show upcoming events</string>
-    <string name="ql_source_media">Media</string>
+    <string name="ql_source_media">Медіа</string>
     <string name="ql_source_media_desc">Show now playing info</string>
     <string name="ql_source_battery">Акумулятор</string>
     <string name="ql_source_battery_desc">Show charging status</string>
