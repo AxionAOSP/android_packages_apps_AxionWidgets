@@ -71,7 +71,7 @@
     <string name="ringer_normal">Ringer</string>
     <string name="ringer_vibrate">Vibrate</string>
     <string name="ringer_silent">Silent</string>
-    <string name="ringer_unknown">Unknown</string>
+    <string name="ringer_unknown">לא ידוע</string>
     <string name="mobile_data">Mobile Data</string>
     <string name="label_year_progress">Year Progress</string>
     <string name="label_digital_clock">Digital Clock</string>
