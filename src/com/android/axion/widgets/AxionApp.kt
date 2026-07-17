@@ -36,7 +36,6 @@ class AxionApp : Hilt_AxionApp() {
         Log.d(TAG, "Application created")
         appComponent = DaggerAxionAppComponent.factory().create(this)
         startWidgetUpdateService()
-        Process.setThreadAffinity(Process.myPid(), 1)
     }
 
     private fun startWidgetUpdateService() {
