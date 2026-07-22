@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="photos_already_exist">
-        <item quantity="one">%d photo already exists and was omitted.</item>
-        <item quantity="few">%d photos already exist and were omitted.</item>
-        <item quantity="many">%d photos already exist and were omitted.</item>
-        <item quantity="other">%d photos already exist and were omitted.</item>
+        <item quantity="one">%d фотографія вже існує та була пропущена.</item>
+        <item quantity="few">%d фотографії вже існують та були пропущені.</item>
+        <item quantity="many">%d фотографій вже існують та були пропущені.</item>
+        <item quantity="other">%d фотографій вже існують та були пропущені.</item>
     </plurals>
     <!-- Manifest -->
-    <string name="app_name">Axion Widgets</string>
-    <string name="label_photo">Photo</string>
-    <string name="label_tile">Tile</string>
-    <string name="label_media_notification_listener">Media Notification Listener</string>
-    <string name="label_screentime">Screen time</string>
-    <string name="label_media_player">Media Player</string>
+    <string name="app_name">Віджети Axion</string>
+    <string name="label_photo">Фото</string>
+    <string name="label_tile">Плитка</string>
+    <string name="label_media_notification_listener">Слухач медіасповіщень</string>
+    <string name="label_screentime">Екранний час</string>
+    <string name="label_media_player">Медіапрогравач</string>
     <!-- Settings -->
-    <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
-    <string name="loading_text">Loading...</string>
-    <string name="toast_calendar_permission_required">Calendar permission is required</string>
-    <string name="allow_notification_access">Allow notification access</string>
-    <string name="allow_calendar_access">Allow calendar access</string>
-    <string name="access_granted">Access granted</string>
-    <string name="needed_for_now_playing">Needed for now playing</string>
-    <string name="needed_for_calendar_events">Needed for calendar events</string>
+    <string name="welcome_message">Ласкаво просимо до Axion. Натисніть тут, щоби налаштувати швидкий перегляд.</string>
+    <string name="loading_text">Завантаження...</string>
+    <string name="toast_calendar_permission_required">Потрібен дозвіл календаря</string>
+    <string name="allow_notification_access">Надати доступ до сповіщень</string>
+    <string name="allow_calendar_access">Надати доступ до календаря</string>
+    <string name="access_granted">Дозвіл надано</string>
+    <string name="needed_for_now_playing">Потрібно для поточного відтворення</string>
+    <string name="needed_for_calendar_events">Потрібно для подій у календарі</string>
     <!-- Calendar -->
-    <string name="quick_look_widget_calendar_in_time">in %d min</string>
-    <string name="quick_look_widget_calendar_now">now</string>
-    <string name="quick_look_widget_calendar_tomorrow">Tomorrow</string>
-    <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
-    <string name="quick_look_widget_calendar_no_title">(No title event)</string>
+    <string name="quick_look_widget_calendar_in_time">за %d хв</string>
+    <string name="quick_look_widget_calendar_now">Зараз</string>
+    <string name="quick_look_widget_calendar_tomorrow">Завтра</string>
+    <string name="quick_look_widget_calendar_yesterday">Учора</string>
+    <string name="quick_look_widget_calendar_no_title">(Подія без назви)</string>
     <!-- Battery -->
     <string name="battery_widget">Акумулятор</string>
-    <string name="full_charge">Charged</string>
+    <string name="full_charge">Заряджено</string>
     <string name="charging">Заряджання</string>
-    <string name="minutes_left">%1$d min left</string>
+    <string name="minutes_left">Залишилось %1$d хв</string>
     <!-- Photo -->
-    <string name="photo_title">Photo</string>
-    <string name="add_photos">Add Photos</string>
-    <string name="add_photos_cd">Add Photos</string>
-    <string name="display_options">Display Options</string>
-    <string name="grayscale_mode">Grayscale Mode</string>
-    <string name="shuffle_interval">Shuffle Interval</string>
-    <string name="select_interval">Select Interval</string>
-    <string name="select_shuffle_interval">Select Shuffle Interval</string>
+    <string name="photo_title">Фото</string>
+    <string name="add_photos">Додати фото</string>
+    <string name="add_photos_cd">Додати фото</string>
+    <string name="display_options">Параметри екрана</string>
+    <string name="grayscale_mode">Режим градацій сірого</string>
+    <string name="shuffle_interval">Інтервал перемішування</string>
+    <string name="select_interval">Обрати інтервал</string>
+    <string name="select_shuffle_interval">Вибрати інтервал перемішування</string>
     <string name="cancel">Скасувати</string>
-    <string name="save_changes">Save Changes</string>
-    <string name="manage_photos">Manage Photos</string>
+    <string name="save_changes">Зберегти зміни</string>
+    <string name="manage_photos">Керувати фотографіями</string>
     <string name="back">Назад</string>
-    <string name="delete_selected">Delete Selected</string>
+    <string name="delete_selected">Видалити вибрані</string>
     <string name="edit">Редагувати</string>
-    <string name="no_photos_selected">No photos selected</string>
-    <string name="photo">Photo</string>
-    <string name="confirm_delete_title">Confirm Delete</string>
-    <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
+    <string name="no_photos_selected">Фото не вибрано</string>
+    <string name="photo">Фото</string>
+    <string name="confirm_delete_title">Підтвердження видалення</string>
+    <string name="confirm_delete_message">Упевнені, що хочете видалити вибрані фото?</string>
     <string name="delete">Видалити</string>
     <string name="interval_1_minute">1 minute</string>
     <string name="interval_5_minutes">5 minutes</string>
@@ -125,21 +125,21 @@
         <item>a walk outside can reset your mood</item>
         <item>don\'t forget to eat well</item>
         <item>rest is productive too</item>
-        <item>sleep is the best recovery tool</item>
-        <item>your eyes need a break \u2014 look at something far away</item>
-        <item>standing up for a minute helps circulation</item>
-        <item>unclench your jaw and relax your shoulders</item>
-        <item>take three slow breaths right now</item>
-        <item>fresh air does wonders for focus</item>
-        <item>a 20-minute nap can boost creativity</item>
-        <item>sunlight in the morning helps set your body clock</item>
-        <item>you\'re doing great today</item>
-        <item>small steps lead to big changes</item>
-        <item>today is a good day to learn something new</item>
-        <item>be kind to yourself</item>
-        <item>progress, not perfection</item>
-        <item>the best time to start is now</item>
-        <item>less scrolling, more living</item>
+        <item>сон — найкращий інструмент відновлення</item>
+        <item>вашим очам потрібен відпочинок \u2014 подивіться на щось вдалині</item>
+        <item>хвилина стояння на ногах покращує кровообіг</item>
+        <item>розтисніть щелепи й розслабте плечі</item>
+        <item>зробіть три повільні вдихи прямо зараз</item>
+        <item>свіже повітря неабияк допомагає зосередитися</item>
+        <item>20-хвилинний сон може стимулювати творчі здібності</item>
+        <item>ранкове сонячне світло допомагає налаштувати ваш біологічний годинник</item>
+        <item>ви сьогодні чудово справляєтеся</item>
+        <item>маленькі кроки ведуть до великих змін</item>
+        <item>сьогодні чудовий день, щоб навчитися чогось нового</item>
+        <item>будь добрим до себе</item>
+        <item>прогрес, а не досконалість</item>
+        <item>найліпший час розпочати зараз</item>
+        <item>менше гортання, більше життя</item>
         <item>what would make today great?</item>
         <item>gratitude changes perspective</item>
         <item>done is better than perfect</item>
@@ -222,7 +222,7 @@
         <item>need for speed ;)</item>
         <item>a is for axion</item>
     </string-array>
-    <string name="tile_selection_group_title">Tile</string>
+    <string name="tile_selection_group_title">Плитка</string>
     <string name="tile_select_title">Select tile</string>
     <string name="tile_select_summary">Choose a quick setting</string>
     <string name="tile_size_group_title">Sizing</string>
