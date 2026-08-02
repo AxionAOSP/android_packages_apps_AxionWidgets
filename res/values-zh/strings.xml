@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="photos_already_exist">
-        <item quantity="other">%d photos already exist and were omitted.</item>
+        <item quantity="other">已有 %d 张照片，已跳过</item>
     </plurals>
     <!-- Manifest -->
-    <string name="app_name">Axion Widgets</string>
-    <string name="label_photo">Photo</string>
-    <string name="label_tile">Tile</string>
+    <string name="app_name">Axion 部件</string>
+    <string name="label_photo">照片</string>
+    <string name="label_tile">平铺显示</string>
     <string name="label_media_notification_listener">媒体通知服务</string>
-    <string name="label_screentime">Screen time</string>
+    <string name="label_screentime">屏幕使用时间</string>
     <string name="label_media_player">媒体播放器</string>
     <!-- Settings -->
     <string name="welcome_message">欢迎使用 Axion，点击这里设置快速查看</string>
-    <string name="loading_text">Loading...</string>
+    <string name="loading_text">加载中…</string>
     <string name="toast_calendar_permission_required">请授予日历权限</string>
     <string name="allow_notification_access">授予通知使用权</string>
     <string name="allow_calendar_access">允许访问日历</string>
-    <string name="access_granted">Access granted</string>
+    <string name="access_granted">已授予访问权限</string>
     <string name="needed_for_now_playing">需要现在播放</string>
     <string name="needed_for_calendar_events">日历事件所需</string>
     <!-- Calendar -->
@@ -27,68 +27,68 @@
     <string name="quick_look_widget_calendar_no_title">(无标题事件)</string>
     <!-- Battery -->
     <string name="battery_widget">省电</string>
-    <string name="full_charge">Charged</string>
+    <string name="full_charge">充电完成</string>
     <string name="charging">充电中</string>
     <string name="minutes_left">剩余 %1$d 分钟</string>
     <!-- Photo -->
-    <string name="photo_title">Photo</string>
-    <string name="add_photos">Add Photos</string>
-    <string name="add_photos_cd">Add Photos</string>
+    <string name="photo_title">照片</string>
+    <string name="add_photos">添加照片</string>
+    <string name="add_photos_cd">添加照片</string>
     <string name="display_options">显示选项</string>
-    <string name="grayscale_mode">Grayscale Mode</string>
-    <string name="shuffle_interval">Shuffle Interval</string>
-    <string name="select_interval">Select Interval</string>
-    <string name="select_shuffle_interval">Select Shuffle Interval</string>
+    <string name="grayscale_mode">灰度模式</string>
+    <string name="shuffle_interval">随机播放间隔</string>
+    <string name="select_interval">选择间隔</string>
+    <string name="select_shuffle_interval">随机播放间隔</string>
     <string name="cancel">取消</string>
-    <string name="save_changes">Save Changes</string>
-    <string name="manage_photos">Manage Photos</string>
+    <string name="save_changes">保存</string>
+    <string name="manage_photos">管理照片</string>
     <string name="back">返回</string>
     <string name="delete_selected">删除所选项</string>
     <string name="edit">编辑</string>
     <string name="no_photos_selected">未选择照片</string>
-    <string name="photo">Photo</string>
+    <string name="photo">照片</string>
     <string name="confirm_delete_title">确认删除</string>
     <string name="confirm_delete_message">确定删除所选中图片吗？</string>
     <string name="delete">删除</string>
-    <string name="interval_1_minute">1 minute</string>
+    <string name="interval_1_minute">1分钟</string>
     <string name="interval_5_minutes">5 分钟</string>
     <string name="interval_15_minutes">15 分钟</string>
     <string name="interval_1_hour">1 小时</string>
     <!-- Tiles -->
     <string name="wifi">WiFi</string>
     <string name="bluetooth">蓝牙</string>
-    <string name="airplane_mode">Airplane</string>
-    <string name="dark_theme">Dark Theme</string>
+    <string name="airplane_mode">飞行模式</string>
+    <string name="dark_theme">深色主题</string>
     <string name="torch">手电筒</string>
     <string name="dnd">勿扰模式</string>
-    <string name="priority">Priority</string>
-    <string name="alarms_only">Alarms Only</string>
-    <string name="total_silence">Total Silence</string>
+    <string name="priority">优先</string>
+    <string name="alarms_only">仅限闹钟</string>
+    <string name="total_silence">完全静音</string>
     <string name="auto_rotate">自动旋转</string>
     <string name="ringer_normal">铃声</string>
     <string name="ringer_vibrate">振动</string>
     <string name="ringer_silent">静音</string>
     <string name="ringer_unknown">未知</string>
     <string name="mobile_data">移动数据</string>
-    <string name="label_year_progress">Year Progress</string>
-    <string name="label_digital_clock">Digital Clock</string>
-    <string name="label_analog_clock">Analog Clock</string>
-    <string name="label_world_clock">World Clock</string>
-    <string name="label_countdown">Countdown</string>
+    <string name="label_year_progress">年度进度</string>
+    <string name="label_digital_clock">数字钟</string>
+    <string name="label_analog_clock">模拟时钟</string>
+    <string name="label_world_clock">世界时钟</string>
+    <string name="label_countdown">倒数</string>
     <string name="label_date">日期</string>
-    <string name="label_pedometer">Pedometer</string>
-    <string name="label_compass">Compass</string>
-    <string name="label_bottle_spinner">Bottle Spinner</string>
-    <string name="bottle_spinner_tap">tap to spin</string>
-    <string name="label_rps">Rock Paper Scissors</string>
-    <string name="rps_tap">tap to play</string>
+    <string name="label_pedometer">计步器</string>
+    <string name="label_compass">指南针</string>
+    <string name="label_bottle_spinner">转盘</string>
+    <string name="bottle_spinner_tap">点击旋转</string>
+    <string name="label_rps">石头剪刀布</string>
+    <string name="rps_tap">点击播放</string>
     <string name="ql_display">界面设置</string>
     <string name="ql_show_date">显示日期</string>
     <string name="ql_show_date_desc">在顶部显示日期</string>
-    <string name="ql_date_format">Date format</string>
+    <string name="ql_date_format">日期格式</string>
     <string name="ql_date_default">默认</string>
-    <string name="ql_date_short">Short (Mon, Jan 1)</string>
-    <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
+    <string name="ql_date_short">短时间(周一，1月)</string>
+    <string name="ql_date_full">完整（2026年1月1日星期一）</string>
     <string name="ql_cal_lookahead">日历查询</string>
     <string name="ql_lookahead_15">15 分钟</string>
     <string name="ql_lookahead_30">30 分钟</string>
@@ -104,15 +104,15 @@
     <string name="ql_source_battery_desc">显示充电状态</string>
     <string name="ql_source_weather">天气</string>
     <string name="ql_source_weather_desc">显示当前状况</string>
-    <string name="ql_source_messages">Random Messages</string>
+    <string name="ql_source_messages">随机消息</string>
     <string name="ql_source_messages_desc">显示提示和趣味知识</string>
-    <string name="ql_msg_settings">Messages</string>
-    <string name="ql_msg_interval">Rotation interval</string>
+    <string name="ql_msg_settings">信息</string>
+    <string name="ql_msg_interval">轮播间隔</string>
     <string name="ql_msg_30m">30 分钟</string>
     <string name="ql_msg_1h">1 小时</string>
     <string name="ql_msg_3h">3 小时</string>
     <string name="ql_msg_6h">6 小时</string>
-    <string name="ql_msg_daily">Daily</string>
+    <string name="ql_msg_daily">每天</string>
     <string name="ql_apply">保存</string>
     <string-array name="quicklook_messages">
         <item>水喝够，精神足</item>
@@ -219,22 +219,22 @@
         <item>速度需求 ;)</item>
         <item>	A 代表 Axion</item>
     </string-array>
-    <string name="tile_selection_group_title">Tile</string>
-    <string name="tile_select_title">Select tile</string>
-    <string name="tile_select_summary">Choose a quick setting</string>
-    <string name="tile_size_group_title">Sizing</string>
-    <string name="tile_circle_size_title">Tile size</string>
-    <string name="tile_circle_size_summary">Diameter of the circular tile</string>
-    <string name="pill_height_title">Pill height</string>
-    <string name="pill_height_summary">Height of the pill form</string>
-    <string name="pill_width_title">Pill width</string>
-    <string name="pill_width_summary">Width of the pill form</string>
+    <string name="tile_selection_group_title">平铺显示</string>
+    <string name="tile_select_title">选择快捷设置</string>
+    <string name="tile_select_summary">选择快捷设置</string>
+    <string name="tile_size_group_title">尺寸</string>
+    <string name="tile_circle_size_title">磁贴尺寸</string>
+    <string name="tile_circle_size_summary">圆形磁贴直径</string>
+    <string name="pill_height_title">胶囊高度</string>
+    <string name="pill_height_summary">胶囊形态的高度</string>
+    <string name="pill_width_title">胶囊宽度</string>
+    <string name="pill_width_summary">胶囊形态的宽度</string>
     <string name="pill_autofit_title">自适应药丸宽度</string>
     <string name="pill_autofit_summary">根据标签文本调整药丸大小</string>
     <!-- Clock Configuration -->
-    <string name="clock_bg_translucent">Translucent background</string>
-    <string name="clock_bg_translucent_desc">A rounded solid background matching system colors</string>
-    <string name="clock_bg_transparent">Transparent background</string>
-    <string name="clock_bg_transparent_desc">No card background behind the clock</string>
-    <string name="clock_style_section">Widget Background</string>
+    <string name="clock_bg_translucent">半透明背景</string>
+    <string name="clock_bg_translucent_desc">匹配系统颜色的圆角纯色背景</string>
+    <string name="clock_bg_transparent">透明背景</string>
+    <string name="clock_bg_transparent_desc">时钟后方无卡片背景</string>
+    <string name="clock_style_section">小部件背景</string>
 </resources>
