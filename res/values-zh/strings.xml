@@ -115,96 +115,96 @@
     <string name="ql_msg_daily">Daily</string>
     <string name="ql_apply">保存</string>
     <string-array name="quicklook_messages">
-        <item>stay hydrated \u2014 drink some water</item>
-        <item>take a deep breath and stretch</item>
-        <item>good posture makes a difference</item>
-        <item>time for a screen break?</item>
-        <item>a walk outside can reset your mood</item>
-        <item>don\'t forget to eat well</item>
-        <item>rest is productive too</item>
-        <item>sleep is the best recovery tool</item>
-        <item>your eyes need a break \u2014 look at something far away</item>
-        <item>standing up for a minute helps circulation</item>
-        <item>unclench your jaw and relax your shoulders</item>
-        <item>take three slow breaths right now</item>
-        <item>fresh air does wonders for focus</item>
-        <item>a 20-minute nap can boost creativity</item>
-        <item>sunlight in the morning helps set your body clock</item>
-        <item>you\'re doing great today</item>
-        <item>small steps lead to big changes</item>
-        <item>today is a good day to learn something new</item>
-        <item>be kind to yourself</item>
-        <item>progress, not perfection</item>
-        <item>the best time to start is now</item>
-        <item>less scrolling, more living</item>
-        <item>what would make today great?</item>
-        <item>gratitude changes perspective</item>
-        <item>done is better than perfect</item>
-        <item>your future self will thank you</item>
-        <item>consistency beats intensity</item>
-        <item>you don\'t need motivation \u2014 just start</item>
-        <item>compare yourself to yesterday, not to others</item>
-        <item>the hardest part is usually starting</item>
-        <item>every expert was once a beginner</item>
-        <item>mistakes are data, not failures</item>
-        <item>focus on what you can control</item>
-        <item>celebrate small wins</item>
-        <item>your comfort zone is not where growth happens</item>
-        <item>check in on someone you care about</item>
-        <item>music makes everything better</item>
-        <item>send a message to an old friend</item>
-        <item>a genuine compliment can make someone\'s day</item>
-        <item>listening is an underrated skill</item>
-        <item>being present is the best gift you can give</item>
-        <item>have you backed up your data lately?</item>
-        <item>clear your notifications \u2014 less noise, more focus</item>
-        <item>review your subscriptions \u2014 cancel what you don\'t use</item>
-        <item>update your passwords if it\'s been a while</item>
-        <item>clean your phone screen \u2014 it\'s dirtier than you think</item>
-        <item>organize one folder or drawer today</item>
-        <item>check your storage \u2014 delete what you don\'t need</item>
-        <item>airplane mode is a great focus tool</item>
-        <item>schedule something fun for this week</item>
-        <item>write down three things you\'re grateful for</item>
-        <item>honey never spoils \u2014 3000-year-old jars were found edible</item>
-        <item>octopuses have three hearts and blue blood</item>
-        <item>bananas are berries, but strawberries aren\'t</item>
-        <item>a group of flamingos is called a flamboyance</item>
-        <item>the moon drifts 3.8 cm farther from earth each year</item>
-        <item>venus spins backwards compared to other planets</item>
+        <item>水喝够，精神足</item>
+        <item>深呼吸，伸个懒腰</item>
+        <item>保持良好姿势，效果确实不同</item>
+        <item>该让眼睛休息一下了</item>
+        <item>出去走走，有助于调节心情</item>
+        <item>记得好好吃饭</item>
+        <item>休息也同样重要</item>
+        <item>睡眠是最好的恢复方式</item>
+        <item>让眼睛休息一下，看看远处</item>
+        <item>站一分钟，促进血液循环</item>
+        <item>松开下巴，放松肩膀</item>
+        <item>现在，慢慢深呼吸三次</item>
+        <item>呼吸新鲜空气，提升专注力</item>
+        <item>小睡20分钟，激发创造力</item>
+        <item>早晨晒晒太阳，调整生物钟</item>
+        <item>今天你做得很好</item>
+        <item>小步积累，成就大改变</item>
+        <item>今天很适合学点新知识</item>
+        <item>善待自己</item>
+        <item>进步，不必追求完美</item>
+        <item>现在就行动</item>
+        <item>少刷视频，回归生活</item>
+        <item>今天怎么做才能过得更棒？</item>
+        <item>感恩改变视角</item>
+        <item>先完成，再完美</item>
+        <item>未来的你会感谢现在的自己</item>
+        <item>坚持比短暂的热情更有用</item>
+        <item>你不需要动力，直接开始就行</item>
+        <item>和昨天的自己比，而不是和别人比</item>
+        <item>最难的通常是开始这一步</item>
+        <item>每个专家都曾是从头开始的</item>
+        <item>错误是数据，不是失败</item>
+        <item>专注于你能掌控的事情</item>
+        <item>为小成就而肯定自己</item>
+        <item>成长不会发生在舒适区里</item>
+        <item>关心一下你在乎的人</item>
+        <item>音乐让一切变得更好</item>
+        <item>给老朋友发条消息</item>
+        <item>真诚的赞美能让人一整天都开心</item>
+        <item>倾听是一项被低估的能力</item>
+        <item>专注当下是你最好的给予</item>
+        <item>你最近备份数据了吗？</item>
+        <item>清理通知，少些干扰，多些专注</item>
+        <item>检查订阅，取消不用的项目</item>
+        <item>如果很久没更新密码，更新一下</item>
+        <item>清洁手机屏幕，它比你想象的脏</item>
+        <item>今天整理一个文件夹或抽屉</item>
+        <item>检查存储空间，删除不需要的内容</item>
+        <item>飞行模式是个很好的专注工具</item>
+        <item>本周趣事时间安排</item>
+        <item>写下三件你感激的事情</item>
+        <item>蜂蜜不会变质，3000年前的罐子被发现仍可食用</item>
+        <item>章鱼有三颗心脏和蓝色的血液</item>
+        <item>香蕉是浆果，但草莓不是</item>
+        <item>一群火烈鸟被称为“flamboyance”</item>
+        <item>月球每年远离地球3.8厘米</item>
+        <item>金星与其他行星相比是反向自转的</item>
         <item>每一束阳光在8分20秒前启程，穿越星河现在到你眼前</item>
-        <item>sharks have been around longer than trees</item>
-        <item>footprints on the moon can last millions of years</item>
-        <item>wombat poop is cube-shaped</item>
-        <item>your body has more bacterial cells than human cells</item>
-        <item>a day on venus is longer than a year on venus</item>
+        <item>鲨鱼存在的时间比树木还要久</item>
+        <item>月球上的足迹可以保存数百万年</item>
+        <item>袋熊的粪便是立方体形状的</item>
+        <item>你体内的细菌细胞比人体细胞还多</item>
+        <item>金星上的一天比金星上的一年还要长</item>
         <item>历史上最短的战争持续了38分钟</item>
-        <item>earth\'s core is as hot as the surface of the sun</item>
-        <item>there are more stars than grains of sand on earth</item>
-        <item>water can boil and freeze at the same time \u2014 it\'s called the triple point</item>
-        <item>neutron stars are so dense a teaspoon weighs billions of tons</item>
-        <item>tardigrades can survive in outer space</item>
-        <item>your brain uses about 20% of your body\'s energy</item>
-        <item>the great wall of china is not visible from space with the naked eye</item>
-        <item>humans share about 60% of their DNA with bananas</item>
-        <item>a cloud can weigh more than a million pounds</item>
-        <item>there are more possible chess games than atoms in the universe</item>
-        <item>the mantis shrimp can punch as fast as a bullet</item>
-        <item>dolphins sleep with one eye open</item>
-        <item>the average person walks about 100,000 miles in a lifetime</item>
-        <item>lightning strikes the earth about 100 times per second</item>
-        <item>scotland\'s national animal is the unicorn</item>
-        <item>a single bolt of lightning contains enough energy to toast 100,000 slices of bread</item>
-        <item>the human nose can detect over 1 trillion different scents</item>
-        <item>crows can recognize human faces and hold grudges</item>
-        <item>the amazon rainforest produces 20% of the world\'s oxygen</item>
-        <item>a jiffy is an actual unit of time \u2014 1/100th of a second</item>
-        <item>the eiffel tower can be 15 cm taller during summer due to heat expansion</item>
-        <item>butterflies taste with their feet</item>
-        <item>sea otters hold hands while sleeping so they don\'t drift apart</item>
-        <item>the inventor of the pringles can is buried in one</item>
+        <item>地球核心的温度和太阳表面一样高</item>
+        <item>恒星的数量比地球上的沙粒还要多</item>
+        <item>水可以同时沸腾和结冰，这被称为三相点</item>
+        <item>中子星密度极高，一茶匙就有数十亿吨重</item>
+        <item>水熊虫能在太空中生存</item>
+        <item>你的大脑消耗人体约20%的能量</item>
+        <item>从太空用肉眼是看不到中国长城的</item>
+        <item>人类与香蕉共享约60%的DNA</item>
+        <item>一朵云的重量可以超过一百万磅</item>
+        <item>可能的国际象棋对局数量比宇宙中的原子还要多</item>
+        <item>螳螂虾出拳的速度和子弹一样快</item>
+        <item>海豚睡觉时睁着一只眼睛</item>
+        <item>普通人一生中大约行走10万英里</item>
+        <item>闪电每秒大约击中地球100次</item>
+        <item>苏格兰的国兽是独角兽</item>
+        <item>一道闪电所含的能量足以烤10万片面包</item>
+        <item>人的鼻子可以分辨超过1万亿种气味</item>
+        <item>乌鸦能识别人的面孔并记仇</item>
+        <item>亚马逊雨林产生全球20%的氧气</item>
+        <item>“一瞬”是实际的时间单位，相当于百分之一秒</item>
+        <item>由于热膨胀，埃菲尔铁塔在夏季可以高15厘米</item>
+        <item>蝴蝶的味觉器官位于足部</item>
+        <item>海獭睡觉时手拉手，以免被冲散</item>
+        <item>品客薯片罐的发明者被葬在一个罐子里</item>
         <item>a photon takes 100,000 years to travel from the sun\'s core to its surface</item>
-        <item>the total length of your blood vessels could circle earth twice</item>
+        <item>人体血管总长度可绕地球赤道两圈</item>
         <item>there are more trees on earth than stars in the milky way</item>
         <item>the oldest known joke is from 1900 BC sumeria</item>
         <item>a teaspoon of a neutron star weighs about 6 billion tons</item>
