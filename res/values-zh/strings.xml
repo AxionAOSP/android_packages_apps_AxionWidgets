@@ -11,20 +11,20 @@
     <string name="label_screentime">Screen time</string>
     <string name="label_media_player">媒体播放器</string>
     <!-- Settings -->
-    <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
+    <string name="welcome_message">欢迎使用 Axion，点击这里设置快速查看</string>
     <string name="loading_text">Loading...</string>
-    <string name="toast_calendar_permission_required">Calendar permission is required</string>
+    <string name="toast_calendar_permission_required">请授予日历权限</string>
     <string name="allow_notification_access">Allow notification access</string>
-    <string name="allow_calendar_access">Allow calendar access</string>
+    <string name="allow_calendar_access">允许访问日历</string>
     <string name="access_granted">Access granted</string>
-    <string name="needed_for_now_playing">Needed for now playing</string>
-    <string name="needed_for_calendar_events">Needed for calendar events</string>
+    <string name="needed_for_now_playing">需要现在播放</string>
+    <string name="needed_for_calendar_events">日历事件所需</string>
     <!-- Calendar -->
-    <string name="quick_look_widget_calendar_in_time">in %d min</string>
-    <string name="quick_look_widget_calendar_now">now</string>
-    <string name="quick_look_widget_calendar_tomorrow">Tomorrow</string>
-    <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
-    <string name="quick_look_widget_calendar_no_title">(No title event)</string>
+    <string name="quick_look_widget_calendar_in_time">%d分钟后</string>
+    <string name="quick_look_widget_calendar_now">现在</string>
+    <string name="quick_look_widget_calendar_tomorrow">明天</string>
+    <string name="quick_look_widget_calendar_yesterday">昨天</string>
+    <string name="quick_look_widget_calendar_no_title">(无标题事件)</string>
     <!-- Battery -->
     <string name="battery_widget">省电</string>
     <string name="full_charge">Charged</string>
@@ -89,20 +89,20 @@
     <string name="ql_date_default">默认</string>
     <string name="ql_date_short">Short (Mon, Jan 1)</string>
     <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
-    <string name="ql_cal_lookahead">Calendar lookahead</string>
+    <string name="ql_cal_lookahead">日历查询</string>
     <string name="ql_lookahead_15">15 分钟</string>
     <string name="ql_lookahead_30">30 分钟</string>
     <string name="ql_lookahead_60">1 小时</string>
     <string name="ql_lookahead_120">2 小时</string>
     <string name="ql_data_sources">数据来源</string>
-    <string name="ql_cal_settings">Calendar</string>
-    <string name="ql_source_calendar">Calendar</string>
+    <string name="ql_cal_settings">日历</string>
+    <string name="ql_source_calendar">日历</string>
     <string name="ql_source_calendar_desc">显示近期安排</string>
     <string name="ql_source_media">媒体</string>
     <string name="ql_source_media_desc">显示正在播放内容</string>
     <string name="ql_source_battery">省电</string>
     <string name="ql_source_battery_desc">显示充电状态</string>
-    <string name="ql_source_weather">Weather</string>
+    <string name="ql_source_weather">天气</string>
     <string name="ql_source_weather_desc">显示当前状况</string>
     <string name="ql_source_messages">Random Messages</string>
     <string name="ql_source_messages_desc">显示提示和趣味知识</string>
