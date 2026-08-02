@@ -1,145 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="photos_already_exist">
-        <item quantity="one">%d photo already exists and was omitted.</item>
-        <item quantity="few">%d photos already exist and were omitted.</item>
-        <item quantity="many">%d photos already exist and were omitted.</item>
-        <item quantity="other">%d photos already exist and were omitted.</item>
+        <item quantity="one">%d фотографія вже існує та була пропущена.</item>
+        <item quantity="few">%d фотографії вже існують та були пропущені.</item>
+        <item quantity="many">%d фотографій вже існують та були пропущені.</item>
+        <item quantity="other">%d фотографій вже існують та були пропущені.</item>
     </plurals>
     <!-- Manifest -->
-    <string name="app_name">Axion Widgets</string>
-    <string name="label_photo">Photo</string>
-    <string name="label_tile">Tile</string>
-    <string name="label_media_notification_listener">Media Notification Listener</string>
-    <string name="label_screentime">Screen time</string>
-    <string name="label_media_player">Media Player</string>
+    <string name="app_name">Віджети Axion</string>
+    <string name="label_photo">Фото</string>
+    <string name="label_tile">Плитка</string>
+    <string name="label_media_notification_listener">Слухач медіасповіщень</string>
+    <string name="label_screentime">Екранний час</string>
+    <string name="label_media_player">Медіапрогравач</string>
     <!-- Settings -->
-    <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
-    <string name="loading_text">Loading...</string>
-    <string name="toast_calendar_permission_required">Calendar permission is required</string>
-    <string name="allow_notification_access">Allow notification access</string>
-    <string name="allow_calendar_access">Allow calendar access</string>
-    <string name="access_granted">Access granted</string>
-    <string name="needed_for_now_playing">Needed for now playing</string>
-    <string name="needed_for_calendar_events">Needed for calendar events</string>
+    <string name="welcome_message">Ласкаво просимо до Axion. Натисніть тут, щоби налаштувати швидкий перегляд.</string>
+    <string name="loading_text">Завантаження...</string>
+    <string name="toast_calendar_permission_required">Потрібен дозвіл календаря</string>
+    <string name="allow_notification_access">Надати доступ до сповіщень</string>
+    <string name="allow_calendar_access">Надати доступ до календаря</string>
+    <string name="access_granted">Дозвіл надано</string>
+    <string name="needed_for_now_playing">Потрібно для поточного відтворення</string>
+    <string name="needed_for_calendar_events">Потрібно для подій у календарі</string>
     <!-- Calendar -->
-    <string name="quick_look_widget_calendar_in_time">in %d min</string>
-    <string name="quick_look_widget_calendar_now">now</string>
-    <string name="quick_look_widget_calendar_tomorrow">Tomorrow</string>
-    <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
-    <string name="quick_look_widget_calendar_no_title">(No title event)</string>
+    <string name="quick_look_widget_calendar_in_time">за %d хв</string>
+    <string name="quick_look_widget_calendar_now">Зараз</string>
+    <string name="quick_look_widget_calendar_tomorrow">Завтра</string>
+    <string name="quick_look_widget_calendar_yesterday">Учора</string>
+    <string name="quick_look_widget_calendar_no_title">(Подія без назви)</string>
     <!-- Battery -->
     <string name="battery_widget">Акумулятор</string>
-    <string name="full_charge">Charged</string>
-    <string name="charging">Charging</string>
-    <string name="minutes_left">%1$d min left</string>
+    <string name="full_charge">Заряджено</string>
+    <string name="charging">Заряджання</string>
+    <string name="minutes_left">Залишилось %1$d хв</string>
     <!-- Photo -->
-    <string name="photo_title">Photo</string>
-    <string name="add_photos">Add Photos</string>
-    <string name="add_photos_cd">Add Photos</string>
-    <string name="display_options">Display Options</string>
-    <string name="grayscale_mode">Grayscale Mode</string>
-    <string name="shuffle_interval">Shuffle Interval</string>
-    <string name="select_interval">Select Interval</string>
-    <string name="select_shuffle_interval">Select Shuffle Interval</string>
+    <string name="photo_title">Фото</string>
+    <string name="add_photos">Додати фото</string>
+    <string name="add_photos_cd">Додати фото</string>
+    <string name="display_options">Параметри екрана</string>
+    <string name="grayscale_mode">Режим градацій сірого</string>
+    <string name="shuffle_interval">Інтервал перемішування</string>
+    <string name="select_interval">Обрати інтервал</string>
+    <string name="select_shuffle_interval">Вибрати інтервал перемішування</string>
     <string name="cancel">Скасувати</string>
-    <string name="save_changes">Save Changes</string>
-    <string name="manage_photos">Manage Photos</string>
+    <string name="save_changes">Зберегти зміни</string>
+    <string name="manage_photos">Керувати фотографіями</string>
     <string name="back">Назад</string>
-    <string name="delete_selected">Delete Selected</string>
+    <string name="delete_selected">Видалити вибрані</string>
     <string name="edit">Редагувати</string>
-    <string name="no_photos_selected">No photos selected</string>
-    <string name="photo">Photo</string>
-    <string name="confirm_delete_title">Confirm Delete</string>
-    <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
+    <string name="no_photos_selected">Фото не вибрано</string>
+    <string name="photo">Фото</string>
+    <string name="confirm_delete_title">Підтвердження видалення</string>
+    <string name="confirm_delete_message">Упевнені, що хочете видалити вибрані фото?</string>
     <string name="delete">Видалити</string>
-    <string name="interval_1_minute">1 minute</string>
-    <string name="interval_5_minutes">5 minutes</string>
-    <string name="interval_15_minutes">15 minutes</string>
-    <string name="interval_1_hour">1 hour</string>
+    <string name="interval_1_minute">1 хвилина</string>
+    <string name="interval_5_minutes">5 хвилин</string>
+    <string name="interval_15_minutes">15 хвилин</string>
+    <string name="interval_1_hour">1 година</string>
     <!-- Tiles -->
-    <string name="wifi">Wifi</string>
+    <string name="wifi">Wi-Fi</string>
     <string name="bluetooth">Bluetooth</string>
-    <string name="airplane_mode">Airplane</string>
-    <string name="dark_theme">Dark Theme</string>
+    <string name="airplane_mode">У літаку</string>
+    <string name="dark_theme">Темна тема</string>
     <string name="torch">Ліхтарик</string>
     <string name="dnd">Не турбувати</string>
-    <string name="priority">Priority</string>
-    <string name="alarms_only">Alarms Only</string>
-    <string name="total_silence">Total Silence</string>
+    <string name="priority">Пріоритет</string>
+    <string name="alarms_only">Тільки будильник</string>
+    <string name="total_silence">Узагалі не турбувати</string>
     <string name="auto_rotate">Автоповорот</string>
     <string name="ringer_normal">Дзвінок</string>
     <string name="ringer_vibrate">Вібросигнал</string>
     <string name="ringer_silent">Режим тиші</string>
     <string name="ringer_unknown">Невідомо</string>
     <string name="mobile_data">Мобільні дані</string>
-    <string name="label_year_progress">Year Progress</string>
-    <string name="label_digital_clock">Digital Clock</string>
-    <string name="label_analog_clock">Analog Clock</string>
-    <string name="label_world_clock">World Clock</string>
-    <string name="label_countdown">Countdown</string>
+    <string name="label_year_progress">Прогрес року</string>
+    <string name="label_digital_clock">Цифровий годинник</string>
+    <string name="label_analog_clock">Аналоговий годинник</string>
+    <string name="label_world_clock">Світовий годинник</string>
+    <string name="label_countdown">Зворотній відлік</string>
     <string name="label_date">Дата</string>
-    <string name="label_pedometer">Pedometer</string>
-    <string name="label_compass">Compass</string>
-    <string name="label_bottle_spinner">Bottle Spinner</string>
-    <string name="bottle_spinner_tap">tap to spin</string>
-    <string name="label_rps">Rock Paper Scissors</string>
-    <string name="rps_tap">tap to play</string>
+    <string name="label_pedometer">Крокомір</string>
+    <string name="label_compass">Компас</string>
+    <string name="label_bottle_spinner">Пляшечка</string>
+    <string name="bottle_spinner_tap">натисніть, щоб обернути</string>
+    <string name="label_rps">Камінь, ножиці, папір</string>
+    <string name="rps_tap">натисніть, аби грати</string>
     <string name="ql_display">Дисплей</string>
-    <string name="ql_show_date">Show date</string>
-    <string name="ql_show_date_desc">Show date on the top line</string>
-    <string name="ql_date_format">Date format</string>
+    <string name="ql_show_date">Показувати дату</string>
+    <string name="ql_show_date_desc">Показувати дату у верхньому рядку</string>
+    <string name="ql_date_format">Формат дати</string>
     <string name="ql_date_default">За замовчуванням</string>
-    <string name="ql_date_short">Short (Mon, Jan 1)</string>
-    <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
-    <string name="ql_cal_lookahead">Calendar lookahead</string>
-    <string name="ql_lookahead_15">15 minutes</string>
-    <string name="ql_lookahead_30">30 minutes</string>
-    <string name="ql_lookahead_60">1 hour</string>
-    <string name="ql_lookahead_120">2 hours</string>
-    <string name="ql_data_sources">Data Sources</string>
-    <string name="ql_cal_settings">Calendar</string>
-    <string name="ql_source_calendar">Calendar</string>
-    <string name="ql_source_calendar_desc">Show upcoming events</string>
-    <string name="ql_source_media">Media</string>
-    <string name="ql_source_media_desc">Show now playing info</string>
+    <string name="ql_date_short">Короткий (Пн, 1 січ)</string>
+    <string name="ql_date_full">Повний (Понеділок, 1 січня 2026)</string>
+    <string name="ql_cal_lookahead">Майбутні події</string>
+    <string name="ql_lookahead_15">15 хвилин</string>
+    <string name="ql_lookahead_30">30 хвилин</string>
+    <string name="ql_lookahead_60">1 година</string>
+    <string name="ql_lookahead_120">2 години</string>
+    <string name="ql_data_sources">Джерела даних</string>
+    <string name="ql_cal_settings">Календар</string>
+    <string name="ql_source_calendar">Календар</string>
+    <string name="ql_source_calendar_desc">Показує найближчі події</string>
+    <string name="ql_source_media">Медіа</string>
+    <string name="ql_source_media_desc">Показує інформацію про те, що зараз відтворюється</string>
     <string name="ql_source_battery">Акумулятор</string>
-    <string name="ql_source_battery_desc">Show charging status</string>
-    <string name="ql_source_weather">Weather</string>
-    <string name="ql_source_weather_desc">Show current conditions</string>
-    <string name="ql_source_messages">Random Messages</string>
-    <string name="ql_source_messages_desc">Show tips and fun facts</string>
-    <string name="ql_msg_settings">Messages</string>
-    <string name="ql_msg_interval">Rotation interval</string>
-    <string name="ql_msg_30m">30 minutes</string>
-    <string name="ql_msg_1h">1 hour</string>
-    <string name="ql_msg_3h">3 hours</string>
-    <string name="ql_msg_6h">6 hours</string>
-    <string name="ql_msg_daily">Daily</string>
+    <string name="ql_source_battery_desc">Показує стан заряджання</string>
+    <string name="ql_source_weather">Погода</string>
+    <string name="ql_source_weather_desc">Показує поточні умови</string>
+    <string name="ql_source_messages">Випадкові повідомлення</string>
+    <string name="ql_source_messages_desc">Показує поради та цікаві факти</string>
+    <string name="ql_msg_settings">Повідомлення</string>
+    <string name="ql_msg_interval">Частота зміни</string>
+    <string name="ql_msg_30m">30 хвилин</string>
+    <string name="ql_msg_1h">1 година</string>
+    <string name="ql_msg_3h">3 години</string>
+    <string name="ql_msg_6h">6 години</string>
+    <string name="ql_msg_daily">Щоденно</string>
     <string name="ql_apply">Зберегти</string>
     <string-array name="quicklook_messages">
-        <item>stay hydrated \u2014 drink some water</item>
-        <item>take a deep breath and stretch</item>
-        <item>good posture makes a difference</item>
-        <item>time for a screen break?</item>
-        <item>a walk outside can reset your mood</item>
-        <item>don\'t forget to eat well</item>
-        <item>rest is productive too</item>
-        <item>sleep is the best recovery tool</item>
-        <item>your eyes need a break \u2014 look at something far away</item>
-        <item>standing up for a minute helps circulation</item>
-        <item>unclench your jaw and relax your shoulders</item>
-        <item>take three slow breaths right now</item>
-        <item>fresh air does wonders for focus</item>
-        <item>a 20-minute nap can boost creativity</item>
-        <item>sunlight in the morning helps set your body clock</item>
-        <item>you\'re doing great today</item>
-        <item>small steps lead to big changes</item>
-        <item>today is a good day to learn something new</item>
-        <item>be kind to yourself</item>
-        <item>progress, not perfection</item>
-        <item>the best time to start is now</item>
-        <item>less scrolling, more living</item>
+        <item>підтримуйте водний баланс \u2014 пийте воду</item>
+        <item>зробіть глибокий вдих і потягніться</item>
+        <item>хороша постава має значення</item>
+        <item>пора відпочити від екрана?</item>
+        <item>прогулянка на вулиці може покращити настрій</item>
+        <item>не забувайте добре їсти</item>
+        <item>відпочинок також приносить плоди</item>
+        <item>сон — найкращий інструмент відновлення</item>
+        <item>вашим очам потрібен відпочинок \u2014 подивіться на щось вдалині</item>
+        <item>хвилина стояння на ногах покращує кровообіг</item>
+        <item>розтисніть щелепи й розслабте плечі</item>
+        <item>зробіть три повільні вдихи прямо зараз</item>
+        <item>свіже повітря неабияк допомагає зосередитися</item>
+        <item>20-хвилинний сон може стимулювати творчі здібності</item>
+        <item>ранкове сонячне світло допомагає налаштувати ваш біологічний годинник</item>
+        <item>ви сьогодні чудово справляєтеся</item>
+        <item>маленькі кроки ведуть до великих змін</item>
+        <item>сьогодні чудовий день, щоб навчитися чогось нового</item>
+        <item>будь добрим до себе</item>
+        <item>прогрес, а не досконалість</item>
+        <item>найліпший час розпочати зараз</item>
+        <item>менше гортання, більше життя</item>
         <item>what would make today great?</item>
         <item>gratitude changes perspective</item>
         <item>done is better than perfect</item>
@@ -190,54 +190,54 @@
         <item>your brain uses about 20% of your body\'s energy</item>
         <item>the great wall of china is not visible from space with the naked eye</item>
         <item>humans share about 60% of their DNA with bananas</item>
-        <item>a cloud can weigh more than a million pounds</item>
-        <item>there are more possible chess games than atoms in the universe</item>
-        <item>the mantis shrimp can punch as fast as a bullet</item>
-        <item>dolphins sleep with one eye open</item>
-        <item>the average person walks about 100,000 miles in a lifetime</item>
-        <item>lightning strikes the earth about 100 times per second</item>
-        <item>scotland\'s national animal is the unicorn</item>
-        <item>a single bolt of lightning contains enough energy to toast 100,000 slices of bread</item>
-        <item>the human nose can detect over 1 trillion different scents</item>
-        <item>crows can recognize human faces and hold grudges</item>
-        <item>the amazon rainforest produces 20% of the world\'s oxygen</item>
-        <item>a jiffy is an actual unit of time \u2014 1/100th of a second</item>
-        <item>the eiffel tower can be 15 cm taller during summer due to heat expansion</item>
-        <item>butterflies taste with their feet</item>
-        <item>sea otters hold hands while sleeping so they don\'t drift apart</item>
-        <item>the inventor of the pringles can is buried in one</item>
-        <item>a photon takes 100,000 years to travel from the sun\'s core to its surface</item>
-        <item>the total length of your blood vessels could circle earth twice</item>
-        <item>there are more trees on earth than stars in the milky way</item>
-        <item>the oldest known joke is from 1900 BC sumeria</item>
-        <item>a teaspoon of a neutron star weighs about 6 billion tons</item>
-        <item>the longest hiccuping spree lasted 68 years</item>
-        <item>the heart of a blue whale is the size of a small car</item>
-        <item>you can\'t hum while holding your nose \u2014 try it</item>
-        <item>oxford university is older than the aztec empire</item>
-        <item>cleopatra lived closer in time to the moon landing than to the building of the pyramids</item>
-        <item>tap to access axion premium features</item>
-        <item>time for some axion :)</item>
-        <item>need more ram? subscribe to axion premium and download ram!</item>
-        <item>need for speed ;)</item>
-        <item>a is for axion</item>
+        <item>хмара може важити понад мільйон фунтів</item>
+        <item>варіантів шахових партій більше, ніж атомів у всьому всесвіті</item>
+        <item>рак-богомол може бити зі швидкістю кулі</item>
+        <item>дельфіни сплять з одним розплющеним оком</item>
+        <item>середньостатистична людина за все життя проходить пішки близько 100 000 миль</item>
+        <item>блискавка вдаряє в землю приблизно 100 разів на секунду</item>
+        <item>національна тварина Шотландії — єдиноріг</item>
+        <item>один розряд блискавки містить достатньо енергії, щоби підсмажити 100 000 скибочок хліба</item>
+        <item>людський ніс здатний розрізняти понад 1 трильйон різних запахів</item>
+        <item>ворони можуть впізнавати людські обличчя та тримати образи</item>
+        <item>тропічні ліси Амазонії виробляють 20% світового кисню</item>
+        <item>«джиффі» \u2014 це реальна одиниця часу, що дорівнює 1/100 секунди</item>
+        <item>Ейфелева вежа може ставати на 15 см вищою улітку через теплове розширення</item>
+        <item>метелики відчувають смак лапками</item>
+        <item>морські видри тримаються за лапки під час сну, щоб не розпливтися в різні боки</item>
+        <item>винахідник банки Pringles похований в одній із них</item>
+        <item>фотону потрібно 100 000 років, аби дістатися від ядра Сонця до його поверхні</item>
+        <item>загальна довжина ваших кровоносних судин могла б двічі обв’язати Землю</item>
+        <item>на Землі більше дерев, ніж зірок у Чумацькому Шляху</item>
+        <item>найдавніший відомий жарт походить із Шумеру 1900 року до н. е.</item>
+        <item>чайна ложка нейтронної зірки важить близько 6 мільярдів тонн</item>
+        <item>найдовша серія гикавки тривала 68 років</item>
+        <item>серце синього кита розміром з невеликий автомобіль</item>
+        <item>неможливо мугикати, затиснувши ніс \u2014 спробуйте</item>
+        <item>Оксфордський університет старший за імперію ацтеків</item>
+        <item>Клеопатра жила ближче до висадки на Місяць, ніж до будівництва пірамід</item>
+        <item>торкніться, щоб отримати доступ до преміальних функцій Axion</item>
+        <item>час для Axion :)</item>
+        <item>треба більше оперативки? підпишіться на Axion Premium та завантажте її!</item>
+        <item>жага швидкості ;)</item>
+        <item>A — це Axion</item>
     </string-array>
-    <string name="tile_selection_group_title">Tile</string>
-    <string name="tile_select_title">Select tile</string>
-    <string name="tile_select_summary">Choose a quick setting</string>
-    <string name="tile_size_group_title">Sizing</string>
-    <string name="tile_circle_size_title">Tile size</string>
-    <string name="tile_circle_size_summary">Diameter of the circular tile</string>
-    <string name="pill_height_title">Pill height</string>
-    <string name="pill_height_summary">Height of the pill form</string>
-    <string name="pill_width_title">Pill width</string>
-    <string name="pill_width_summary">Width of the pill form</string>
-    <string name="pill_autofit_title">Auto-fit pill width</string>
-    <string name="pill_autofit_summary">Size pill to fit label text</string>
+    <string name="tile_selection_group_title">Плитка</string>
+    <string name="tile_select_title">Виберіть плитку</string>
+    <string name="tile_select_summary">Вибрати швидке налаштування</string>
+    <string name="tile_size_group_title">Розмірна сітка</string>
+    <string name="tile_circle_size_title">Розмір плитки</string>
+    <string name="tile_circle_size_summary">Діаметр круглої плитки</string>
+    <string name="pill_height_title">Висота таблетки</string>
+    <string name="pill_height_summary">Висота форми таблетки</string>
+    <string name="pill_width_title">Ширина таблетки</string>
+    <string name="pill_width_summary">Ширина форми таблетки</string>
+    <string name="pill_autofit_title">Автопідбір ширини таблетки</string>
+    <string name="pill_autofit_summary">Підігнати розмір таблетки під текст мітки</string>
     <!-- Clock Configuration -->
-    <string name="clock_bg_translucent">Translucent background</string>
-    <string name="clock_bg_translucent_desc">A rounded solid background matching system colors</string>
-    <string name="clock_bg_transparent">Transparent background</string>
-    <string name="clock_bg_transparent_desc">No card background behind the clock</string>
-    <string name="clock_style_section">Widget Background</string>
+    <string name="clock_bg_translucent">Напівпрозорий фон</string>
+    <string name="clock_bg_translucent_desc">Закруглений суцільний фон, що відповідає системним кольорам</string>
+    <string name="clock_bg_transparent">Прозорий фон</string>
+    <string name="clock_bg_transparent_desc">Прибирає фон картки за годинником</string>
+    <string name="clock_style_section">Фон віджета</string>
 </resources>

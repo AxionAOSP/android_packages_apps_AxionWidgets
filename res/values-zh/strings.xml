@@ -29,7 +29,7 @@
     <string name="battery_widget">省电</string>
     <string name="full_charge">Charged</string>
     <string name="charging">充电中</string>
-    <string name="minutes_left">%1$d min left</string>
+    <string name="minutes_left">剩余 %1$d 分钟</string>
     <!-- Photo -->
     <string name="photo_title">Photo</string>
     <string name="add_photos">Add Photos</string>
@@ -51,9 +51,9 @@
     <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
     <string name="delete">删除</string>
     <string name="interval_1_minute">1 minute</string>
-    <string name="interval_5_minutes">5 minutes</string>
-    <string name="interval_15_minutes">15 minutes</string>
-    <string name="interval_1_hour">1 hour</string>
+    <string name="interval_5_minutes">5 分钟</string>
+    <string name="interval_15_minutes">15 分钟</string>
+    <string name="interval_1_hour">1 小时</string>
     <!-- Tiles -->
     <string name="wifi">Wifi</string>
     <string name="bluetooth">蓝牙</string>
@@ -90,10 +90,10 @@
     <string name="ql_date_short">Short (Mon, Jan 1)</string>
     <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
     <string name="ql_cal_lookahead">Calendar lookahead</string>
-    <string name="ql_lookahead_15">15 minutes</string>
-    <string name="ql_lookahead_30">30 minutes</string>
-    <string name="ql_lookahead_60">1 hour</string>
-    <string name="ql_lookahead_120">2 hours</string>
+    <string name="ql_lookahead_15">15 分钟</string>
+    <string name="ql_lookahead_30">30 分钟</string>
+    <string name="ql_lookahead_60">1 小时</string>
+    <string name="ql_lookahead_120">2 小时</string>
     <string name="ql_data_sources">Data Sources</string>
     <string name="ql_cal_settings">Calendar</string>
     <string name="ql_source_calendar">Calendar</string>
@@ -108,10 +108,10 @@
     <string name="ql_source_messages_desc">Show tips and fun facts</string>
     <string name="ql_msg_settings">Messages</string>
     <string name="ql_msg_interval">Rotation interval</string>
-    <string name="ql_msg_30m">30 minutes</string>
-    <string name="ql_msg_1h">1 hour</string>
-    <string name="ql_msg_3h">3 hours</string>
-    <string name="ql_msg_6h">6 hours</string>
+    <string name="ql_msg_30m">30 分钟</string>
+    <string name="ql_msg_1h">1 小时</string>
+    <string name="ql_msg_3h">3 小时</string>
+    <string name="ql_msg_6h">6 小时</string>
     <string name="ql_msg_daily">Daily</string>
     <string name="ql_apply">保存</string>
     <string-array name="quicklook_messages">
@@ -172,13 +172,13 @@
         <item>a group of flamingos is called a flamboyance</item>
         <item>the moon drifts 3.8 cm farther from earth each year</item>
         <item>venus spins backwards compared to other planets</item>
-        <item>sunlight takes 8 minutes and 20 seconds to reach earth</item>
+        <item>每一束阳光在8分20秒前启程，穿越星河现在到你眼前</item>
         <item>sharks have been around longer than trees</item>
         <item>footprints on the moon can last millions of years</item>
         <item>wombat poop is cube-shaped</item>
         <item>your body has more bacterial cells than human cells</item>
         <item>a day on venus is longer than a year on venus</item>
-        <item>the shortest war in history lasted 38 minutes</item>
+        <item>历史上最短的战争持续了38分钟</item>
         <item>earth\'s core is as hot as the surface of the sun</item>
         <item>there are more stars than grains of sand on earth</item>
         <item>water can boil and freeze at the same time \u2014 it\'s called the triple point</item>
