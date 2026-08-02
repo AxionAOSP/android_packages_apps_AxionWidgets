@@ -7,9 +7,9 @@
     <string name="app_name">Axion Widgets</string>
     <string name="label_photo">Photo</string>
     <string name="label_tile">Tile</string>
-    <string name="label_media_notification_listener">Media Notification Listener</string>
+    <string name="label_media_notification_listener">媒体通知服务</string>
     <string name="label_screentime">Screen time</string>
-    <string name="label_media_player">Media Player</string>
+    <string name="label_media_player">媒体播放器</string>
     <!-- Settings -->
     <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
     <string name="loading_text">Loading...</string>
@@ -55,7 +55,7 @@
     <string name="interval_15_minutes">15 分钟</string>
     <string name="interval_1_hour">1 小时</string>
     <!-- Tiles -->
-    <string name="wifi">Wifi</string>
+    <string name="wifi">WiFi</string>
     <string name="bluetooth">蓝牙</string>
     <string name="airplane_mode">Airplane</string>
     <string name="dark_theme">Dark Theme</string>
@@ -83,8 +83,8 @@
     <string name="label_rps">Rock Paper Scissors</string>
     <string name="rps_tap">tap to play</string>
     <string name="ql_display">界面设置</string>
-    <string name="ql_show_date">Show date</string>
-    <string name="ql_show_date_desc">Show date on the top line</string>
+    <string name="ql_show_date">显示日期</string>
+    <string name="ql_show_date_desc">在顶部显示日期</string>
     <string name="ql_date_format">Date format</string>
     <string name="ql_date_default">默认</string>
     <string name="ql_date_short">Short (Mon, Jan 1)</string>
@@ -94,18 +94,18 @@
     <string name="ql_lookahead_30">30 分钟</string>
     <string name="ql_lookahead_60">1 小时</string>
     <string name="ql_lookahead_120">2 小时</string>
-    <string name="ql_data_sources">Data Sources</string>
+    <string name="ql_data_sources">数据来源</string>
     <string name="ql_cal_settings">Calendar</string>
     <string name="ql_source_calendar">Calendar</string>
-    <string name="ql_source_calendar_desc">Show upcoming events</string>
+    <string name="ql_source_calendar_desc">显示近期安排</string>
     <string name="ql_source_media">媒体</string>
-    <string name="ql_source_media_desc">Show now playing info</string>
+    <string name="ql_source_media_desc">显示正在播放内容</string>
     <string name="ql_source_battery">省电</string>
-    <string name="ql_source_battery_desc">Show charging status</string>
+    <string name="ql_source_battery_desc">显示充电状态</string>
     <string name="ql_source_weather">Weather</string>
-    <string name="ql_source_weather_desc">Show current conditions</string>
+    <string name="ql_source_weather_desc">显示当前状况</string>
     <string name="ql_source_messages">Random Messages</string>
-    <string name="ql_source_messages_desc">Show tips and fun facts</string>
+    <string name="ql_source_messages_desc">显示提示和趣味知识</string>
     <string name="ql_msg_settings">Messages</string>
     <string name="ql_msg_interval">Rotation interval</string>
     <string name="ql_msg_30m">30 分钟</string>
@@ -203,21 +203,21 @@
         <item>蝴蝶的味觉器官位于足部</item>
         <item>海獭睡觉时手拉手，以免被冲散</item>
         <item>品客薯片罐的发明者被葬在一个罐子里</item>
-        <item>a photon takes 100,000 years to travel from the sun\'s core to its surface</item>
+        <item>光子从太阳核心到表面需要10万年</item>
         <item>人体血管总长度可绕地球赤道两圈</item>
-        <item>there are more trees on earth than stars in the milky way</item>
-        <item>the oldest known joke is from 1900 BC sumeria</item>
-        <item>a teaspoon of a neutron star weighs about 6 billion tons</item>
-        <item>the longest hiccuping spree lasted 68 years</item>
-        <item>the heart of a blue whale is the size of a small car</item>
-        <item>you can\'t hum while holding your nose \u2014 try it</item>
-        <item>oxford university is older than the aztec empire</item>
-        <item>cleopatra lived closer in time to the moon landing than to the building of the pyramids</item>
-        <item>tap to access axion premium features</item>
-        <item>time for some axion :)</item>
-        <item>need more ram? subscribe to axion premium and download ram!</item>
-        <item>need for speed ;)</item>
-        <item>a is for axion</item>
+        <item>地球上的树木比银河系中的恒星还多</item>
+        <item>已知最古老的笑话出自公元前1900年的苏美尔</item>
+        <item>一茶匙中子星物质重约60亿吨</item>
+        <item>打嗝最久的一次持续了68年</item>
+        <item>蓝鲸的心脏有一辆小汽车那么大</item>
+        <item>捏着鼻子无法哼出声，试试看</item>
+        <item>牛津大学比阿兹特克帝国还要古老</item>
+        <item>克利奥帕特拉生活的年代距离登月比距离建造金字塔更近</item>
+        <item>点击访问 Axion 高级功能</item>
+        <item>该用一下 Axion 了 :)</item>
+        <item>需要更多内存？订阅 Axion 高级版并下载内存！</item>
+        <item>速度需求 ;)</item>
+        <item>	A 代表 Axion</item>
     </string-array>
     <string name="tile_selection_group_title">Tile</string>
     <string name="tile_select_title">Select tile</string>
