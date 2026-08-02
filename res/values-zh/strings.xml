@@ -14,7 +14,7 @@
     <string name="welcome_message">欢迎使用 Axion，点击这里设置快速查看</string>
     <string name="loading_text">Loading...</string>
     <string name="toast_calendar_permission_required">请授予日历权限</string>
-    <string name="allow_notification_access">Allow notification access</string>
+    <string name="allow_notification_access">授予通知使用权</string>
     <string name="allow_calendar_access">允许访问日历</string>
     <string name="access_granted">Access granted</string>
     <string name="needed_for_now_playing">需要现在播放</string>
@@ -34,7 +34,7 @@
     <string name="photo_title">Photo</string>
     <string name="add_photos">Add Photos</string>
     <string name="add_photos_cd">Add Photos</string>
-    <string name="display_options">Display Options</string>
+    <string name="display_options">显示选项</string>
     <string name="grayscale_mode">Grayscale Mode</string>
     <string name="shuffle_interval">Shuffle Interval</string>
     <string name="select_interval">Select Interval</string>
@@ -43,12 +43,12 @@
     <string name="save_changes">Save Changes</string>
     <string name="manage_photos">Manage Photos</string>
     <string name="back">返回</string>
-    <string name="delete_selected">Delete Selected</string>
+    <string name="delete_selected">删除所选项</string>
     <string name="edit">编辑</string>
-    <string name="no_photos_selected">No photos selected</string>
+    <string name="no_photos_selected">未选择照片</string>
     <string name="photo">Photo</string>
-    <string name="confirm_delete_title">Confirm Delete</string>
-    <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
+    <string name="confirm_delete_title">确认删除</string>
+    <string name="confirm_delete_message">确定删除所选中图片吗？</string>
     <string name="delete">删除</string>
     <string name="interval_1_minute">1 minute</string>
     <string name="interval_5_minutes">5 分钟</string>
@@ -229,8 +229,8 @@
     <string name="pill_height_summary">Height of the pill form</string>
     <string name="pill_width_title">Pill width</string>
     <string name="pill_width_summary">Width of the pill form</string>
-    <string name="pill_autofit_title">Auto-fit pill width</string>
-    <string name="pill_autofit_summary">Size pill to fit label text</string>
+    <string name="pill_autofit_title">自适应药丸宽度</string>
+    <string name="pill_autofit_summary">根据标签文本调整药丸大小</string>
     <!-- Clock Configuration -->
     <string name="clock_bg_translucent">Translucent background</string>
     <string name="clock_bg_translucent_desc">A rounded solid background matching system colors</string>
