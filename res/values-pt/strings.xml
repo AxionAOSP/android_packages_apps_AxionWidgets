@@ -29,7 +29,7 @@
     <!-- Battery -->
     <string name="battery_widget">Bateria</string>
     <string name="full_charge">Charged</string>
-    <string name="charging">Charging</string>
+    <string name="charging">Carregando</string>
     <string name="minutes_left">%1$d min left</string>
     <!-- Photo -->
     <string name="photo_title">Photo</string>
@@ -99,7 +99,7 @@
     <string name="ql_cal_settings">Calendar</string>
     <string name="ql_source_calendar">Calendar</string>
     <string name="ql_source_calendar_desc">Show upcoming events</string>
-    <string name="ql_source_media">Media</string>
+    <string name="ql_source_media">Mídia</string>
     <string name="ql_source_media_desc">Show now playing info</string>
     <string name="ql_source_battery">Bateria</string>
     <string name="ql_source_battery_desc">Show charging status</string>
