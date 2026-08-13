@@ -229,13 +229,13 @@
     <string name="pill_height_title">Altura do pílula</string>
     <string name="pill_height_summary">Altura da forma da pílula</string>
     <string name="pill_width_title">Largura do pílula</string>
-    <string name="pill_width_summary">Width of the pill form</string>
-    <string name="pill_autofit_title">Auto-fit pill width</string>
-    <string name="pill_autofit_summary">Size pill to fit label text</string>
+    <string name="pill_width_summary">Largura do formato da pílula</string>
+    <string name="pill_autofit_title">Ajustar largura da pílula automaticamente</string>
+    <string name="pill_autofit_summary">Tamanho pílula para caber no texto do rótulo</string>
     <!-- Clock Configuration -->
-    <string name="clock_bg_translucent">Translucent background</string>
-    <string name="clock_bg_translucent_desc">A rounded solid background matching system colors</string>
-    <string name="clock_bg_transparent">Transparent background</string>
-    <string name="clock_bg_transparent_desc">No card background behind the clock</string>
-    <string name="clock_style_section">Widget Background</string>
+    <string name="clock_bg_translucent">Fundo translúcido</string>
+    <string name="clock_bg_translucent_desc">Um fundo sólido arredondado que combina com as cores do sistema</string>
+    <string name="clock_bg_transparent">Fundo transparente</string>
+    <string name="clock_bg_transparent_desc">Nenhum plano de fundo atrás do relógio</string>
+    <string name="clock_style_section">Plano de fundo do Widget</string>
 </resources>
