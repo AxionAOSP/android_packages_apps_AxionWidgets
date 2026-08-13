@@ -103,7 +103,7 @@
     <string name="ql_source_media_desc">Mostrar informação de reprodução agora</string>
     <string name="ql_source_battery">Bateria</string>
     <string name="ql_source_battery_desc">Mostrar status de carregamento</string>
-    <string name="ql_source_weather">Clima</string>
+    <string name="ql_source_weather">Tempo</string>
     <string name="ql_source_weather_desc">Exibir condições atuais</string>
     <string name="ql_source_messages">Mensagens aleatórias</string>
     <string name="ql_source_messages_desc">Mostrar dicas e fatos divertidos</string>
@@ -129,16 +129,16 @@
         <item>destrave a mandíbula e relaxe os ombros</item>
         <item>respire fundo três vezes agora mesmo</item>
         <item>ar fresco faz maravilhas pela concentração</item>
-        <item>a 20-minute nap can boost creativity</item>
-        <item>sunlight in the morning helps set your body clock</item>
-        <item>you\'re doing great today</item>
-        <item>small steps lead to big changes</item>
-        <item>today is a good day to learn something new</item>
-        <item>be kind to yourself</item>
-        <item>progress, not perfection</item>
-        <item>the best time to start is now</item>
-        <item>less scrolling, more living</item>
-        <item>what would make today great?</item>
+        <item>um cochilo de 20 minutos pode impulsionar a criatividade</item>
+        <item>a luz do sol pela manhã ajuda a regular o seu relógio biológico</item>
+        <item>você está indo muito bem hoje</item>
+        <item>pequenos passos levam a grandes mudanças</item>
+        <item>hoje é um bom dia para aprender algo novo</item>
+        <item>seja gentil com você mesmo</item>
+        <item>progresso, não perfeição</item>
+        <item>o melhor momento para começar é agora</item>
+        <item>menos rolagem e mais vida</item>
+        <item>o que tornaria o dia de hoje ótimo?</item>
         <item>a gratidão muda a perspectiva</item>
         <item>feito é melhor que perfeito</item>
         <item>o seu eu do futuro vai lhe agradecer</item>
@@ -203,12 +203,12 @@
         <item>a torre eiffel pode ser 15 cm mais alta durante o verão devido à expansão de calor</item>
         <item>as borboletas sentem o gosto com as patas</item>
         <item>as lontras-marinhas dão as mãos enquanto dormem para não se separarem</item>
-        <item>the inventor of the pringles can is buried in one</item>
-        <item>a photon takes 100,000 years to travel from the sun\'s core to its surface</item>
-        <item>the total length of your blood vessels could circle earth twice</item>
-        <item>there are more trees on earth than stars in the milky way</item>
-        <item>the oldest known joke is from 1900 BC sumeria</item>
-        <item>a teaspoon of a neutron star weighs about 6 billion tons</item>
+        <item>o inventor da lata de Pringles está enterrado dentro de uma</item>
+        <item>um fóton leva 100.000 anos para viajar do núcleo do Sol até a sua superfície</item>
+        <item>o comprimento total dos seus vasos sanguíneos poderia dar duas voltas ao redor da Terra</item>
+        <item>há mais árvores na Terra do que estrelas na Via Láctea</item>
+        <item>a piada mais antiga de que se tem registro vem da Suméria, de 1900 a. C</item>
+        <item>uma colher de chá de uma estrela de nêutrons pesa cerca de 6 bilhões de toneladas</item>
         <item>the longest hiccuping spree lasted 68 years</item>
         <item>the heart of a blue whale is the size of a small car</item>
         <item>you can\'t hum while holding your nose \u2014 try it</item>
