@@ -209,26 +209,26 @@
         <item>há mais árvores na Terra do que estrelas na Via Láctea</item>
         <item>a piada mais antiga de que se tem registro vem da Suméria, de 1900 a. C</item>
         <item>uma colher de chá de uma estrela de nêutrons pesa cerca de 6 bilhões de toneladas</item>
-        <item>the longest hiccuping spree lasted 68 years</item>
-        <item>the heart of a blue whale is the size of a small car</item>
-        <item>you can\'t hum while holding your nose \u2014 try it</item>
-        <item>oxford university is older than the aztec empire</item>
-        <item>cleopatra lived closer in time to the moon landing than to the building of the pyramids</item>
-        <item>tap to access axion premium features</item>
-        <item>time for some axion :)</item>
-        <item>need more ram? subscribe to axion premium and download ram!</item>
-        <item>need for speed ;)</item>
-        <item>a is for axion</item>
+        <item>o episódio de soluços mais longo durou 68 anos</item>
+        <item>o coração de uma baleia azul é do tamanho de um carro pequeno</item>
+        <item>você não consegue cantarolar enquanto segura o seu nariz \u2014 experimente</item>
+        <item>a universidade de oxford é mais antiga que o império azteca</item>
+        <item>cleópatra viveu mais perto do pouso na Lua do que da construção das pirâmides</item>
+        <item>toque para acessar as funcionalidades premium de axion</item>
+        <item>hora de um pouco de Axion :)</item>
+        <item>precisa de mais ram? assine axion premium e baixe ram agora!</item>
+        <item>preciso de velociada ;)</item>
+        <item>a é para axion</item>
     </string-array>
     <string name="tile_selection_group_title">Bloco</string>
-    <string name="tile_select_title">Select tile</string>
-    <string name="tile_select_summary">Choose a quick setting</string>
-    <string name="tile_size_group_title">Sizing</string>
-    <string name="tile_circle_size_title">Tile size</string>
-    <string name="tile_circle_size_summary">Diameter of the circular tile</string>
-    <string name="pill_height_title">Pill height</string>
-    <string name="pill_height_summary">Height of the pill form</string>
-    <string name="pill_width_title">Pill width</string>
+    <string name="tile_select_title">Selecionar bloco</string>
+    <string name="tile_select_summary">Escolha uma configuração rápida</string>
+    <string name="tile_size_group_title">Dimensionamento</string>
+    <string name="tile_circle_size_title">Tamanho do bloco</string>
+    <string name="tile_circle_size_summary">Diâmetro do bloco circular</string>
+    <string name="pill_height_title">Altura do pílula</string>
+    <string name="pill_height_summary">Altura da forma da pílula</string>
+    <string name="pill_width_title">Largura do pílula</string>
     <string name="pill_width_summary">Width of the pill form</string>
     <string name="pill_autofit_title">Auto-fit pill width</string>
     <string name="pill_autofit_summary">Size pill to fit label text</string>
