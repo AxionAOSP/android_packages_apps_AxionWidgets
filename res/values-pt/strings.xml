@@ -78,57 +78,57 @@
     <string name="label_countdown">Contagem regressiva</string>
     <string name="label_date">Data</string>
     <string name="label_pedometer">Pedômetro</string>
-    <string name="label_compass">Compass</string>
-    <string name="label_bottle_spinner">Bottle Spinner</string>
-    <string name="bottle_spinner_tap">tap to spin</string>
-    <string name="label_rps">Rock Paper Scissors</string>
-    <string name="rps_tap">tap to play</string>
+    <string name="label_compass">Bússola</string>
+    <string name="label_bottle_spinner">Gira Garrafa</string>
+    <string name="bottle_spinner_tap">toque para girar</string>
+    <string name="label_rps">Pedra, Papel ou Tesoura</string>
+    <string name="rps_tap">toque para jogar</string>
     <string name="ql_display">Tela</string>
-    <string name="ql_show_date">Show date</string>
-    <string name="ql_show_date_desc">Show date on the top line</string>
-    <string name="ql_date_format">Date format</string>
+    <string name="ql_show_date">Mostrar data</string>
+    <string name="ql_show_date_desc">Mostrar data no topo da linha</string>
+    <string name="ql_date_format">Formato da data</string>
     <string name="ql_date_default">Padrão</string>
-    <string name="ql_date_short">Short (Mon, Jan 1)</string>
-    <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
-    <string name="ql_cal_lookahead">Calendar lookahead</string>
+    <string name="ql_date_short">Curto (Seg, Jan 1)</string>
+    <string name="ql_date_full">Completo (segunda-feira, 1 de janeiro de 2026)</string>
+    <string name="ql_cal_lookahead">Calendário de previsão</string>
     <string name="ql_lookahead_15">15 minutos</string>
-    <string name="ql_lookahead_30">30 minutes</string>
+    <string name="ql_lookahead_30">30 minutos</string>
     <string name="ql_lookahead_60">1 hora</string>
-    <string name="ql_lookahead_120">2 hours</string>
-    <string name="ql_data_sources">Data Sources</string>
-    <string name="ql_cal_settings">Calendar</string>
-    <string name="ql_source_calendar">Calendar</string>
-    <string name="ql_source_calendar_desc">Show upcoming events</string>
+    <string name="ql_lookahead_120">2 horas</string>
+    <string name="ql_data_sources">Fontes de Dados</string>
+    <string name="ql_cal_settings">Calendário</string>
+    <string name="ql_source_calendar">Calendário</string>
+    <string name="ql_source_calendar_desc">Mostrar próximos eventos</string>
     <string name="ql_source_media">Mídia</string>
-    <string name="ql_source_media_desc">Show now playing info</string>
+    <string name="ql_source_media_desc">Mostrar informação de reprodução agora</string>
     <string name="ql_source_battery">Bateria</string>
-    <string name="ql_source_battery_desc">Show charging status</string>
-    <string name="ql_source_weather">Weather</string>
-    <string name="ql_source_weather_desc">Show current conditions</string>
-    <string name="ql_source_messages">Random Messages</string>
-    <string name="ql_source_messages_desc">Show tips and fun facts</string>
-    <string name="ql_msg_settings">Messages</string>
-    <string name="ql_msg_interval">Rotation interval</string>
-    <string name="ql_msg_30m">30 minutes</string>
+    <string name="ql_source_battery_desc">Mostrar status de carregamento</string>
+    <string name="ql_source_weather">Clima</string>
+    <string name="ql_source_weather_desc">Exibir condições atuais</string>
+    <string name="ql_source_messages">Mensagens aleatórias</string>
+    <string name="ql_source_messages_desc">Mostrar dicas e fatos divertidos</string>
+    <string name="ql_msg_settings">Mensagens</string>
+    <string name="ql_msg_interval">Intervalo de rotação</string>
+    <string name="ql_msg_30m">30 minutos</string>
     <string name="ql_msg_1h">1 hora</string>
-    <string name="ql_msg_3h">3 hours</string>
-    <string name="ql_msg_6h">6 hours</string>
-    <string name="ql_msg_daily">Daily</string>
+    <string name="ql_msg_3h">3 horas</string>
+    <string name="ql_msg_6h">6 horas</string>
+    <string name="ql_msg_daily">Diariamente</string>
     <string name="ql_apply">Salvar</string>
     <string-array name="quicklook_messages">
-        <item>stay hydrated \u2014 drink some water</item>
-        <item>take a deep breath and stretch</item>
-        <item>good posture makes a difference</item>
-        <item>time for a screen break?</item>
-        <item>a walk outside can reset your mood</item>
-        <item>don\'t forget to eat well</item>
-        <item>rest is productive too</item>
-        <item>sleep is the best recovery tool</item>
-        <item>your eyes need a break \u2014 look at something far away</item>
-        <item>standing up for a minute helps circulation</item>
-        <item>unclench your jaw and relax your shoulders</item>
-        <item>take three slow breaths right now</item>
-        <item>fresh air does wonders for focus</item>
+        <item>fique hidratado \u2014 beba um pouco de água</item>
+        <item>respire fundo e alongue-se</item>
+        <item>uma boa postura faz a diferença</item>
+        <item>hora de uma pausa das telas?</item>
+        <item>uma caminhada ao ar livre pode renovar o seu humor</item>
+        <item>não se esqueça de comer bem</item>
+        <item>o descanso também é produtivo</item>
+        <item>o sono é a melhor ferramenta de recuperação</item>
+        <item>seus olhos precisam de uma pausa \u2014 olhe para algo distante</item>
+        <item>o sono é a melhor ferramenta de recuperação</item>
+        <item>destrave a mandíbula e relaxe os ombros</item>
+        <item>respire fundo três vezes agora mesmo</item>
+        <item>ar fresco faz maravilhas pela concentração</item>
         <item>a 20-minute nap can boost creativity</item>
         <item>sunlight in the morning helps set your body clock</item>
         <item>you\'re doing great today</item>
