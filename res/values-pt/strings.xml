@@ -1,241 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="photos_already_exist">
-        <item quantity="one">%d photo already exists and was omitted.</item>
-        <item quantity="other">%d photos already exist and were omitted.</item>
+        <item quantity="one">A foto %d já existe e foi omitida.</item>
+        <item quantity="other">%d fotos já existem e foram omitidas.</item>
     </plurals>
     <!-- Manifest -->
-    <string name="app_name">Axion Widgets</string>
-    <string name="label_photo">Photo</string>
-    <string name="label_tile">Tile</string>
-    <string name="label_media_notification_listener">Media Notification Listener</string>
-    <string name="label_screentime">Screen time</string>
-    <string name="label_media_player">Media Player</string>
+    <string name="app_name">Widgets Axion</string>
+    <string name="label_photo">Foto</string>
+    <string name="label_tile">Bloco</string>
+    <string name="label_media_notification_listener">Mídia ouvinte de notificação</string>
+    <string name="label_screentime">Tempo de tela</string>
+    <string name="label_media_player">Reprodutor de Mídia</string>
     <!-- Settings -->
-    <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
-    <string name="loading_text">Loading...</string>
-    <string name="toast_calendar_permission_required">Calendar permission is required</string>
-    <string name="allow_notification_access">Allow notification access</string>
-    <string name="allow_calendar_access">Allow calendar access</string>
-    <string name="access_granted">Access granted</string>
-    <string name="needed_for_now_playing">Needed for now playing</string>
-    <string name="needed_for_calendar_events">Needed for calendar events</string>
+    <string name="welcome_message">Bem-vindo ao Axion. Clique aqui para configurar o QuickLook.</string>
+    <string name="loading_text">Carregando...</string>
+    <string name="toast_calendar_permission_required">É necessária a permissão do Calendário</string>
+    <string name="allow_notification_access">Permitir acesso à notificação</string>
+    <string name="allow_calendar_access">Permitir acesso ao calendário</string>
+    <string name="access_granted">Acesso permitido</string>
+    <string name="needed_for_now_playing">Necessário por enquanto em execução</string>
+    <string name="needed_for_calendar_events">Necessário para eventos na agenda</string>
     <!-- Calendar -->
-    <string name="quick_look_widget_calendar_in_time">in %d min</string>
-    <string name="quick_look_widget_calendar_now">now</string>
-    <string name="quick_look_widget_calendar_tomorrow">Tomorrow</string>
-    <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
-    <string name="quick_look_widget_calendar_no_title">(No title event)</string>
+    <string name="quick_look_widget_calendar_in_time">em %d min</string>
+    <string name="quick_look_widget_calendar_now">agora</string>
+    <string name="quick_look_widget_calendar_tomorrow">Amanhã</string>
+    <string name="quick_look_widget_calendar_yesterday">Ontem</string>
+    <string name="quick_look_widget_calendar_no_title">(Nenhum evento de título)</string>
     <!-- Battery -->
     <string name="battery_widget">Bateria</string>
-    <string name="full_charge">Charged</string>
-    <string name="charging">Charging</string>
-    <string name="minutes_left">%1$d min left</string>
+    <string name="full_charge">Carregado</string>
+    <string name="charging">Carregando</string>
+    <string name="minutes_left">%1$d min restantes</string>
     <!-- Photo -->
-    <string name="photo_title">Photo</string>
-    <string name="add_photos">Add Photos</string>
-    <string name="add_photos_cd">Add Photos</string>
-    <string name="display_options">Display Options</string>
-    <string name="grayscale_mode">Grayscale Mode</string>
-    <string name="shuffle_interval">Shuffle Interval</string>
-    <string name="select_interval">Select Interval</string>
-    <string name="select_shuffle_interval">Select Shuffle Interval</string>
+    <string name="photo_title">Foto</string>
+    <string name="add_photos">Adicionar fotos</string>
+    <string name="add_photos_cd">Adicionar fotos</string>
+    <string name="display_options">Opções de Exibição</string>
+    <string name="grayscale_mode">Modo cinza</string>
+    <string name="shuffle_interval">Intervalo de Embaralhamento</string>
+    <string name="select_interval">Selecione o intervalo</string>
+    <string name="select_shuffle_interval">Selecione o intervalo de Embaralhamento</string>
     <string name="cancel">Cancelar</string>
-    <string name="save_changes">Save Changes</string>
-    <string name="manage_photos">Manage Photos</string>
+    <string name="save_changes">Salvar Alterações</string>
+    <string name="manage_photos">Gerenciar fotos</string>
     <string name="back">Voltar</string>
-    <string name="delete_selected">Delete Selected</string>
+    <string name="delete_selected">Excluir Selecionados</string>
     <string name="edit">Editar</string>
-    <string name="no_photos_selected">No photos selected</string>
-    <string name="photo">Photo</string>
-    <string name="confirm_delete_title">Confirm Delete</string>
-    <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
+    <string name="no_photos_selected">Nenhuma foto selecionada</string>
+    <string name="photo">Foto</string>
+    <string name="confirm_delete_title">Confirme Apagar</string>
+    <string name="confirm_delete_message">Tem certeza que deseja excluir a foto selecionada?</string>
     <string name="delete">Deletar</string>
-    <string name="interval_1_minute">1 minute</string>
-    <string name="interval_5_minutes">5 minutes</string>
-    <string name="interval_15_minutes">15 minutes</string>
-    <string name="interval_1_hour">1 hour</string>
+    <string name="interval_1_minute">1 minuto</string>
+    <string name="interval_5_minutes">5 minutos</string>
+    <string name="interval_15_minutes">15 minutos</string>
+    <string name="interval_1_hour">1 hora</string>
     <!-- Tiles -->
-    <string name="wifi">Wifi</string>
+    <string name="wifi">Wi-Fi</string>
     <string name="bluetooth">Bluetooth</string>
-    <string name="airplane_mode">Airplane</string>
-    <string name="dark_theme">Dark Theme</string>
+    <string name="airplane_mode">Modo Avião</string>
+    <string name="dark_theme">Tema Escuro</string>
     <string name="torch">Lanterna</string>
     <string name="dnd">Não perturbe</string>
-    <string name="priority">Priority</string>
-    <string name="alarms_only">Alarms Only</string>
-    <string name="total_silence">Total Silence</string>
+    <string name="priority">Prioridade</string>
+    <string name="alarms_only">Apenas alarmes</string>
+    <string name="total_silence">Silêncio total</string>
     <string name="auto_rotate">Rotação automática</string>
     <string name="ringer_normal">Toque</string>
     <string name="ringer_vibrate">Vibração</string>
     <string name="ringer_silent">Silencioso</string>
     <string name="ringer_unknown">Desconhecido</string>
     <string name="mobile_data">Dados móveis</string>
-    <string name="label_year_progress">Year Progress</string>
-    <string name="label_digital_clock">Digital Clock</string>
-    <string name="label_analog_clock">Analog Clock</string>
-    <string name="label_world_clock">World Clock</string>
-    <string name="label_countdown">Countdown</string>
+    <string name="label_year_progress">Progresso do ano</string>
+    <string name="label_digital_clock">Relógio Digital</string>
+    <string name="label_analog_clock">Relógio Analógico</string>
+    <string name="label_world_clock">Relógio Mundial</string>
+    <string name="label_countdown">Contagem regressiva</string>
     <string name="label_date">Data</string>
-    <string name="label_pedometer">Pedometer</string>
-    <string name="label_compass">Compass</string>
-    <string name="label_bottle_spinner">Bottle Spinner</string>
-    <string name="bottle_spinner_tap">tap to spin</string>
-    <string name="label_rps">Rock Paper Scissors</string>
-    <string name="rps_tap">tap to play</string>
-    <string name="ql_display">Display</string>
-    <string name="ql_show_date">Show date</string>
-    <string name="ql_show_date_desc">Show date on the top line</string>
-    <string name="ql_date_format">Date format</string>
+    <string name="label_pedometer">Pedômetro</string>
+    <string name="label_compass">Bússola</string>
+    <string name="label_bottle_spinner">Gira Garrafa</string>
+    <string name="bottle_spinner_tap">toque para girar</string>
+    <string name="label_rps">Pedra, Papel ou Tesoura</string>
+    <string name="rps_tap">toque para jogar</string>
+    <string name="ql_display">Tela</string>
+    <string name="ql_show_date">Mostrar data</string>
+    <string name="ql_show_date_desc">Mostrar data no topo da linha</string>
+    <string name="ql_date_format">Formato da data</string>
     <string name="ql_date_default">Padrão</string>
-    <string name="ql_date_short">Short (Mon, Jan 1)</string>
-    <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
-    <string name="ql_cal_lookahead">Calendar lookahead</string>
-    <string name="ql_lookahead_15">15 minutes</string>
-    <string name="ql_lookahead_30">30 minutes</string>
-    <string name="ql_lookahead_60">1 hour</string>
-    <string name="ql_lookahead_120">2 hours</string>
-    <string name="ql_data_sources">Data Sources</string>
-    <string name="ql_cal_settings">Calendar</string>
-    <string name="ql_source_calendar">Calendar</string>
-    <string name="ql_source_calendar_desc">Show upcoming events</string>
-    <string name="ql_source_media">Media</string>
-    <string name="ql_source_media_desc">Show now playing info</string>
+    <string name="ql_date_short">Curto (Seg, Jan 1)</string>
+    <string name="ql_date_full">Completo (segunda-feira, 1 de janeiro de 2026)</string>
+    <string name="ql_cal_lookahead">Calendário de previsão</string>
+    <string name="ql_lookahead_15">15 minutos</string>
+    <string name="ql_lookahead_30">30 minutos</string>
+    <string name="ql_lookahead_60">1 hora</string>
+    <string name="ql_lookahead_120">2 horas</string>
+    <string name="ql_data_sources">Fontes de Dados</string>
+    <string name="ql_cal_settings">Calendário</string>
+    <string name="ql_source_calendar">Calendário</string>
+    <string name="ql_source_calendar_desc">Mostrar próximos eventos</string>
+    <string name="ql_source_media">Mídia</string>
+    <string name="ql_source_media_desc">Mostrar informação de reprodução agora</string>
     <string name="ql_source_battery">Bateria</string>
-    <string name="ql_source_battery_desc">Show charging status</string>
-    <string name="ql_source_weather">Weather</string>
-    <string name="ql_source_weather_desc">Show current conditions</string>
-    <string name="ql_source_messages">Random Messages</string>
-    <string name="ql_source_messages_desc">Show tips and fun facts</string>
-    <string name="ql_msg_settings">Messages</string>
-    <string name="ql_msg_interval">Rotation interval</string>
-    <string name="ql_msg_30m">30 minutes</string>
-    <string name="ql_msg_1h">1 hour</string>
-    <string name="ql_msg_3h">3 hours</string>
-    <string name="ql_msg_6h">6 hours</string>
-    <string name="ql_msg_daily">Daily</string>
+    <string name="ql_source_battery_desc">Mostrar status de carregamento</string>
+    <string name="ql_source_weather">Tempo</string>
+    <string name="ql_source_weather_desc">Exibir condições atuais</string>
+    <string name="ql_source_messages">Mensagens aleatórias</string>
+    <string name="ql_source_messages_desc">Mostrar dicas e fatos divertidos</string>
+    <string name="ql_msg_settings">Mensagens</string>
+    <string name="ql_msg_interval">Intervalo de rotação</string>
+    <string name="ql_msg_30m">30 minutos</string>
+    <string name="ql_msg_1h">1 hora</string>
+    <string name="ql_msg_3h">3 horas</string>
+    <string name="ql_msg_6h">6 horas</string>
+    <string name="ql_msg_daily">Diariamente</string>
     <string name="ql_apply">Salvar</string>
     <string-array name="quicklook_messages">
-        <item>stay hydrated \u2014 drink some water</item>
-        <item>take a deep breath and stretch</item>
-        <item>good posture makes a difference</item>
-        <item>time for a screen break?</item>
-        <item>a walk outside can reset your mood</item>
-        <item>don\'t forget to eat well</item>
-        <item>rest is productive too</item>
-        <item>sleep is the best recovery tool</item>
-        <item>your eyes need a break \u2014 look at something far away</item>
-        <item>standing up for a minute helps circulation</item>
-        <item>unclench your jaw and relax your shoulders</item>
-        <item>take three slow breaths right now</item>
-        <item>fresh air does wonders for focus</item>
-        <item>a 20-minute nap can boost creativity</item>
-        <item>sunlight in the morning helps set your body clock</item>
-        <item>you\'re doing great today</item>
-        <item>small steps lead to big changes</item>
-        <item>today is a good day to learn something new</item>
-        <item>be kind to yourself</item>
-        <item>progress, not perfection</item>
-        <item>the best time to start is now</item>
-        <item>less scrolling, more living</item>
-        <item>what would make today great?</item>
-        <item>gratitude changes perspective</item>
-        <item>done is better than perfect</item>
-        <item>your future self will thank you</item>
-        <item>consistency beats intensity</item>
-        <item>you don\'t need motivation \u2014 just start</item>
-        <item>compare yourself to yesterday, not to others</item>
-        <item>the hardest part is usually starting</item>
-        <item>every expert was once a beginner</item>
-        <item>mistakes are data, not failures</item>
-        <item>focus on what you can control</item>
-        <item>celebrate small wins</item>
-        <item>your comfort zone is not where growth happens</item>
-        <item>check in on someone you care about</item>
-        <item>music makes everything better</item>
-        <item>send a message to an old friend</item>
-        <item>a genuine compliment can make someone\'s day</item>
-        <item>listening is an underrated skill</item>
-        <item>being present is the best gift you can give</item>
-        <item>have you backed up your data lately?</item>
-        <item>clear your notifications \u2014 less noise, more focus</item>
-        <item>review your subscriptions \u2014 cancel what you don\'t use</item>
-        <item>update your passwords if it\'s been a while</item>
-        <item>clean your phone screen \u2014 it\'s dirtier than you think</item>
-        <item>organize one folder or drawer today</item>
-        <item>check your storage \u2014 delete what you don\'t need</item>
-        <item>airplane mode is a great focus tool</item>
-        <item>schedule something fun for this week</item>
-        <item>write down three things you\'re grateful for</item>
-        <item>honey never spoils \u2014 3000-year-old jars were found edible</item>
-        <item>octopuses have three hearts and blue blood</item>
-        <item>bananas are berries, but strawberries aren\'t</item>
-        <item>a group of flamingos is called a flamboyance</item>
-        <item>the moon drifts 3.8 cm farther from earth each year</item>
-        <item>venus spins backwards compared to other planets</item>
-        <item>sunlight takes 8 minutes and 20 seconds to reach earth</item>
-        <item>sharks have been around longer than trees</item>
-        <item>footprints on the moon can last millions of years</item>
-        <item>wombat poop is cube-shaped</item>
-        <item>your body has more bacterial cells than human cells</item>
-        <item>a day on venus is longer than a year on venus</item>
-        <item>the shortest war in history lasted 38 minutes</item>
-        <item>earth\'s core is as hot as the surface of the sun</item>
-        <item>there are more stars than grains of sand on earth</item>
-        <item>water can boil and freeze at the same time \u2014 it\'s called the triple point</item>
-        <item>neutron stars are so dense a teaspoon weighs billions of tons</item>
-        <item>tardigrades can survive in outer space</item>
-        <item>your brain uses about 20% of your body\'s energy</item>
-        <item>the great wall of china is not visible from space with the naked eye</item>
-        <item>humans share about 60% of their DNA with bananas</item>
-        <item>a cloud can weigh more than a million pounds</item>
-        <item>there are more possible chess games than atoms in the universe</item>
-        <item>the mantis shrimp can punch as fast as a bullet</item>
-        <item>dolphins sleep with one eye open</item>
-        <item>the average person walks about 100,000 miles in a lifetime</item>
-        <item>lightning strikes the earth about 100 times per second</item>
-        <item>scotland\'s national animal is the unicorn</item>
-        <item>a single bolt of lightning contains enough energy to toast 100,000 slices of bread</item>
-        <item>the human nose can detect over 1 trillion different scents</item>
-        <item>crows can recognize human faces and hold grudges</item>
-        <item>the amazon rainforest produces 20% of the world\'s oxygen</item>
-        <item>a jiffy is an actual unit of time \u2014 1/100th of a second</item>
-        <item>the eiffel tower can be 15 cm taller during summer due to heat expansion</item>
-        <item>butterflies taste with their feet</item>
-        <item>sea otters hold hands while sleeping so they don\'t drift apart</item>
-        <item>the inventor of the pringles can is buried in one</item>
-        <item>a photon takes 100,000 years to travel from the sun\'s core to its surface</item>
-        <item>the total length of your blood vessels could circle earth twice</item>
-        <item>there are more trees on earth than stars in the milky way</item>
-        <item>the oldest known joke is from 1900 BC sumeria</item>
-        <item>a teaspoon of a neutron star weighs about 6 billion tons</item>
-        <item>the longest hiccuping spree lasted 68 years</item>
-        <item>the heart of a blue whale is the size of a small car</item>
-        <item>you can\'t hum while holding your nose \u2014 try it</item>
-        <item>oxford university is older than the aztec empire</item>
-        <item>cleopatra lived closer in time to the moon landing than to the building of the pyramids</item>
-        <item>tap to access axion premium features</item>
-        <item>time for some axion :)</item>
-        <item>need more ram? subscribe to axion premium and download ram!</item>
-        <item>need for speed ;)</item>
-        <item>a is for axion</item>
+        <item>fique hidratado \u2014 beba um pouco de água</item>
+        <item>respire fundo e alongue-se</item>
+        <item>uma boa postura faz a diferença</item>
+        <item>hora de uma pausa das telas?</item>
+        <item>uma caminhada ao ar livre pode renovar o seu humor</item>
+        <item>não se esqueça de comer bem</item>
+        <item>o descanso também é produtivo</item>
+        <item>o sono é a melhor ferramenta de recuperação</item>
+        <item>seus olhos precisam de uma pausa \u2014 olhe para algo distante</item>
+        <item>o sono é a melhor ferramenta de recuperação</item>
+        <item>destrave a mandíbula e relaxe os ombros</item>
+        <item>respire fundo três vezes agora mesmo</item>
+        <item>ar fresco faz maravilhas pela concentração</item>
+        <item>um cochilo de 20 minutos pode impulsionar a criatividade</item>
+        <item>a luz do sol pela manhã ajuda a regular o seu relógio biológico</item>
+        <item>você está indo muito bem hoje</item>
+        <item>pequenos passos levam a grandes mudanças</item>
+        <item>hoje é um bom dia para aprender algo novo</item>
+        <item>seja gentil com você mesmo</item>
+        <item>progresso, não perfeição</item>
+        <item>o melhor momento para começar é agora</item>
+        <item>menos rolagem e mais vida</item>
+        <item>o que tornaria o dia de hoje ótimo?</item>
+        <item>a gratidão muda a perspectiva</item>
+        <item>feito é melhor que perfeito</item>
+        <item>o seu eu do futuro vai lhe agradecer</item>
+        <item>consistência bate a intensidade</item>
+        <item>você não precisa de motivação, basta começar</item>
+        <item>compare-se com quem você era ontem, não com os outros</item>
+        <item>a parte mais difícil é normalmente começar</item>
+        <item>cada especialista já foi um iniciante</item>
+        <item>erros são dados e não falhas</item>
+        <item>foco no que você pode controlar</item>
+        <item>celebrar pequenas vitórias</item>
+        <item>sua zona de conforto não é onde o crescimento acontece</item>
+        <item>procure saber como está alguém de quem você gosta</item>
+        <item>a música torna tudo melhor</item>
+        <item>envie uma mensagem para um amigo antigo</item>
+        <item>um verdadeiro elogio pode fazer o dia de alguém</item>
+        <item>ouvindo é uma habilidade subestimada</item>
+        <item>estar presente é o melhor presente que você pode dar</item>
+        <item>você fez backup de seus dados ultimamente?</item>
+        <item>limpar suas notificações \u2014 menos ruído, mais foco</item>
+        <item>revise suas assinaturas \u2014 cancele o que você não usa</item>
+        <item>atualize suas senhas se já faz algum tempo</item>
+        <item>limpe a tela do seu telefone \u2014 é mais sujo do que você pensa</item>
+        <item>organize uma pasta ou gaveta hoje</item>
+        <item>verifique o seu armazenamento e exclua o que você não precisa</item>
+        <item>o modo avião é uma ótima ferramenta de foco</item>
+        <item>agende algo divertido para esta semana</item>
+        <item>escreva três coisas pelas quais você é grato</item>
+        <item>mel nunca estraga jarras \u2014 3000 anos de idade foram encontrados comestíveis</item>
+        <item>polvos possuem três corações e sangue azul</item>
+        <item>bananas são frutas, mas morangos não são</item>
+        <item>um grupo de flamingos é chamado de flamboyance</item>
+        <item>os drifts da lua são de 3,8 cm mais da terra a cada ano</item>
+        <item>venus gira para trás em comparação com outros planetas</item>
+        <item>a luz solar leva 8 minutos e 20 segundos para alcançar a Terra</item>
+        <item>tubarões estão por aí mais tempo do que árvores</item>
+        <item>pegadas na lua podem durar milhões de anos</item>
+        <item>cocô de casca tem forma de cubo</item>
+        <item>seu corpo tem mais células bacterianas que células humanas</item>
+        <item>um dia no venus é mais longo que um ano no venus</item>
+        <item>a menor guerra na história durou 38 minutos</item>
+        <item>o núcleo da Terra é tão quente quanto a superfície do sol</item>
+        <item>há mais estrelas do que grãos de areia na terra</item>
+        <item>água pode ferver e congelar ao mesmo tempo \u2014 é chamado de ponto triplo</item>
+        <item>estrelas de nêutrons são tão densas que uma colher de chá pesa bilhões de toneladas</item>
+        <item>os tardígrados conseguem sobreviver no espaço sideral</item>
+        <item>seu cérebro usa cerca de 20% da energia do seu corpo</item>
+        <item>a grande parede de quina não é visível do espaço com olho nu</item>
+        <item>os seres humanos compartilham cerca de 60% do seu DNA com bananas</item>
+        <item>uma nuvem pode pesar mais de um milhão de libras</item>
+        <item>há jogos de xadrez mais possíveis do que átomos no universo</item>
+        <item>o camarão de mante pode socar tão rápido quanto uma bala</item>
+        <item>os golfinhos dormem com um olho aberto</item>
+        <item>a pessoa média anda cerca de 100.000 milhas em toda a vida</item>
+        <item>relâmpago atinge a Terra cerca de 100 vezes por segundo</item>
+        <item>o animal nacional da Escócia é o unicórnio</item>
+        <item>um único raio contém energia suficiente para torrar 100.000 fatias de pão</item>
+        <item>o nariz humano consegue detectar mais de 1 trilhão de odores diferentes</item>
+        <item>corvos conseguem reconhecer rostos humanos e guardar rancor</item>
+        <item>a floresta tropical amazônica produz 20% do oxigênio do mundo</item>
+        <item>um jiffy é uma unidade real de tempo \u2014 1/100th de um segundo</item>
+        <item>a torre eiffel pode ser 15 cm mais alta durante o verão devido à expansão de calor</item>
+        <item>as borboletas sentem o gosto com as patas</item>
+        <item>as lontras-marinhas dão as mãos enquanto dormem para não se separarem</item>
+        <item>o inventor da lata de Pringles está enterrado dentro de uma</item>
+        <item>um fóton leva 100.000 anos para viajar do núcleo do Sol até a sua superfície</item>
+        <item>o comprimento total dos seus vasos sanguíneos poderia dar duas voltas ao redor da Terra</item>
+        <item>há mais árvores na Terra do que estrelas na Via Láctea</item>
+        <item>a piada mais antiga de que se tem registro vem da Suméria, de 1900 a. C</item>
+        <item>uma colher de chá de uma estrela de nêutrons pesa cerca de 6 bilhões de toneladas</item>
+        <item>o episódio de soluços mais longo durou 68 anos</item>
+        <item>o coração de uma baleia azul é do tamanho de um carro pequeno</item>
+        <item>você não consegue cantarolar enquanto segura o seu nariz \u2014 experimente</item>
+        <item>a universidade de oxford é mais antiga que o império azteca</item>
+        <item>cleópatra viveu mais perto do pouso na Lua do que da construção das pirâmides</item>
+        <item>toque para acessar as funcionalidades premium de axion</item>
+        <item>hora de um pouco de Axion :)</item>
+        <item>precisa de mais ram? assine axion premium e baixe ram agora!</item>
+        <item>preciso de velociada ;)</item>
+        <item>a é para axion</item>
     </string-array>
-    <string name="tile_selection_group_title">Tile</string>
-    <string name="tile_select_title">Select tile</string>
-    <string name="tile_select_summary">Choose a quick setting</string>
-    <string name="tile_size_group_title">Sizing</string>
-    <string name="tile_circle_size_title">Tile size</string>
-    <string name="tile_circle_size_summary">Diameter of the circular tile</string>
-    <string name="pill_height_title">Pill height</string>
-    <string name="pill_height_summary">Height of the pill form</string>
-    <string name="pill_width_title">Pill width</string>
-    <string name="pill_width_summary">Width of the pill form</string>
-    <string name="pill_autofit_title">Auto-fit pill width</string>
-    <string name="pill_autofit_summary">Size pill to fit label text</string>
+    <string name="tile_selection_group_title">Bloco</string>
+    <string name="tile_select_title">Selecionar bloco</string>
+    <string name="tile_select_summary">Escolha uma configuração rápida</string>
+    <string name="tile_size_group_title">Dimensionamento</string>
+    <string name="tile_circle_size_title">Tamanho do bloco</string>
+    <string name="tile_circle_size_summary">Diâmetro do bloco circular</string>
+    <string name="pill_height_title">Altura do pílula</string>
+    <string name="pill_height_summary">Altura da forma da pílula</string>
+    <string name="pill_width_title">Largura do pílula</string>
+    <string name="pill_width_summary">Largura do formato da pílula</string>
+    <string name="pill_autofit_title">Ajustar largura da pílula automaticamente</string>
+    <string name="pill_autofit_summary">Tamanho pílula para caber no texto do rótulo</string>
     <!-- Clock Configuration -->
-    <string name="clock_bg_translucent">Translucent background</string>
-    <string name="clock_bg_translucent_desc">A rounded solid background matching system colors</string>
-    <string name="clock_bg_transparent">Transparent background</string>
-    <string name="clock_bg_transparent_desc">No card background behind the clock</string>
-    <string name="clock_style_section">Widget Background</string>
+    <string name="clock_bg_translucent">Fundo translúcido</string>
+    <string name="clock_bg_translucent_desc">Um fundo sólido arredondado que combina com as cores do sistema</string>
+    <string name="clock_bg_transparent">Fundo transparente</string>
+    <string name="clock_bg_transparent_desc">Nenhum plano de fundo atrás do relógio</string>
+    <string name="clock_style_section">Plano de fundo do Widget</string>
 </resources>

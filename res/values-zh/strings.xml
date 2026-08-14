@@ -1,240 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="photos_already_exist">
-        <item quantity="other">%d photos already exist and were omitted.</item>
+        <item quantity="other">已有 %d 张照片，已跳过</item>
     </plurals>
     <!-- Manifest -->
-    <string name="app_name">Axion Widgets</string>
-    <string name="label_photo">Photo</string>
-    <string name="label_tile">Tile</string>
-    <string name="label_media_notification_listener">Media Notification Listener</string>
-    <string name="label_screentime">Screen time</string>
-    <string name="label_media_player">Media Player</string>
+    <string name="app_name">Axion 部件</string>
+    <string name="label_photo">照片</string>
+    <string name="label_tile">平铺显示</string>
+    <string name="label_media_notification_listener">媒体通知服务</string>
+    <string name="label_screentime">屏幕使用时间</string>
+    <string name="label_media_player">媒体播放器</string>
     <!-- Settings -->
-    <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
-    <string name="loading_text">Loading...</string>
-    <string name="toast_calendar_permission_required">Calendar permission is required</string>
-    <string name="allow_notification_access">Allow notification access</string>
-    <string name="allow_calendar_access">Allow calendar access</string>
-    <string name="access_granted">Access granted</string>
-    <string name="needed_for_now_playing">Needed for now playing</string>
-    <string name="needed_for_calendar_events">Needed for calendar events</string>
+    <string name="welcome_message">欢迎使用 Axion，点击这里设置快速查看</string>
+    <string name="loading_text">加载中…</string>
+    <string name="toast_calendar_permission_required">请授予日历权限</string>
+    <string name="allow_notification_access">授予通知使用权</string>
+    <string name="allow_calendar_access">允许访问日历</string>
+    <string name="access_granted">已授予访问权限</string>
+    <string name="needed_for_now_playing">需要现在播放</string>
+    <string name="needed_for_calendar_events">日历事件所需</string>
     <!-- Calendar -->
-    <string name="quick_look_widget_calendar_in_time">in %d min</string>
-    <string name="quick_look_widget_calendar_now">now</string>
-    <string name="quick_look_widget_calendar_tomorrow">Tomorrow</string>
-    <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
-    <string name="quick_look_widget_calendar_no_title">(No title event)</string>
+    <string name="quick_look_widget_calendar_in_time">%d分钟后</string>
+    <string name="quick_look_widget_calendar_now">现在</string>
+    <string name="quick_look_widget_calendar_tomorrow">明天</string>
+    <string name="quick_look_widget_calendar_yesterday">昨天</string>
+    <string name="quick_look_widget_calendar_no_title">(无标题事件)</string>
     <!-- Battery -->
     <string name="battery_widget">省电</string>
-    <string name="full_charge">Charged</string>
+    <string name="full_charge">充电完成</string>
     <string name="charging">充电中</string>
     <string name="minutes_left">剩余 %1$d 分钟</string>
     <!-- Photo -->
-    <string name="photo_title">Photo</string>
-    <string name="add_photos">Add Photos</string>
-    <string name="add_photos_cd">Add Photos</string>
-    <string name="display_options">Display Options</string>
-    <string name="grayscale_mode">Grayscale Mode</string>
-    <string name="shuffle_interval">Shuffle Interval</string>
-    <string name="select_interval">Select Interval</string>
-    <string name="select_shuffle_interval">Select Shuffle Interval</string>
+    <string name="photo_title">照片</string>
+    <string name="add_photos">添加照片</string>
+    <string name="add_photos_cd">添加照片</string>
+    <string name="display_options">显示选项</string>
+    <string name="grayscale_mode">灰度模式</string>
+    <string name="shuffle_interval">随机播放间隔</string>
+    <string name="select_interval">选择间隔</string>
+    <string name="select_shuffle_interval">随机播放间隔</string>
     <string name="cancel">取消</string>
-    <string name="save_changes">Save Changes</string>
-    <string name="manage_photos">Manage Photos</string>
+    <string name="save_changes">保存</string>
+    <string name="manage_photos">管理照片</string>
     <string name="back">返回</string>
-    <string name="delete_selected">Delete Selected</string>
+    <string name="delete_selected">删除所选项</string>
     <string name="edit">编辑</string>
-    <string name="no_photos_selected">No photos selected</string>
-    <string name="photo">Photo</string>
-    <string name="confirm_delete_title">Confirm Delete</string>
-    <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
+    <string name="no_photos_selected">未选择照片</string>
+    <string name="photo">照片</string>
+    <string name="confirm_delete_title">确认删除</string>
+    <string name="confirm_delete_message">确定删除所选中图片吗？</string>
     <string name="delete">删除</string>
-    <string name="interval_1_minute">1 minute</string>
+    <string name="interval_1_minute">1分钟</string>
     <string name="interval_5_minutes">5 分钟</string>
     <string name="interval_15_minutes">15 分钟</string>
     <string name="interval_1_hour">1 小时</string>
     <!-- Tiles -->
-    <string name="wifi">Wifi</string>
+    <string name="wifi">WiFi</string>
     <string name="bluetooth">蓝牙</string>
-    <string name="airplane_mode">Airplane</string>
-    <string name="dark_theme">Dark Theme</string>
+    <string name="airplane_mode">飞行模式</string>
+    <string name="dark_theme">深色主题</string>
     <string name="torch">手电筒</string>
     <string name="dnd">勿扰模式</string>
-    <string name="priority">Priority</string>
-    <string name="alarms_only">Alarms Only</string>
-    <string name="total_silence">Total Silence</string>
+    <string name="priority">优先</string>
+    <string name="alarms_only">仅限闹钟</string>
+    <string name="total_silence">完全静音</string>
     <string name="auto_rotate">自动旋转</string>
     <string name="ringer_normal">铃声</string>
     <string name="ringer_vibrate">振动</string>
     <string name="ringer_silent">静音</string>
     <string name="ringer_unknown">未知</string>
     <string name="mobile_data">移动数据</string>
-    <string name="label_year_progress">Year Progress</string>
-    <string name="label_digital_clock">Digital Clock</string>
-    <string name="label_analog_clock">Analog Clock</string>
-    <string name="label_world_clock">World Clock</string>
-    <string name="label_countdown">Countdown</string>
+    <string name="label_year_progress">年度进度</string>
+    <string name="label_digital_clock">数字钟</string>
+    <string name="label_analog_clock">模拟时钟</string>
+    <string name="label_world_clock">世界时钟</string>
+    <string name="label_countdown">倒数</string>
     <string name="label_date">日期</string>
-    <string name="label_pedometer">Pedometer</string>
-    <string name="label_compass">Compass</string>
-    <string name="label_bottle_spinner">Bottle Spinner</string>
-    <string name="bottle_spinner_tap">tap to spin</string>
-    <string name="label_rps">Rock Paper Scissors</string>
-    <string name="rps_tap">tap to play</string>
+    <string name="label_pedometer">计步器</string>
+    <string name="label_compass">指南针</string>
+    <string name="label_bottle_spinner">转盘</string>
+    <string name="bottle_spinner_tap">点击旋转</string>
+    <string name="label_rps">石头剪刀布</string>
+    <string name="rps_tap">点击播放</string>
     <string name="ql_display">界面设置</string>
-    <string name="ql_show_date">Show date</string>
-    <string name="ql_show_date_desc">Show date on the top line</string>
-    <string name="ql_date_format">Date format</string>
+    <string name="ql_show_date">显示日期</string>
+    <string name="ql_show_date_desc">在顶部显示日期</string>
+    <string name="ql_date_format">日期格式</string>
     <string name="ql_date_default">默认</string>
-    <string name="ql_date_short">Short (Mon, Jan 1)</string>
-    <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
-    <string name="ql_cal_lookahead">Calendar lookahead</string>
+    <string name="ql_date_short">短时间(周一，1月)</string>
+    <string name="ql_date_full">完整（2026年1月1日星期一）</string>
+    <string name="ql_cal_lookahead">日历查询</string>
     <string name="ql_lookahead_15">15 分钟</string>
     <string name="ql_lookahead_30">30 分钟</string>
     <string name="ql_lookahead_60">1 小时</string>
     <string name="ql_lookahead_120">2 小时</string>
-    <string name="ql_data_sources">Data Sources</string>
-    <string name="ql_cal_settings">Calendar</string>
-    <string name="ql_source_calendar">Calendar</string>
-    <string name="ql_source_calendar_desc">Show upcoming events</string>
+    <string name="ql_data_sources">数据来源</string>
+    <string name="ql_cal_settings">日历</string>
+    <string name="ql_source_calendar">日历</string>
+    <string name="ql_source_calendar_desc">显示近期安排</string>
     <string name="ql_source_media">媒体</string>
-    <string name="ql_source_media_desc">Show now playing info</string>
+    <string name="ql_source_media_desc">显示正在播放内容</string>
     <string name="ql_source_battery">省电</string>
-    <string name="ql_source_battery_desc">Show charging status</string>
-    <string name="ql_source_weather">Weather</string>
-    <string name="ql_source_weather_desc">Show current conditions</string>
-    <string name="ql_source_messages">Random Messages</string>
-    <string name="ql_source_messages_desc">Show tips and fun facts</string>
-    <string name="ql_msg_settings">Messages</string>
-    <string name="ql_msg_interval">Rotation interval</string>
+    <string name="ql_source_battery_desc">显示充电状态</string>
+    <string name="ql_source_weather">天气</string>
+    <string name="ql_source_weather_desc">显示当前状况</string>
+    <string name="ql_source_messages">随机消息</string>
+    <string name="ql_source_messages_desc">显示提示和趣味知识</string>
+    <string name="ql_msg_settings">信息</string>
+    <string name="ql_msg_interval">轮播间隔</string>
     <string name="ql_msg_30m">30 分钟</string>
     <string name="ql_msg_1h">1 小时</string>
     <string name="ql_msg_3h">3 小时</string>
     <string name="ql_msg_6h">6 小时</string>
-    <string name="ql_msg_daily">Daily</string>
+    <string name="ql_msg_daily">每天</string>
     <string name="ql_apply">保存</string>
     <string-array name="quicklook_messages">
-        <item>stay hydrated \u2014 drink some water</item>
-        <item>take a deep breath and stretch</item>
-        <item>good posture makes a difference</item>
-        <item>time for a screen break?</item>
-        <item>a walk outside can reset your mood</item>
-        <item>don\'t forget to eat well</item>
-        <item>rest is productive too</item>
-        <item>sleep is the best recovery tool</item>
-        <item>your eyes need a break \u2014 look at something far away</item>
-        <item>standing up for a minute helps circulation</item>
-        <item>unclench your jaw and relax your shoulders</item>
-        <item>take three slow breaths right now</item>
-        <item>fresh air does wonders for focus</item>
-        <item>a 20-minute nap can boost creativity</item>
-        <item>sunlight in the morning helps set your body clock</item>
-        <item>you\'re doing great today</item>
-        <item>small steps lead to big changes</item>
-        <item>today is a good day to learn something new</item>
-        <item>be kind to yourself</item>
-        <item>progress, not perfection</item>
-        <item>the best time to start is now</item>
-        <item>less scrolling, more living</item>
-        <item>what would make today great?</item>
-        <item>gratitude changes perspective</item>
-        <item>done is better than perfect</item>
-        <item>your future self will thank you</item>
-        <item>consistency beats intensity</item>
-        <item>you don\'t need motivation \u2014 just start</item>
-        <item>compare yourself to yesterday, not to others</item>
-        <item>the hardest part is usually starting</item>
-        <item>every expert was once a beginner</item>
-        <item>mistakes are data, not failures</item>
-        <item>focus on what you can control</item>
-        <item>celebrate small wins</item>
-        <item>your comfort zone is not where growth happens</item>
-        <item>check in on someone you care about</item>
-        <item>music makes everything better</item>
-        <item>send a message to an old friend</item>
-        <item>a genuine compliment can make someone\'s day</item>
-        <item>listening is an underrated skill</item>
-        <item>being present is the best gift you can give</item>
-        <item>have you backed up your data lately?</item>
-        <item>clear your notifications \u2014 less noise, more focus</item>
-        <item>review your subscriptions \u2014 cancel what you don\'t use</item>
-        <item>update your passwords if it\'s been a while</item>
-        <item>clean your phone screen \u2014 it\'s dirtier than you think</item>
-        <item>organize one folder or drawer today</item>
-        <item>check your storage \u2014 delete what you don\'t need</item>
-        <item>airplane mode is a great focus tool</item>
-        <item>schedule something fun for this week</item>
-        <item>write down three things you\'re grateful for</item>
-        <item>honey never spoils \u2014 3000-year-old jars were found edible</item>
-        <item>octopuses have three hearts and blue blood</item>
-        <item>bananas are berries, but strawberries aren\'t</item>
-        <item>a group of flamingos is called a flamboyance</item>
-        <item>the moon drifts 3.8 cm farther from earth each year</item>
-        <item>venus spins backwards compared to other planets</item>
+        <item>水喝够，精神足</item>
+        <item>深呼吸，伸个懒腰</item>
+        <item>保持良好姿势，效果确实不同</item>
+        <item>该让眼睛休息一下了</item>
+        <item>出去走走，有助于调节心情</item>
+        <item>记得好好吃饭</item>
+        <item>休息也同样重要</item>
+        <item>睡眠是最好的恢复方式</item>
+        <item>让眼睛休息一下，看看远处</item>
+        <item>站一分钟，促进血液循环</item>
+        <item>松开下巴，放松肩膀</item>
+        <item>现在，慢慢深呼吸三次</item>
+        <item>呼吸新鲜空气，提升专注力</item>
+        <item>小睡20分钟，激发创造力</item>
+        <item>早晨晒晒太阳，调整生物钟</item>
+        <item>今天你做得很好</item>
+        <item>小步积累，成就大改变</item>
+        <item>今天很适合学点新知识</item>
+        <item>善待自己</item>
+        <item>进步，不必追求完美</item>
+        <item>现在就行动</item>
+        <item>少刷视频，回归生活</item>
+        <item>今天怎么做才能过得更棒？</item>
+        <item>感恩改变视角</item>
+        <item>先完成，再完美</item>
+        <item>未来的你会感谢现在的自己</item>
+        <item>坚持比短暂的热情更有用</item>
+        <item>你不需要动力，直接开始就行</item>
+        <item>和昨天的自己比，而不是和别人比</item>
+        <item>最难的通常是开始这一步</item>
+        <item>每个专家都曾是从头开始的</item>
+        <item>错误是数据，不是失败</item>
+        <item>专注于你能掌控的事情</item>
+        <item>为小成就而肯定自己</item>
+        <item>成长不会发生在舒适区里</item>
+        <item>关心一下你在乎的人</item>
+        <item>音乐让一切变得更好</item>
+        <item>给老朋友发条消息</item>
+        <item>真诚的赞美能让人一整天都开心</item>
+        <item>倾听是一项被低估的能力</item>
+        <item>专注当下是你最好的给予</item>
+        <item>你最近备份数据了吗？</item>
+        <item>清理通知，少些干扰，多些专注</item>
+        <item>检查订阅，取消不用的项目</item>
+        <item>如果很久没更新密码，更新一下</item>
+        <item>清洁手机屏幕，它比你想象的脏</item>
+        <item>今天整理一个文件夹或抽屉</item>
+        <item>检查存储空间，删除不需要的内容</item>
+        <item>飞行模式是个很好的专注工具</item>
+        <item>本周趣事时间安排</item>
+        <item>写下三件你感激的事情</item>
+        <item>蜂蜜不会变质，3000年前的罐子被发现仍可食用</item>
+        <item>章鱼有三颗心脏和蓝色的血液</item>
+        <item>香蕉是浆果，但草莓不是</item>
+        <item>一群火烈鸟被称为“flamboyance”</item>
+        <item>月球每年远离地球3.8厘米</item>
+        <item>金星与其他行星相比是反向自转的</item>
         <item>每一束阳光在8分20秒前启程，穿越星河现在到你眼前</item>
-        <item>sharks have been around longer than trees</item>
-        <item>footprints on the moon can last millions of years</item>
-        <item>wombat poop is cube-shaped</item>
-        <item>your body has more bacterial cells than human cells</item>
-        <item>a day on venus is longer than a year on venus</item>
+        <item>鲨鱼存在的时间比树木还要久</item>
+        <item>月球上的足迹可以保存数百万年</item>
+        <item>袋熊的粪便是立方体形状的</item>
+        <item>你体内的细菌细胞比人体细胞还多</item>
+        <item>金星上的一天比金星上的一年还要长</item>
         <item>历史上最短的战争持续了38分钟</item>
-        <item>earth\'s core is as hot as the surface of the sun</item>
-        <item>there are more stars than grains of sand on earth</item>
-        <item>water can boil and freeze at the same time \u2014 it\'s called the triple point</item>
-        <item>neutron stars are so dense a teaspoon weighs billions of tons</item>
-        <item>tardigrades can survive in outer space</item>
-        <item>your brain uses about 20% of your body\'s energy</item>
-        <item>the great wall of china is not visible from space with the naked eye</item>
-        <item>humans share about 60% of their DNA with bananas</item>
-        <item>a cloud can weigh more than a million pounds</item>
-        <item>there are more possible chess games than atoms in the universe</item>
-        <item>the mantis shrimp can punch as fast as a bullet</item>
-        <item>dolphins sleep with one eye open</item>
-        <item>the average person walks about 100,000 miles in a lifetime</item>
-        <item>lightning strikes the earth about 100 times per second</item>
-        <item>scotland\'s national animal is the unicorn</item>
-        <item>a single bolt of lightning contains enough energy to toast 100,000 slices of bread</item>
-        <item>the human nose can detect over 1 trillion different scents</item>
-        <item>crows can recognize human faces and hold grudges</item>
-        <item>the amazon rainforest produces 20% of the world\'s oxygen</item>
-        <item>a jiffy is an actual unit of time \u2014 1/100th of a second</item>
-        <item>the eiffel tower can be 15 cm taller during summer due to heat expansion</item>
-        <item>butterflies taste with their feet</item>
-        <item>sea otters hold hands while sleeping so they don\'t drift apart</item>
-        <item>the inventor of the pringles can is buried in one</item>
-        <item>a photon takes 100,000 years to travel from the sun\'s core to its surface</item>
-        <item>the total length of your blood vessels could circle earth twice</item>
-        <item>there are more trees on earth than stars in the milky way</item>
-        <item>the oldest known joke is from 1900 BC sumeria</item>
-        <item>a teaspoon of a neutron star weighs about 6 billion tons</item>
-        <item>the longest hiccuping spree lasted 68 years</item>
-        <item>the heart of a blue whale is the size of a small car</item>
-        <item>you can\'t hum while holding your nose \u2014 try it</item>
-        <item>oxford university is older than the aztec empire</item>
-        <item>cleopatra lived closer in time to the moon landing than to the building of the pyramids</item>
-        <item>tap to access axion premium features</item>
-        <item>time for some axion :)</item>
-        <item>need more ram? subscribe to axion premium and download ram!</item>
-        <item>need for speed ;)</item>
-        <item>a is for axion</item>
+        <item>地球核心的温度和太阳表面一样高</item>
+        <item>恒星的数量比地球上的沙粒还要多</item>
+        <item>水可以同时沸腾和结冰，这被称为三相点</item>
+        <item>中子星密度极高，一茶匙就有数十亿吨重</item>
+        <item>水熊虫能在太空中生存</item>
+        <item>你的大脑消耗人体约20%的能量</item>
+        <item>从太空用肉眼是看不到中国长城的</item>
+        <item>人类与香蕉共享约60%的DNA</item>
+        <item>一朵云的重量可以超过一百万磅</item>
+        <item>可能的国际象棋对局数量比宇宙中的原子还要多</item>
+        <item>螳螂虾出拳的速度和子弹一样快</item>
+        <item>海豚睡觉时睁着一只眼睛</item>
+        <item>普通人一生中大约行走10万英里</item>
+        <item>闪电每秒大约击中地球100次</item>
+        <item>苏格兰的国兽是独角兽</item>
+        <item>一道闪电所含的能量足以烤10万片面包</item>
+        <item>人的鼻子可以分辨超过1万亿种气味</item>
+        <item>乌鸦能识别人的面孔并记仇</item>
+        <item>亚马逊雨林产生全球20%的氧气</item>
+        <item>“一瞬”是实际的时间单位，相当于百分之一秒</item>
+        <item>由于热膨胀，埃菲尔铁塔在夏季可以高15厘米</item>
+        <item>蝴蝶的味觉器官位于足部</item>
+        <item>海獭睡觉时手拉手，以免被冲散</item>
+        <item>品客薯片罐的发明者被葬在一个罐子里</item>
+        <item>光子从太阳核心到表面需要10万年</item>
+        <item>人体血管总长度可绕地球赤道两圈</item>
+        <item>地球上的树木比银河系中的恒星还多</item>
+        <item>已知最古老的笑话出自公元前1900年的苏美尔</item>
+        <item>一茶匙中子星物质重约60亿吨</item>
+        <item>打嗝最久的一次持续了68年</item>
+        <item>蓝鲸的心脏有一辆小汽车那么大</item>
+        <item>捏着鼻子无法哼出声，试试看</item>
+        <item>牛津大学比阿兹特克帝国还要古老</item>
+        <item>克利奥帕特拉生活的年代距离登月比距离建造金字塔更近</item>
+        <item>点击访问 Axion 高级功能</item>
+        <item>该用一下 Axion 了 :)</item>
+        <item>需要更多内存？订阅 Axion 高级版并下载内存！</item>
+        <item>速度需求 ;)</item>
+        <item>	A 代表 Axion</item>
     </string-array>
-    <string name="tile_selection_group_title">Tile</string>
-    <string name="tile_select_title">Select tile</string>
-    <string name="tile_select_summary">Choose a quick setting</string>
-    <string name="tile_size_group_title">Sizing</string>
-    <string name="tile_circle_size_title">Tile size</string>
-    <string name="tile_circle_size_summary">Diameter of the circular tile</string>
-    <string name="pill_height_title">Pill height</string>
-    <string name="pill_height_summary">Height of the pill form</string>
-    <string name="pill_width_title">Pill width</string>
-    <string name="pill_width_summary">Width of the pill form</string>
-    <string name="pill_autofit_title">Auto-fit pill width</string>
-    <string name="pill_autofit_summary">Size pill to fit label text</string>
+    <string name="tile_selection_group_title">平铺显示</string>
+    <string name="tile_select_title">选择快捷设置</string>
+    <string name="tile_select_summary">选择快捷设置</string>
+    <string name="tile_size_group_title">尺寸</string>
+    <string name="tile_circle_size_title">磁贴尺寸</string>
+    <string name="tile_circle_size_summary">圆形磁贴直径</string>
+    <string name="pill_height_title">胶囊高度</string>
+    <string name="pill_height_summary">胶囊形态的高度</string>
+    <string name="pill_width_title">胶囊宽度</string>
+    <string name="pill_width_summary">胶囊形态的宽度</string>
+    <string name="pill_autofit_title">自适应药丸宽度</string>
+    <string name="pill_autofit_summary">根据标签文本调整药丸大小</string>
     <!-- Clock Configuration -->
-    <string name="clock_bg_translucent">Translucent background</string>
-    <string name="clock_bg_translucent_desc">A rounded solid background matching system colors</string>
-    <string name="clock_bg_transparent">Transparent background</string>
-    <string name="clock_bg_transparent_desc">No card background behind the clock</string>
-    <string name="clock_style_section">Widget Background</string>
+    <string name="clock_bg_translucent">半透明背景</string>
+    <string name="clock_bg_translucent_desc">匹配系统颜色的圆角纯色背景</string>
+    <string name="clock_bg_transparent">透明背景</string>
+    <string name="clock_bg_transparent_desc">时钟后方无卡片背景</string>
+    <string name="clock_style_section">小部件背景</string>
 </resources>
