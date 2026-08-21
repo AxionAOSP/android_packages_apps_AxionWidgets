@@ -16,7 +16,7 @@
     <!-- Settings -->
     <string name="welcome_message">Ласкаво просимо до Axion. Натисніть тут, щоби налаштувати швидкий перегляд.</string>
     <string name="loading_text">Завантаження...</string>
-    <string name="toast_calendar_permission_required">Потрібен дозвіл календаря</string>
+    <string name="toast_calendar_permission_required">Потрібен дозвіл на доступ до календаря</string>
     <string name="allow_notification_access">Надати доступ до сповіщень</string>
     <string name="allow_calendar_access">Надати доступ до календаря</string>
     <string name="access_granted">Дозвіл надано</string>
@@ -166,7 +166,7 @@
         <item>протри екран \u2014 він брудніший, ніж здається</item>
         <item>розгреби хоч одну папку чи шухляду</item>
         <item>перевір пам\'ять \u2014 видали зайве</item>
-        <item>режим «у літаку» \u2014 твій найкращий інструмент для фокусу</item>
+        <item>режим «у літаку» \u2014 твій найкращий інструмент для фокуса</item>
         <item>заплануй собі щось приємне</item>
         <item>запиши три речі, за які ти вдячний</item>
         <item>мед не псується \u2014 глечики віком 3000 років досі їстівні</item>
