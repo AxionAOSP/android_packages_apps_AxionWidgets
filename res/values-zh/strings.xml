@@ -1,240 +1,240 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="photos_already_exist">
-        <item quantity="other">已有 %d 张照片，已跳过</item>
+        <item quantity="other">已略過 %d 張已存在的相片。</item>
     </plurals>
     <!-- Manifest -->
-    <string name="app_name">Axion 部件</string>
-    <string name="label_photo">照片</string>
-    <string name="label_tile">平铺显示</string>
-    <string name="label_media_notification_listener">媒体通知服务</string>
-    <string name="label_screentime">屏幕使用时间</string>
-    <string name="label_media_player">媒体播放器</string>
+    <string name="app_name">Axion 小工具</string>
+    <string name="label_photo">相片</string>
+    <string name="label_tile">方塊</string>
+    <string name="label_media_notification_listener">媒體通知監聽器</string>
+    <string name="label_screentime">裝置使用時間</string>
+    <string name="label_media_player">媒體播放器</string>
     <!-- Settings -->
-    <string name="welcome_message">欢迎使用 Axion，点击这里设置快速查看</string>
-    <string name="loading_text">加载中…</string>
-    <string name="toast_calendar_permission_required">请授予日历权限</string>
-    <string name="allow_notification_access">授予通知使用权</string>
-    <string name="allow_calendar_access">允许访问日历</string>
-    <string name="access_granted">已授予访问权限</string>
-    <string name="needed_for_now_playing">需要现在播放</string>
-    <string name="needed_for_calendar_events">日历事件所需</string>
+    <string name="welcome_message">歡迎來到 Axion，點這裡來設定 QuickLock。</string>
+    <string name="loading_text">載入中……</string>
+    <string name="toast_calendar_permission_required">需要日曆權限</string>
+    <string name="allow_notification_access">允許通知存取權</string>
+    <string name="allow_calendar_access">允許日曆存取權</string>
+    <string name="access_granted">已授予存取權</string>
+    <string name="needed_for_now_playing">「Now Playing」功能所需</string>
+    <string name="needed_for_calendar_events">日曆活動功能所需</string>
     <!-- Calendar -->
-    <string name="quick_look_widget_calendar_in_time">%d分钟后</string>
-    <string name="quick_look_widget_calendar_now">现在</string>
+    <string name="quick_look_widget_calendar_in_time">再 %d 分鐘</string>
+    <string name="quick_look_widget_calendar_now">現在</string>
     <string name="quick_look_widget_calendar_tomorrow">明天</string>
     <string name="quick_look_widget_calendar_yesterday">昨天</string>
-    <string name="quick_look_widget_calendar_no_title">(无标题事件)</string>
+    <string name="quick_look_widget_calendar_no_title">（無標題活動）</string>
     <!-- Battery -->
-    <string name="battery_widget">省电</string>
-    <string name="full_charge">充电完成</string>
+    <string name="battery_widget">省電</string>
+    <string name="full_charge">已充飽</string>
     <string name="charging">充电中</string>
-    <string name="minutes_left">剩余 %1$d 分钟</string>
+    <string name="minutes_left">剩餘 %1$d 分鐘</string>
     <!-- Photo -->
-    <string name="photo_title">照片</string>
-    <string name="add_photos">添加照片</string>
-    <string name="add_photos_cd">添加照片</string>
-    <string name="display_options">显示选项</string>
-    <string name="grayscale_mode">灰度模式</string>
-    <string name="shuffle_interval">随机播放间隔</string>
-    <string name="select_interval">选择间隔</string>
-    <string name="select_shuffle_interval">随机播放间隔</string>
+    <string name="photo_title">相片</string>
+    <string name="add_photos">新增相片</string>
+    <string name="add_photos_cd">新增相片</string>
+    <string name="display_options">顯示選項</string>
+    <string name="grayscale_mode">灰階模式</string>
+    <string name="shuffle_interval">隨機播放間隔</string>
+    <string name="select_interval">選取間隔</string>
+    <string name="select_shuffle_interval">選取隨機播放間隔</string>
     <string name="cancel">取消</string>
-    <string name="save_changes">保存</string>
-    <string name="manage_photos">管理照片</string>
+    <string name="save_changes">儲存變更</string>
+    <string name="manage_photos">管理相片</string>
     <string name="back">返回</string>
-    <string name="delete_selected">删除所选项</string>
-    <string name="edit">编辑</string>
-    <string name="no_photos_selected">未选择照片</string>
-    <string name="photo">照片</string>
-    <string name="confirm_delete_title">确认删除</string>
-    <string name="confirm_delete_message">确定删除所选中图片吗？</string>
-    <string name="delete">删除</string>
-    <string name="interval_1_minute">1分钟</string>
-    <string name="interval_5_minutes">5 分钟</string>
-    <string name="interval_15_minutes">15 分钟</string>
-    <string name="interval_1_hour">1 小时</string>
+    <string name="delete_selected">刪除所選</string>
+    <string name="edit">編輯</string>
+    <string name="no_photos_selected">未選取相片</string>
+    <string name="photo">相片</string>
+    <string name="confirm_delete_title">確認刪除</string>
+    <string name="confirm_delete_message">確定要刪除所選的相片嗎？</string>
+    <string name="delete">刪除</string>
+    <string name="interval_1_minute">1 分鐘</string>
+    <string name="interval_5_minutes">5 分鐘</string>
+    <string name="interval_15_minutes">15 分鐘</string>
+    <string name="interval_1_hour">1 小時</string>
     <!-- Tiles -->
-    <string name="wifi">WiFi</string>
-    <string name="bluetooth">蓝牙</string>
-    <string name="airplane_mode">飞行模式</string>
-    <string name="dark_theme">深色主题</string>
-    <string name="torch">手电筒</string>
-    <string name="dnd">勿扰模式</string>
-    <string name="priority">优先</string>
-    <string name="alarms_only">仅限闹钟</string>
-    <string name="total_silence">完全静音</string>
-    <string name="auto_rotate">自动旋转</string>
-    <string name="ringer_normal">铃声</string>
-    <string name="ringer_vibrate">振动</string>
-    <string name="ringer_silent">静音</string>
-    <string name="ringer_unknown">未知</string>
-    <string name="mobile_data">移动数据</string>
-    <string name="label_year_progress">年度进度</string>
-    <string name="label_digital_clock">数字钟</string>
-    <string name="label_analog_clock">模拟时钟</string>
-    <string name="label_world_clock">世界时钟</string>
-    <string name="label_countdown">倒数</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="bluetooth">藍牙</string>
+    <string name="airplane_mode">飛航</string>
+    <string name="dark_theme">深色主題</string>
+    <string name="torch">手電筒</string>
+    <string name="dnd">勿擾模式</string>
+    <string name="priority">僅優先通知</string>
+    <string name="alarms_only">僅限鬧鐘</string>
+    <string name="total_silence">完全靜音</string>
+    <string name="auto_rotate">自動旋轉</string>
+    <string name="ringer_normal">響鈴</string>
+    <string name="ringer_vibrate">震動</string>
+    <string name="ringer_silent">靜音</string>
+    <string name="ringer_unknown">不明</string>
+    <string name="mobile_data">行動數據</string>
+    <string name="label_year_progress">年度進度</string>
+    <string name="label_digital_clock">數位時鐘</string>
+    <string name="label_analog_clock">指針時鐘</string>
+    <string name="label_world_clock">世界時鐘</string>
+    <string name="label_countdown">倒數計時</string>
     <string name="label_date">日期</string>
-    <string name="label_pedometer">计步器</string>
-    <string name="label_compass">指南针</string>
-    <string name="label_bottle_spinner">转盘</string>
-    <string name="bottle_spinner_tap">点击旋转</string>
-    <string name="label_rps">石头剪刀布</string>
-    <string name="rps_tap">点击播放</string>
+    <string name="label_pedometer">計步器</string>
+    <string name="label_compass">指南針</string>
+    <string name="label_bottle_spinner">轉瓶遊戲</string>
+    <string name="bottle_spinner_tap">輕觸以旋轉</string>
+    <string name="label_rps">猜拳</string>
+    <string name="rps_tap">輕觸以開始</string>
     <string name="ql_display">界面设置</string>
-    <string name="ql_show_date">显示日期</string>
-    <string name="ql_show_date_desc">在顶部显示日期</string>
+    <string name="ql_show_date">顯示日期</string>
+    <string name="ql_show_date_desc">在頂端顯示日期</string>
     <string name="ql_date_format">日期格式</string>
-    <string name="ql_date_default">默认</string>
-    <string name="ql_date_short">短时间(周一，1月)</string>
-    <string name="ql_date_full">完整（2026年1月1日星期一）</string>
-    <string name="ql_cal_lookahead">日历查询</string>
-    <string name="ql_lookahead_15">15 分钟</string>
-    <string name="ql_lookahead_30">30 分钟</string>
-    <string name="ql_lookahead_60">1 小时</string>
-    <string name="ql_lookahead_120">2 小时</string>
-    <string name="ql_data_sources">数据来源</string>
-    <string name="ql_cal_settings">日历</string>
-    <string name="ql_source_calendar">日历</string>
-    <string name="ql_source_calendar_desc">显示近期安排</string>
+    <string name="ql_date_default">預設</string>
+    <string name="ql_date_short">簡短（Mon, Jan 1）</string>
+    <string name="ql_date_full">完整（Monday, January 1, 2026）</string>
+    <string name="ql_cal_lookahead">日曆預覽時間</string>
+    <string name="ql_lookahead_15">15 分鐘</string>
+    <string name="ql_lookahead_30">30 分鐘</string>
+    <string name="ql_lookahead_60">1 小時</string>
+    <string name="ql_lookahead_120">2 小時</string>
+    <string name="ql_data_sources">資料來源</string>
+    <string name="ql_cal_settings">日曆</string>
+    <string name="ql_source_calendar">日曆</string>
+    <string name="ql_source_calendar_desc">顯示即將到來的活動</string>
     <string name="ql_source_media">媒体</string>
-    <string name="ql_source_media_desc">显示正在播放内容</string>
-    <string name="ql_source_battery">省电</string>
-    <string name="ql_source_battery_desc">显示充电状态</string>
-    <string name="ql_source_weather">天气</string>
-    <string name="ql_source_weather_desc">显示当前状况</string>
-    <string name="ql_source_messages">随机消息</string>
-    <string name="ql_source_messages_desc">显示提示和趣味知识</string>
-    <string name="ql_msg_settings">信息</string>
-    <string name="ql_msg_interval">轮播间隔</string>
-    <string name="ql_msg_30m">30 分钟</string>
-    <string name="ql_msg_1h">1 小时</string>
-    <string name="ql_msg_3h">3 小时</string>
-    <string name="ql_msg_6h">6 小时</string>
+    <string name="ql_source_media_desc">顯示 Now Playing 的資訊</string>
+    <string name="ql_source_battery">省電</string>
+    <string name="ql_source_battery_desc">顯示充電狀態</string>
+    <string name="ql_source_weather">天氣</string>
+    <string name="ql_source_weather_desc">顯示目前的天氣狀況</string>
+    <string name="ql_source_messages">隨機訊息</string>
+    <string name="ql_source_messages_desc">顯示提示和趣味小知識</string>
+    <string name="ql_msg_settings">訊息</string>
+    <string name="ql_msg_interval">輪替間隔</string>
+    <string name="ql_msg_30m">30 分鐘</string>
+    <string name="ql_msg_1h">1 小時</string>
+    <string name="ql_msg_3h">3 小時</string>
+    <string name="ql_msg_6h">6 小時</string>
     <string name="ql_msg_daily">每天</string>
-    <string name="ql_apply">保存</string>
+    <string name="ql_apply">儲存</string>
     <string-array name="quicklook_messages">
-        <item>水喝够，精神足</item>
-        <item>深呼吸，伸个懒腰</item>
-        <item>保持良好姿势，效果确实不同</item>
-        <item>该让眼睛休息一下了</item>
-        <item>出去走走，有助于调节心情</item>
-        <item>记得好好吃饭</item>
-        <item>休息也同样重要</item>
-        <item>睡眠是最好的恢复方式</item>
-        <item>让眼睛休息一下，看看远处</item>
-        <item>站一分钟，促进血液循环</item>
-        <item>松开下巴，放松肩膀</item>
-        <item>现在，慢慢深呼吸三次</item>
-        <item>呼吸新鲜空气，提升专注力</item>
-        <item>小睡20分钟，激发创造力</item>
-        <item>早晨晒晒太阳，调整生物钟</item>
-        <item>今天你做得很好</item>
-        <item>小步积累，成就大改变</item>
-        <item>今天很适合学点新知识</item>
+        <item>記得補充水分 \u2014 喝點水吧</item>
+        <item>做個深呼吸，伸展一下</item>
+        <item>良好的姿勢大有幫助</item>
+        <item>該讓眼睛休息一下了嗎？</item>
+        <item>出門散步能讓心情煥然一新</item>
+        <item>別忘了好好吃飯</item>
+        <item>休息也是一種生產力</item>
+        <item>睡眠是最好的恢復方式</item>
+        <item>讓眼睛休息一下 \u2014 看看遠方吧</item>
+        <item>起身站一分鐘有助於促進血液循環</item>
+        <item>放鬆下顎，舒展肩膀</item>
+        <item>現在就慢慢深呼吸三次</item>
+        <item>新鮮空氣對專注力大有益處</item>
+        <item>小睡 20 分鐘有助於激發創造力</item>
+        <item>早晨的陽光有助於調節生理時鐘</item>
+        <item>你今天表現很棒</item>
+        <item>積少成多，小步驟帶來大改變</item>
+        <item>今天是學習新知的好日子</item>
         <item>善待自己</item>
-        <item>进步，不必追求完美</item>
-        <item>现在就行动</item>
-        <item>少刷视频，回归生活</item>
-        <item>今天怎么做才能过得更棒？</item>
-        <item>感恩改变视角</item>
-        <item>先完成，再完美</item>
-        <item>未来的你会感谢现在的自己</item>
-        <item>坚持比短暂的热情更有用</item>
-        <item>你不需要动力，直接开始就行</item>
-        <item>和昨天的自己比，而不是和别人比</item>
-        <item>最难的通常是开始这一步</item>
-        <item>每个专家都曾是从头开始的</item>
-        <item>错误是数据，不是失败</item>
-        <item>专注于你能掌控的事情</item>
-        <item>为小成就而肯定自己</item>
-        <item>成长不会发生在舒适区里</item>
-        <item>关心一下你在乎的人</item>
-        <item>音乐让一切变得更好</item>
-        <item>给老朋友发条消息</item>
-        <item>真诚的赞美能让人一整天都开心</item>
-        <item>倾听是一项被低估的能力</item>
-        <item>专注当下是你最好的给予</item>
-        <item>你最近备份数据了吗？</item>
-        <item>清理通知，少些干扰，多些专注</item>
-        <item>检查订阅，取消不用的项目</item>
-        <item>如果很久没更新密码，更新一下</item>
-        <item>清洁手机屏幕，它比你想象的脏</item>
-        <item>今天整理一个文件夹或抽屉</item>
-        <item>检查存储空间，删除不需要的内容</item>
-        <item>飞行模式是个很好的专注工具</item>
-        <item>本周趣事时间安排</item>
-        <item>写下三件你感激的事情</item>
-        <item>蜂蜜不会变质，3000年前的罐子被发现仍可食用</item>
-        <item>章鱼有三颗心脏和蓝色的血液</item>
-        <item>香蕉是浆果，但草莓不是</item>
-        <item>一群火烈鸟被称为“flamboyance”</item>
-        <item>月球每年远离地球3.8厘米</item>
-        <item>金星与其他行星相比是反向自转的</item>
-        <item>每一束阳光在8分20秒前启程，穿越星河现在到你眼前</item>
-        <item>鲨鱼存在的时间比树木还要久</item>
-        <item>月球上的足迹可以保存数百万年</item>
-        <item>袋熊的粪便是立方体形状的</item>
-        <item>你体内的细菌细胞比人体细胞还多</item>
-        <item>金星上的一天比金星上的一年还要长</item>
-        <item>历史上最短的战争持续了38分钟</item>
-        <item>地球核心的温度和太阳表面一样高</item>
-        <item>恒星的数量比地球上的沙粒还要多</item>
-        <item>水可以同时沸腾和结冰，这被称为三相点</item>
-        <item>中子星密度极高，一茶匙就有数十亿吨重</item>
-        <item>水熊虫能在太空中生存</item>
-        <item>你的大脑消耗人体约20%的能量</item>
-        <item>从太空用肉眼是看不到中国长城的</item>
-        <item>人类与香蕉共享约60%的DNA</item>
-        <item>一朵云的重量可以超过一百万磅</item>
-        <item>可能的国际象棋对局数量比宇宙中的原子还要多</item>
-        <item>螳螂虾出拳的速度和子弹一样快</item>
-        <item>海豚睡觉时睁着一只眼睛</item>
-        <item>普通人一生中大约行走10万英里</item>
-        <item>闪电每秒大约击中地球100次</item>
-        <item>苏格兰的国兽是独角兽</item>
-        <item>一道闪电所含的能量足以烤10万片面包</item>
-        <item>人的鼻子可以分辨超过1万亿种气味</item>
-        <item>乌鸦能识别人的面孔并记仇</item>
-        <item>亚马逊雨林产生全球20%的氧气</item>
-        <item>“一瞬”是实际的时间单位，相当于百分之一秒</item>
-        <item>由于热膨胀，埃菲尔铁塔在夏季可以高15厘米</item>
-        <item>蝴蝶的味觉器官位于足部</item>
-        <item>海獭睡觉时手拉手，以免被冲散</item>
-        <item>品客薯片罐的发明者被葬在一个罐子里</item>
-        <item>光子从太阳核心到表面需要10万年</item>
-        <item>人体血管总长度可绕地球赤道两圈</item>
-        <item>地球上的树木比银河系中的恒星还多</item>
-        <item>已知最古老的笑话出自公元前1900年的苏美尔</item>
-        <item>一茶匙中子星物质重约60亿吨</item>
-        <item>打嗝最久的一次持续了68年</item>
-        <item>蓝鲸的心脏有一辆小汽车那么大</item>
-        <item>捏着鼻子无法哼出声，试试看</item>
-        <item>牛津大学比阿兹特克帝国还要古老</item>
-        <item>克利奥帕特拉生活的年代距离登月比距离建造金字塔更近</item>
-        <item>点击访问 Axion 高级功能</item>
-        <item>该用一下 Axion 了 :)</item>
-        <item>需要更多内存？订阅 Axion 高级版并下载内存！</item>
+        <item>追求進步，不求完美</item>
+        <item>開始的最佳時機就是現在</item>
+        <item>少滑手機，多活在當下</item>
+        <item>怎麼做能讓今天更美好？</item>
+        <item>感恩能改變看事情的角度</item>
+        <item>完成勝過完美</item>
+        <item>未來的你會感謝現在的自己</item>
+        <item>持之以恆勝過短期衝刺</item>
+        <item>你不需要動力 \u2014 只要開始就好</item>
+        <item>跟昨天的自己比，而不是和別人比</item>
+        <item>最難的部分通常是開始</item>
+        <item>每位專家都曾是初學者</item>
+        <item>錯誤是經驗，不是失敗</item>
+        <item>專注在你能控制的事</item>
+        <item>慶祝每一個小小的成就</item>
+        <item>舒適圈不是成長發生的地方</item>
+        <item>關心一下你在乎的人</item>
+        <item>音樂讓一切變得更美好</item>
+        <item>傳個訊息給老朋友</item>
+        <item>一句真誠的讚美能讓人開心一整天</item>
+        <item>傾聽是一項被低估的技能</item>
+        <item>全心陪伴是你能給的最好禮物</item>
+        <item>你最近有備份資料嗎？</item>
+        <item>清除通知 \u2014 減少干擾，更加專注</item>
+        <item>檢查你的訂閱 \u2014 取消不需要的項目</item>
+        <item>如果密碼很久沒更新，是時候換一換了</item>
+        <item>清潔手機螢幕 \u2014 它比你想像的還髒</item>
+        <item>今天整理一個資料夾或抽屜</item>
+        <item>檢查儲存空間 \u2014 刪除不需要的項目</item>
+        <item>飛航模式是很好的專注工具</item>
+        <item>為這週安排一件有趣的事</item>
+        <item>寫下三件你感恩的事</item>
+        <item>蜂蜜永不變質 \u2014 3000 年前的蜂蜜罐仍可食用</item>
+        <item>章魚有三顆心臟，而且血液是藍色的</item>
+        <item>香蕉是漿果，草莓卻不是</item>
+        <item>一群紅鶴的英文叫做 flamboyance（炫麗群）</item>
+        <item>月球每年遠離地球約 3.8 公分</item>
+        <item>金星的自轉方向與其他行星相反</item>
+        <item>陽光需要 8 分 20 秒才能到達地球</item>
+        <item>鯊魚存在的時間比樹木還要長</item>
+        <item>月球上的腳印可以保存數百萬年</item>
+        <item>袋熊的糞便是方塊狀的</item>
+        <item>你體內的細菌細胞數量超過人體細胞</item>
+        <item>金星的一天比金星的一年還要長</item>
+        <item>歷史上最短的戰爭只持續了 38 分鐘</item>
+        <item>地球核心的溫度與太陽表面一樣熱</item>
+        <item>宇宙中的星星比地球上所有的沙粒還要多</item>
+        <item>水可以同時沸騰和結凍 \u2014 這叫做三相點</item>
+        <item>中子星密度極高，一茶匙就重達數十億噸</item>
+        <item>水熊蟲能在外太空存活</item>
+        <item>你的大腦消耗了約 20% 的身體能量</item>
+        <item>長城從太空用肉眼根本看不到</item>
+        <item>人類與香蕉有約 60% 的 DNA 相同</item>
+        <item>一朵雲的重量可能超過一百萬磅</item>
+        <item>可能的西洋棋局數比宇宙中的原子還要多</item>
+        <item>螳螂蝦的出拳速度和子彈一樣快</item>
+        <item>海豚睡覺時一隻眼睛是張開的</item>
+        <item>一個人一生平均走約 16 萬公里</item>
+        <item>閃電每秒大約擊中地球 100 次</item>
+        <item>蘇格蘭的國獸是獨角獸</item>
+        <item>一道閃電包含的能量足以烤 10 萬片麵包</item>
+        <item>人類的鼻子能辨識超過 1 兆種不同的氣味</item>
+        <item>烏鴉能辨認人臉，而且會記仇</item>
+        <item>亞馬遜雨林製造了全球 20% 的氧氣</item>
+        <item>jiffy 是一個真實的時間單位 \u2014 等於百分之一秒</item>
+        <item>夏天時，熱脹冷縮使艾菲爾鐵塔可以高出 15 公分</item>
+        <item>蝴蝶用腳來品嚐味道</item>
+        <item>海獺睡覺時會牽手，以免漂離彼此</item>
+        <item>品客罐的發明者被葬在一個品客罐中</item>
+        <item>一顆光子從太陽核心到達表面需要 10 萬年</item>
+        <item>你體內所有血管的總長度可以繞地球兩圈</item>
+        <item>地球上的樹木比銀河系的星星還要多</item>
+        <item>已知最古老的笑話來自西元前 1900 年的蘇美</item>
+        <item>一茶匙中子星的重量約 60 億噸</item>
+        <item>史上最長的打嗝記錄持續了 68 年</item>
+        <item>藍鯨的心臟有一輛小轎車那麼大</item>
+        <item>捏住鼻子就無法哼歌 \u2014 試試看</item>
+        <item>牛津大學比阿茲特克帝國還要古老</item>
+        <item>克麗奧佩脫拉距離月球登陸的時間，比距離金字塔建造的時間還要近</item>
+        <item>輕觸以存取 Axion 進階功能</item>
+        <item>來點 Axion 吧 :)</item>
+        <item>需要更多 RAM？訂閱 Axion Premium 並下載 RAM！</item>
         <item>速度需求 ;)</item>
-        <item>	A 代表 Axion</item>
+        <item>A 代表 Axion</item>
     </string-array>
-    <string name="tile_selection_group_title">平铺显示</string>
-    <string name="tile_select_title">选择快捷设置</string>
-    <string name="tile_select_summary">选择快捷设置</string>
+    <string name="tile_selection_group_title">方塊</string>
+    <string name="tile_select_title">選取快捷方塊</string>
+    <string name="tile_select_summary">選擇一個快速設定</string>
     <string name="tile_size_group_title">尺寸</string>
-    <string name="tile_circle_size_title">磁贴尺寸</string>
-    <string name="tile_circle_size_summary">圆形磁贴直径</string>
-    <string name="pill_height_title">胶囊高度</string>
-    <string name="pill_height_summary">胶囊形态的高度</string>
-    <string name="pill_width_title">胶囊宽度</string>
-    <string name="pill_width_summary">胶囊形态的宽度</string>
-    <string name="pill_autofit_title">自适应药丸宽度</string>
-    <string name="pill_autofit_summary">根据标签文本调整药丸大小</string>
+    <string name="tile_circle_size_title">快捷方塊大小</string>
+    <string name="tile_circle_size_summary">圓形方塊的直徑</string>
+    <string name="pill_height_title">膠囊高度</string>
+    <string name="pill_height_summary">膠囊形狀的高度</string>
+    <string name="pill_width_title">膠囊寬度</string>
+    <string name="pill_width_summary">膠囊形狀的寬度</string>
+    <string name="pill_autofit_title">自動調整膠囊寬度</string>
+    <string name="pill_autofit_summary">依標籤文字調整膠囊大小</string>
     <!-- Clock Configuration -->
-    <string name="clock_bg_translucent">半透明背景</string>
-    <string name="clock_bg_translucent_desc">匹配系统颜色的圆角纯色背景</string>
-    <string name="clock_bg_transparent">透明背景</string>
-    <string name="clock_bg_transparent_desc">时钟后方无卡片背景</string>
-    <string name="clock_style_section">小部件背景</string>
+    <string name="clock_bg_translucent">Translucent background</string>
+    <string name="clock_bg_translucent_desc">A rounded solid background matching system colors</string>
+    <string name="clock_bg_transparent">Transparent background</string>
+    <string name="clock_bg_transparent_desc">No card background behind the clock</string>
+    <string name="clock_style_section">Widget Background</string>
 </resources>

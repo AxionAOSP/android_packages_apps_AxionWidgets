@@ -16,7 +16,7 @@
     <!-- Settings -->
     <string name="welcome_message">Ласкаво просимо до Axion. Натисніть тут, щоби налаштувати швидкий перегляд.</string>
     <string name="loading_text">Завантаження...</string>
-    <string name="toast_calendar_permission_required">Потрібен дозвіл календаря</string>
+    <string name="toast_calendar_permission_required">Потрібен дозвіл на доступ до календаря</string>
     <string name="allow_notification_access">Надати доступ до сповіщень</string>
     <string name="allow_calendar_access">Надати доступ до календаря</string>
     <string name="access_granted">Дозвіл надано</string>
@@ -140,56 +140,56 @@
         <item>прогрес, а не досконалість</item>
         <item>найліпший час розпочати зараз</item>
         <item>менше гортання, більше життя</item>
-        <item>what would make today great?</item>
-        <item>gratitude changes perspective</item>
-        <item>done is better than perfect</item>
-        <item>your future self will thank you</item>
-        <item>consistency beats intensity</item>
-        <item>you don\'t need motivation \u2014 just start</item>
-        <item>compare yourself to yesterday, not to others</item>
-        <item>the hardest part is usually starting</item>
-        <item>every expert was once a beginner</item>
-        <item>mistakes are data, not failures</item>
-        <item>focus on what you can control</item>
-        <item>celebrate small wins</item>
-        <item>your comfort zone is not where growth happens</item>
-        <item>check in on someone you care about</item>
-        <item>music makes everything better</item>
-        <item>send a message to an old friend</item>
-        <item>a genuine compliment can make someone\'s day</item>
-        <item>listening is an underrated skill</item>
-        <item>being present is the best gift you can give</item>
-        <item>have you backed up your data lately?</item>
-        <item>clear your notifications \u2014 less noise, more focus</item>
-        <item>review your subscriptions \u2014 cancel what you don\'t use</item>
-        <item>update your passwords if it\'s been a while</item>
-        <item>clean your phone screen \u2014 it\'s dirtier than you think</item>
-        <item>organize one folder or drawer today</item>
-        <item>check your storage \u2014 delete what you don\'t need</item>
-        <item>airplane mode is a great focus tool</item>
-        <item>schedule something fun for this week</item>
-        <item>write down three things you\'re grateful for</item>
-        <item>honey never spoils \u2014 3000-year-old jars were found edible</item>
-        <item>octopuses have three hearts and blue blood</item>
-        <item>bananas are berries, but strawberries aren\'t</item>
-        <item>a group of flamingos is called a flamboyance</item>
-        <item>the moon drifts 3.8 cm farther from earth each year</item>
-        <item>venus spins backwards compared to other planets</item>
-        <item>sunlight takes 8 minutes and 20 seconds to reach earth</item>
-        <item>sharks have been around longer than trees</item>
-        <item>footprints on the moon can last millions of years</item>
-        <item>wombat poop is cube-shaped</item>
-        <item>your body has more bacterial cells than human cells</item>
-        <item>a day on venus is longer than a year on venus</item>
-        <item>the shortest war in history lasted 38 minutes</item>
-        <item>earth\'s core is as hot as the surface of the sun</item>
-        <item>there are more stars than grains of sand on earth</item>
-        <item>water can boil and freeze at the same time \u2014 it\'s called the triple point</item>
-        <item>neutron stars are so dense a teaspoon weighs billions of tons</item>
-        <item>tardigrades can survive in outer space</item>
-        <item>your brain uses about 20% of your body\'s energy</item>
-        <item>the great wall of china is not visible from space with the naked eye</item>
-        <item>humans share about 60% of their DNA with bananas</item>
+        <item>що зробило б цей день чудовим?</item>
+        <item>вдячність змінює погляд на речі</item>
+        <item>зроблене краще за ідеальне</item>
+        <item>ти в майбутньому подякуєш собі</item>
+        <item>регулярність перемагає інтенсивність</item>
+        <item>забудь про мотивацію \u2014 просто почни</item>
+        <item>порівнюй себе із собою вчорашнім, а не з іншими</item>
+        <item>найважче \u2014 зробити перший крок</item>
+        <item>будь-який профі починав з нуля</item>
+        <item>помилки це досвід, а не поразка</item>
+        <item>фокусуйся на тому, що контролюєш</item>
+        <item>радій маленьким крокам</item>
+        <item>у зоні комфорту немає розвитку</item>
+        <item>напиши тому, хто тобі небайдужий</item>
+        <item>з музикою все простіше</item>
+        <item>напиши старому другові</item>
+        <item>щирий комплімент може підняти комусь настрій на весь день</item>
+        <item>вміння слухати це рідкісна суперсила</item>
+        <item>твоя увага найкращий подарунок</item>
+        <item>давно робив бекап?</item>
+        <item>очисть сповіщення \u2014 менше шуму, більше фокусу</item>
+        <item>перевір підписки \u2014 скасуй непотрібні</item>
+        <item>онови паролі, якщо давно цього не робив</item>
+        <item>протри екран \u2014 він брудніший, ніж здається</item>
+        <item>розгреби хоч одну папку чи шухляду</item>
+        <item>перевір пам\'ять \u2014 видали зайве</item>
+        <item>режим «у літаку» \u2014 твій найкращий інструмент для фокуса</item>
+        <item>заплануй собі щось приємне</item>
+        <item>запиши три речі, за які ти вдячний</item>
+        <item>мед не псується \u2014 глечики віком 3000 років досі їстівні</item>
+        <item>у восьминогів три серця та блакитна кров</item>
+        <item>банан це ягода, а полуниця ні</item>
+        <item>зграю фламінго називають фламбоянс</item>
+        <item>місяць щороку віддаляється від землі на 3,8 см</item>
+        <item>венера крутиться в інший бік, ніж решта планет</item>
+        <item>сонячне світло летить до Землі 8 хвилин і 20 секунд</item>
+        <item>акули з\'явилися раніше за дерева</item>
+        <item>сліди на місяці можуть лежати мільйони років</item>
+        <item>фекалії вомбатів мають форму кубиків</item>
+        <item>у твоєму тілі більше бактеріальних клітин, ніж людських</item>
+        <item>день на венері довший за її рік</item>
+        <item>найкоротша війна в історії тривала всього 38 хв</item>
+        <item>ядро землі таке ж гаряче, як і поверхня сонця</item>
+        <item>зірок більше, ніж піщинок на землі</item>
+        <item>вода може кипіти й замерзати одночасно \u2014 це потрійна точка</item>
+        <item>чайна ложка нейтронної зорі важить мільярди тонн</item>
+        <item>тихоходи можуть виживати у відкритому космосі</item>
+        <item>мозок споживає близько 20% енергії тіла</item>
+        <item>велику китайську стіну не видно з космосу без оптики</item>
+        <item>люди мають близько 60% спільної ДНК із бананами</item>
         <item>хмара може важити понад мільйон фунтів</item>
         <item>варіантів шахових партій більше, ніж атомів у всьому всесвіті</item>
         <item>рак-богомол може бити зі швидкістю кулі</item>
