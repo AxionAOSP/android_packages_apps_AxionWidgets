@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="photos_already_exist">
-        <item quantity="other">%d photos already exist and were omitted.</item>
+        <item quantity="other">%d장의 사진이 이미 존재하여 생략되었습니다.</item>
     </plurals>
     <!-- Manifest -->
     <string name="app_name">Axion 위젯</string>
@@ -11,7 +11,7 @@
     <string name="label_screentime">스크린 타임</string>
     <string name="label_media_player">미디어 플레이어</string>
     <!-- Settings -->
-    <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
+    <string name="welcome_message">Axion에 오신 걸 환영합니다. 여기를 눌러 QuickLook를 설정하세요.</string>
     <string name="loading_text">로딩 중...</string>
     <string name="toast_calendar_permission_required">캘린더 권한이 필요합니다</string>
     <string name="allow_notification_access">알림 접근 허용</string>
@@ -28,7 +28,7 @@
     <!-- Battery -->
     <string name="battery_widget">Battery</string>
     <string name="full_charge">충전됨</string>
-    <string name="charging">Charging</string>
+    <string name="charging">충전 중</string>
     <string name="minutes_left">%1$d분 남음</string>
     <!-- Photo -->
     <string name="photo_title">사진</string>
@@ -82,7 +82,7 @@
     <string name="bottle_spinner_tap">tap to spin</string>
     <string name="label_rps">가위 바위 보</string>
     <string name="rps_tap">탭하여 플레이하기</string>
-    <string name="ql_display">Display</string>
+    <string name="ql_display">디스플레이</string>
     <string name="ql_show_date">Show date</string>
     <string name="ql_show_date_desc">Show date on the top line</string>
     <string name="ql_date_format">날짜 형식</string>
@@ -98,7 +98,7 @@
     <string name="ql_cal_settings">Calendar</string>
     <string name="ql_source_calendar">Calendar</string>
     <string name="ql_source_calendar_desc">Show upcoming events</string>
-    <string name="ql_source_media">Media</string>
+    <string name="ql_source_media">미디어</string>
     <string name="ql_source_media_desc">Show now playing info</string>
     <string name="ql_source_battery">Battery</string>
     <string name="ql_source_battery_desc">Show charging status</string>
