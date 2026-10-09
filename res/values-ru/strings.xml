@@ -7,10 +7,10 @@
         <item quantity="other">%d photos already exist and were omitted.</item>
     </plurals>
     <!-- Manifest -->
-    <string name="app_name">Axion Widgets</string>
+    <string name="app_name">Виджеты Axion</string>
     <string name="label_photo">Фото</string>
     <string name="label_tile">Tile</string>
-    <string name="label_media_notification_listener">Media Notification Listener</string>
+    <string name="label_media_notification_listener">Обработчик медиа уведомлений</string>
     <string name="label_screentime">Время использования</string>
     <string name="label_media_player">Медиаплеер</string>
     <!-- Settings -->
@@ -58,7 +58,7 @@
     <string name="interval_15_minutes">15 минут</string>
     <string name="interval_1_hour">1 час</string>
     <!-- Tiles -->
-    <string name="wifi">Wifi</string>
+    <string name="wifi">WiFi</string>
     <string name="bluetooth">Bluetooth</string>
     <string name="airplane_mode">Режим полёта</string>
     <string name="dark_theme">Тёмная тема</string>
@@ -80,13 +80,13 @@
     <string name="label_countdown">Таймер</string>
     <string name="label_date">Дата</string>
     <string name="label_pedometer">Шагомер</string>
-    <string name="label_compass">Compass</string>
+    <string name="label_compass">Компас</string>
     <string name="label_bottle_spinner">Bottle Spinner</string>
     <string name="bottle_spinner_tap">tap to spin</string>
     <string name="label_rps">Rock Paper Scissors</string>
-    <string name="rps_tap">tap to play</string>
+    <string name="rps_tap">Нажмите для воспроизведения</string>
     <string name="ql_display">Дисплей</string>
-    <string name="ql_show_date">Show date</string>
+    <string name="ql_show_date">Показывать дату</string>
     <string name="ql_show_date_desc">Show date on the top line</string>
     <string name="ql_date_format">Date format</string>
     <string name="ql_date_default">По умолчанию</string>
