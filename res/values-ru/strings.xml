@@ -94,150 +94,152 @@
     <string name="ql_date_full">Полный (Понедельник, 1 января 2026)</string>
     <string name="ql_cal_lookahead">Внешний вид календаря</string>
     <string name="ql_lookahead_15">15 минут</string>
-    <string name="ql_lookahead_30">30 minutes</string>
+    <string name="ql_lookahead_30">30 минут</string>
     <string name="ql_lookahead_60">1 час</string>
-    <string name="ql_lookahead_120">2 hours</string>
-    <string name="ql_data_sources">Data Sources</string>
-    <string name="ql_cal_settings">Calendar</string>
-    <string name="ql_source_calendar">Calendar</string>
-    <string name="ql_source_calendar_desc">Show upcoming events</string>
+    <string name="ql_lookahead_120">2 часа</string>
+    <string name="ql_data_sources">Источник данных</string>
+    <string name="ql_cal_settings">Календарь</string>
+    <string name="ql_source_calendar">Календарь</string>
+    <string name="ql_source_calendar_desc">Показать предстоящие события</string>
     <string name="ql_source_media">Медиа</string>
-    <string name="ql_source_media_desc">Show now playing info</string>
+    <string name="ql_source_media_desc">Показать информацию о воспроизведении</string>
     <string name="ql_source_battery">Батарея</string>
-    <string name="ql_source_battery_desc">Show charging status</string>
-    <string name="ql_source_weather">Weather</string>
-    <string name="ql_source_weather_desc">Show current conditions</string>
-    <string name="ql_source_messages">Random Messages</string>
-    <string name="ql_source_messages_desc">Show tips and fun facts</string>
-    <string name="ql_msg_settings">Messages</string>
-    <string name="ql_msg_interval">Rotation interval</string>
-    <string name="ql_msg_30m">30 minutes</string>
+    <string name="ql_source_battery_desc">Показывать состояние зарядки</string>
+    <string name="ql_source_weather">Погода</string>
+    <string name="ql_source_weather_desc">Показать текущие условия</string>
+    <string name="ql_source_messages">Случайные сообщения</string>
+    <string name="ql_source_messages_desc">Показывать советы и веселые факты</string>
+    <string name="ql_msg_settings">Сообщения</string>
+    <string name="ql_msg_interval">Интервал автосмены</string>
+    <string name="ql_msg_30m">30 минут</string>
     <string name="ql_msg_1h">1 час</string>
-    <string name="ql_msg_3h">3 hours</string>
-    <string name="ql_msg_6h">6 hours</string>
-    <string name="ql_msg_daily">Daily</string>
+    <string name="ql_msg_3h">3 часа</string>
+    <string name="ql_msg_6h">6 часов</string>
+    <string name="ql_msg_daily">Ежедневно</string>
     <string name="ql_apply">Сохранить</string>
     <string-array name="quicklook_messages">
-        <item>stay hydrated \u2014 drink some water</item>
-        <item>take a deep breath and stretch</item>
-        <item>good posture makes a difference</item>
-        <item>time for a screen break?</item>
-        <item>a walk outside can reset your mood</item>
-        <item>don\'t forget to eat well</item>
-        <item>rest is productive too</item>
-        <item>sleep is the best recovery tool</item>
-        <item>your eyes need a break \u2014 look at something far away</item>
-        <item>standing up for a minute helps circulation</item>
-        <item>unclench your jaw and relax your shoulders</item>
-        <item>take three slow breaths right now</item>
-        <item>fresh air does wonders for focus</item>
-        <item>a 20-minute nap can boost creativity</item>
-        <item>sunlight in the morning helps set your body clock</item>
-        <item>you\'re doing great today</item>
-        <item>small steps lead to big changes</item>
-        <item>today is a good day to learn something new</item>
-        <item>be kind to yourself</item>
-        <item>progress, not perfection</item>
-        <item>the best time to start is now</item>
-        <item>less scrolling, more living</item>
-        <item>what would make today great?</item>
-        <item>gratitude changes perspective</item>
-        <item>done is better than perfect</item>
-        <item>your future self will thank you</item>
-        <item>consistency beats intensity</item>
-        <item>you don\'t need motivation \u2014 just start</item>
-        <item>compare yourself to yesterday, not to others</item>
-        <item>the hardest part is usually starting</item>
-        <item>every expert was once a beginner</item>
-        <item>mistakes are data, not failures</item>
-        <item>focus on what you can control</item>
-        <item>celebrate small wins</item>
-        <item>your comfort zone is not where growth happens</item>
-        <item>check in on someone you care about</item>
-        <item>music makes everything better</item>
-        <item>send a message to an old friend</item>
-        <item>a genuine compliment can make someone\'s day</item>
-        <item>listening is an underrated skill</item>
-        <item>being present is the best gift you can give</item>
-        <item>have you backed up your data lately?</item>
-        <item>clear your notifications \u2014 less noise, more focus</item>
-        <item>review your subscriptions \u2014 cancel what you don\'t use</item>
-        <item>update your passwords if it\'s been a while</item>
-        <item>clean your phone screen \u2014 it\'s dirtier than you think</item>
-        <item>organize one folder or drawer today</item>
-        <item>check your storage \u2014 delete what you don\'t need</item>
-        <item>airplane mode is a great focus tool</item>
-        <item>schedule something fun for this week</item>
-        <item>write down three things you\'re grateful for</item>
-        <item>honey never spoils \u2014 3000-year-old jars were found edible</item>
-        <item>octopuses have three hearts and blue blood</item>
-        <item>bananas are berries, but strawberries aren\'t</item>
-        <item>a group of flamingos is called a flamboyance</item>
-        <item>the moon drifts 3.8 cm farther from earth each year</item>
-        <item>venus spins backwards compared to other planets</item>
-        <item>sunlight takes 8 minutes and 20 seconds to reach earth</item>
-        <item>sharks have been around longer than trees</item>
-        <item>footprints on the moon can last millions of years</item>
-        <item>wombat poop is cube-shaped</item>
-        <item>your body has more bacterial cells than human cells</item>
-        <item>a day on venus is longer than a year on venus</item>
-        <item>the shortest war in history lasted 38 minutes</item>
-        <item>earth\'s core is as hot as the surface of the sun</item>
-        <item>there are more stars than grains of sand on earth</item>
-        <item>water can boil and freeze at the same time \u2014 it\'s called the triple point</item>
-        <item>neutron stars are so dense a teaspoon weighs billions of tons</item>
-        <item>tardigrades can survive in outer space</item>
-        <item>your brain uses about 20% of your body\'s energy</item>
-        <item>the great wall of china is not visible from space with the naked eye</item>
-        <item>humans share about 60% of their DNA with bananas</item>
-        <item>a cloud can weigh more than a million pounds</item>
-        <item>there are more possible chess games than atoms in the universe</item>
-        <item>the mantis shrimp can punch as fast as a bullet</item>
-        <item>dolphins sleep with one eye open</item>
-        <item>the average person walks about 100,000 miles in a lifetime</item>
-        <item>lightning strikes the earth about 100 times per second</item>
-        <item>scotland\'s national animal is the unicorn</item>
-        <item>a single bolt of lightning contains enough energy to toast 100,000 slices of bread</item>
-        <item>the human nose can detect over 1 trillion different scents</item>
-        <item>crows can recognize human faces and hold grudges</item>
-        <item>the amazon rainforest produces 20% of the world\'s oxygen</item>
-        <item>a jiffy is an actual unit of time \u2014 1/100th of a second</item>
-        <item>the eiffel tower can be 15 cm taller during summer due to heat expansion</item>
-        <item>butterflies taste with their feet</item>
-        <item>sea otters hold hands while sleeping so they don\'t drift apart</item>
-        <item>the inventor of the pringles can is buried in one</item>
-        <item>a photon takes 100,000 years to travel from the sun\'s core to its surface</item>
-        <item>the total length of your blood vessels could circle earth twice</item>
-        <item>there are more trees on earth than stars in the milky way</item>
-        <item>the oldest known joke is from 1900 BC sumeria</item>
-        <item>a teaspoon of a neutron star weighs about 6 billion tons</item>
-        <item>the longest hiccuping spree lasted 68 years</item>
-        <item>the heart of a blue whale is the size of a small car</item>
-        <item>you can\'t hum while holding your nose \u2014 try it</item>
-        <item>oxford university is older than the aztec empire</item>
-        <item>cleopatra lived closer in time to the moon landing than to the building of the pyramids</item>
-        <item>tap to access axion premium features</item>
-        <item>time for some axion :)</item>
-        <item>need more ram? subscribe to axion premium and download ram!</item>
-        <item>need for speed ;)</item>
-        <item>a is for axion</item>
+        <item>Не забывайте пить воду — выпейте немного воды</item>
+        <item>Сделайте глубокий вдох и потянитесь</item>
+        <item>Правильная осанка очень важна</item>
+        <item>Пора отдохнуть от экрана?</item>
+        <item>Прогулка на свежем воздухе улучшит настроение</item>
+        <item>Не забудь вкусно и полезно поесть</item>
+        <item>Отдых — это тоже продуктивность</item>
+        <item>Сон — лучший способ восстановиться</item>
+        <item>Глазам нужен отдых — посмотрите вдаль</item>
+        <item>Минутная разминка улучшает кровообращение</item>
+        <item>Расслабьте челюсть и опустите плечи</item>
+        <item>Сделайте три медленных вдоха прямо сейчас</item>
+        <item>Свежий воздух творит чудеса с концентрацией</item>
+        <item>20-минутный сон помогает раскрыть творческий потенциал</item>
+        <item>Утренний солнечный свет помогает настроить биологические часы</item>
+        <item>Вы отлично справляетесь сегодня!</item>
+        <item>Маленькие шаги ведут к большим переменам</item>
+        <item>Сегодня отличный день, чтобы узнать что-то новое!</item>
+        <item>Относитесь к себе с добротой</item>
+        <item>Прогресс важен, а не совершенство</item>
+        <item>Лучшее время начать — прямо сейчас</item>
+        <item>Меньше ленты, больше жизни</item>
+        <item>Что сделает сегодняшний день отличным?</item>
+        <item>Благодарность меняет взгляд на мир</item>
+        <item>Сделанное лучше идеального</item>
+        <item>Ваше будущее «я» скажет вам спасибо</item>
+        <item>Регулярность важнее интенсивности</item>
+        <item>Вам не нужна мотивация — просто начните</item>
+        <item>Сравнивайте себя с собой вчерашним, а не с другими</item>
+        <item>Самое сложное — обычно просто начать</item>
+        <item>Каждый эксперт когда-то был новичком</item>
+        <item>Ошибки — это данные, а не провал</item>
+        <item>Фокусируйтесь на том, что можете контролировать</item>
+        <item>Замечайте и празднуйте даже маленькие победы</item>
+        <item>Зона комфорта — это не то место, где происходит рост</item>
+        <item>Узнайте, как дела у того, кто вам дорог</item>
+        <item>Музыка делает всё лучше</item>
+        <item>Напишите старому другу</item>
+        <item>Искренний комплимент может сделать чей-то день лучше</item>
+        <item>Умение слушать — недооценённый навык</item>
+        <item>Быть рядом и вовлечённо — лучший подарок, который вы можете сделать</item>
+        <item>Вы давно делали резервную копию данных?</item>
+        <item>Очистите уведомления — меньше шума, больше фокуса</item>
+        <item>Проверьте свои подписки — отмените то, чем не пользуетесь</item>
+        <item>Обновите пароли, если давно этого не делали</item>
+        <item>Протрите экран телефона — он грязнее, чем кажется</item>
+        <item>Наведите порядок хотя бы в одной папке или выдвижном ящике сегодня</item>
+        <item>Проверьте память устройства — удалите то, что вам не нужно</item>
+        <item>Режим «В полёте» — отличный инструмент для фокусировки</item>
+        <item>Запланируйте что-нибудь увлекательное на эту неделю</item>
+        <item>Запишите три вещи, за которые вы благодарны</item>
+        <item>Мёд никогда не портится: 3000-летние запасы из древних гробниц всё ещё съедобны</item>
+        <item>У осьминогов три сердца и голубая кровь</item>
+        <item>Банан — это ягода с точки зрения ботаники, а клубника — нет</item>
+        <item>Группа фламинго называется «фламбоянс» — слово, означающее пышность и яркость</item>
+        <item>Луна удаляется от Земли на 3,8 см каждый год</item>
+        <item>Венера вращается в обратном направлении по сравнению с другими планетами</item>
+        <item>Солнечному свету требуется 8 минут и 20 секунд, чтобы долететь до Земли</item>
+        <item>Акулы появились на Земле раньше, чем деревья</item>
+        <item>Следы на Луне могут сохраняться миллионы лет</item>
+        <item>Фекалии вомбатов имеют форму кубиков</item>
+        <item>В вашем теле бактериальных клеток больше, чем человеческих</item>
+        <item>Сутки на Венере длятся дольше, чем год на этой планете</item>
+        <item>Самая короткая война в истории длилась всего 38 минут</item>
+        <item>Температура ядра Земли сравнима с температурой поверхности Солнца</item>
+        <item>Во Вселенной больше звезд, чем песчинок на всех пляжах Земли</item>
+        <item>Вода может кипеть и замерзать одновременно — это называется тройной точкой</item>
+        <item>Нейтронные звезды настолько плотные, что чайная ложка весит миллиарды тонн</item>
+        <item>Тихоходки способны выжить даже в открытом космосе</item>
+        <item>Мозг потребляет около 20% всей энергии вашего тела
+</item>
+        <item>Великую Китайскую стену не видно из космоса невооруженным глазом</item>
+        <item>ДНК человека и банана совпадает примерно на 60%</item>
+        <item>Одно облако может весить больше 500 тонн</item>
+        <item>Возможных шахматных партий больше, чем атомов в наблюдаемой Вселенной</item>
+        <item>Рак-богомол наносит удар со скоростью пули</item>
+        <item>Дельфины спят с одним открытым глазом</item>
+        <item>За свою жизнь средний человек проходит около 160 000 километров</item>
+        <item>Молния бьет в Землю около 100 раз в секунду</item>
+        <item>Национальное животное Шотландии — единорог</item>
+        <item>Энергии одной молнии хватило бы, чтобы поджарить 100 000 ломтиков хлеба</item>
+        <item>Человеческий нос способен различать более 1 триллиона разных запахов</item>
+        <item>Вороны умеют запоминать человеческие лица и долго хранить обиду</item>
+        <item>Амазонские леса вырабатывают около 20% всего кислорода на Земле</item>
+        <item>«Джиффи» — это реальная единица времени, равная 1/100 секунды</item>
+        <item>Летом из-за теплового расширения Эйфелева башня может становиться выше на 15 см</item>
+        <item>Бабочки чувствуют вкус лапками</item>
+        <item>Морские выдры держатся за лапки во время сна, чтобы их не унесло течением</item>
+        <item>Создатель упаковки Pringles был похоронен в банке из-под этих чипсов</item>
+        <item>Фотону требуется 100 000 лет, чтобы преодолеть путь от ядра Солнца до его поверхности
+</item>
+        <item>Общая длина кровеносных сосудов человека позволяет обогнуть Землю дважды</item>
+        <item>На Земле больше деревьев, чем звезд в Млечном Пути</item>
+        <item>Самая старая из известных шуток относится к 1900 году до н. э. и принадлежит шумерам</item>
+        <item>Чайная ложка вещества нейтронной звезды весит около 6 миллиардов тонн</item>
+        <item>Самый длинный приступ икоты в истории продолжался 68 лет</item>
+        <item>Сердце синего кита размером с небольшой автомобиль</item>
+        <item>Нельзя мычать с зажатым носом — попробуйте сами!</item>
+        <item>Оксфордский университет старше Ацтекской империи</item>
+        <item>Клеопатра жила ближе во времени к высадке человека на Луну, чем к строительству египетских пирамид</item>
+        <item>Нажмите, чтобы открыть доступ к Axion Premium</item>
+        <item>Время для Axion! :)</item>
+        <item>Нужно больше ОЗУ? Оформите подписку на Axion Premium и скачайте оперативку!</item>
+        <item>Жажда скорости! ;)</item>
+        <item>А — значит Axion</item>
     </string-array>
     <string name="tile_selection_group_title">Плитка</string>
-    <string name="tile_select_title">Select tile</string>
-    <string name="tile_select_summary">Choose a quick setting</string>
-    <string name="tile_size_group_title">Sizing</string>
-    <string name="tile_circle_size_title">Tile size</string>
-    <string name="tile_circle_size_summary">Diameter of the circular tile</string>
-    <string name="pill_height_title">Pill height</string>
-    <string name="pill_height_summary">Height of the pill form</string>
-    <string name="pill_width_title">Pill width</string>
-    <string name="pill_width_summary">Width of the pill form</string>
-    <string name="pill_autofit_title">Auto-fit pill width</string>
-    <string name="pill_autofit_summary">Size pill to fit label text</string>
+    <string name="tile_select_title">Выберите тайл:</string>
+    <string name="tile_select_summary">Выберите быстрые настройки</string>
+    <string name="tile_size_group_title">Размер</string>
+    <string name="tile_circle_size_title">Размер плиток</string>
+    <string name="tile_circle_size_summary">Диаметр круговой плитки</string>
+    <string name="pill_height_title">Высота таблетки</string>
+    <string name="pill_height_summary">Высота формы таблетки</string>
+    <string name="pill_width_title">Ширина таблетки</string>
+    <string name="pill_width_summary">Ширина формы таблетки</string>
+    <string name="pill_autofit_title">Ширина автоподставки</string>
+    <string name="pill_autofit_summary">Подгонять размер плашки под текст</string>
     <!-- Clock Configuration -->
-    <string name="clock_bg_translucent">Translucent background</string>
-    <string name="clock_bg_translucent_desc">A rounded solid background matching system colors</string>
-    <string name="clock_bg_transparent">Transparent background</string>
-    <string name="clock_bg_transparent_desc">No card background behind the clock</string>
-    <string name="clock_style_section">Widget Background</string>
+    <string name="clock_bg_translucent">Прозрачный фон</string>
+    <string name="clock_bg_translucent_desc">Сплошной скругленный фон в тонах системы</string>
+    <string name="clock_bg_transparent">Прозрачный фон</string>
+    <string name="clock_bg_transparent_desc">Без фона карточки за часами</string>
+    <string name="clock_style_section">Фон виджета</string>
 </resources>
