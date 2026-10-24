@@ -9,7 +9,7 @@
     <!-- Manifest -->
     <string name="app_name">Виджеты Axion</string>
     <string name="label_photo">Фото</string>
-    <string name="label_tile">Tile</string>
+    <string name="label_tile">Плитка</string>
     <string name="label_media_notification_listener">Обработчик медиа уведомлений</string>
     <string name="label_screentime">Время использования</string>
     <string name="label_media_player">Медиаплеер</string>
@@ -20,11 +20,11 @@
     <string name="allow_notification_access">Разрешить доступ к уведомлениям</string>
     <string name="allow_calendar_access">Разрешить доступ к календарю</string>
     <string name="access_granted">Доступ предоставлен</string>
-    <string name="needed_for_now_playing">Needed for now playing</string>
+    <string name="needed_for_now_playing">Нужно для «Сейчас играет»</string>
     <string name="needed_for_calendar_events">Нужно для событий календаря</string>
     <!-- Calendar -->
     <string name="quick_look_widget_calendar_in_time">через %d минут</string>
-    <string name="quick_look_widget_calendar_now">now</string>
+    <string name="quick_look_widget_calendar_now">сейчас</string>
     <string name="quick_look_widget_calendar_tomorrow">Завтра</string>
     <string name="quick_look_widget_calendar_yesterday">Вчера</string>
     <string name="quick_look_widget_calendar_no_title">(Нет названия события)</string>
@@ -39,9 +39,9 @@
     <string name="add_photos_cd">Добавить фотографии</string>
     <string name="display_options">Настройки дисплея</string>
     <string name="grayscale_mode">Режим оттенков серого</string>
-    <string name="shuffle_interval">Shuffle Interval</string>
+    <string name="shuffle_interval">Интервал перемешивания</string>
     <string name="select_interval">Выберите интервал</string>
-    <string name="select_shuffle_interval">Select Shuffle Interval</string>
+    <string name="select_shuffle_interval">Выберите интервал перемешивания</string>
     <string name="cancel">Отмена</string>
     <string name="save_changes">Сохранить</string>
     <string name="manage_photos">Управление фотографиями</string>
@@ -73,7 +73,7 @@
     <string name="ringer_silent">Без звука</string>
     <string name="ringer_unknown">Неизвестно</string>
     <string name="mobile_data">Мобильные данные</string>
-    <string name="label_year_progress">Year Progress</string>
+    <string name="label_year_progress">Годовой прогресс</string>
     <string name="label_digital_clock">Цифровые часы</string>
     <string name="label_analog_clock">Аналоговые Часы</string>
     <string name="label_world_clock">Мировые часы</string>
@@ -81,7 +81,7 @@
     <string name="label_date">Дата</string>
     <string name="label_pedometer">Шагомер</string>
     <string name="label_compass">Компас</string>
-    <string name="label_bottle_spinner">Bottle Spinner</string>
+    <string name="label_bottle_spinner">Крутить бутылочку</string>
     <string name="bottle_spinner_tap">нажать для вращения</string>
     <string name="label_rps">Камень, ножницы, бумага</string>
     <string name="rps_tap">Нажмите для воспроизведения</string>
@@ -90,9 +90,9 @@
     <string name="ql_show_date_desc">Показать дату в верхней строке</string>
     <string name="ql_date_format">Формат даты</string>
     <string name="ql_date_default">По умолчанию</string>
-    <string name="ql_date_short">Short (Mon, Jan 1)</string>
-    <string name="ql_date_full">Full (Monday, January 1, 2026)</string>
-    <string name="ql_cal_lookahead">Calendar lookahead</string>
+    <string name="ql_date_short">Короткий (Пн, Ян 1)</string>
+    <string name="ql_date_full">Полный (Понедельник, 1 января 2026)</string>
+    <string name="ql_cal_lookahead">Внешний вид календаря</string>
     <string name="ql_lookahead_15">15 минут</string>
     <string name="ql_lookahead_30">30 minutes</string>
     <string name="ql_lookahead_60">1 час</string>
@@ -222,7 +222,7 @@
         <item>need for speed ;)</item>
         <item>a is for axion</item>
     </string-array>
-    <string name="tile_selection_group_title">Tile</string>
+    <string name="tile_selection_group_title">Плитка</string>
     <string name="tile_select_title">Select tile</string>
     <string name="tile_select_summary">Choose a quick setting</string>
     <string name="tile_size_group_title">Sizing</string>
