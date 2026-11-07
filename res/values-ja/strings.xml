@@ -28,7 +28,7 @@
     <!-- Battery -->
     <string name="battery_widget">バッテリー</string>
     <string name="full_charge">Charged</string>
-    <string name="charging">Charging</string>
+    <string name="charging">充電中</string>
     <string name="minutes_left">%1$d min left</string>
     <!-- Photo -->
     <string name="photo_title">Photo</string>
@@ -82,7 +82,7 @@
     <string name="bottle_spinner_tap">tap to spin</string>
     <string name="label_rps">Rock Paper Scissors</string>
     <string name="rps_tap">tap to play</string>
-    <string name="ql_display">Display</string>
+    <string name="ql_display">画面</string>
     <string name="ql_show_date">Show date</string>
     <string name="ql_show_date_desc">Show date on the top line</string>
     <string name="ql_date_format">Date format</string>
@@ -98,7 +98,7 @@
     <string name="ql_cal_settings">Calendar</string>
     <string name="ql_source_calendar">Calendar</string>
     <string name="ql_source_calendar_desc">Show upcoming events</string>
-    <string name="ql_source_media">Media</string>
+    <string name="ql_source_media">メディア</string>
     <string name="ql_source_media_desc">Show now playing info</string>
     <string name="ql_source_battery">バッテリー</string>
     <string name="ql_source_battery_desc">Show charging status</string>

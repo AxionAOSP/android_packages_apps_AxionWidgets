@@ -114,7 +114,7 @@
     <string name="ql_msg_3h">3 hours</string>
     <string name="ql_msg_6h">6 hours</string>
     <string name="ql_msg_daily">Daily</string>
-    <string name="ql_apply">Ahorrar</string>
+    <string name="ql_apply">Guardar</string>
     <string-array name="quicklook_messages">
         <item>stay hydrated \u2014 drink some water</item>
         <item>take a deep breath and stretch</item>
