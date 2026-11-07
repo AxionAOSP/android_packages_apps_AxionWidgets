@@ -28,7 +28,7 @@
     <!-- Battery -->
     <string name="battery_widget">バッテリー</string>
     <string name="full_charge">Charged</string>
-    <string name="charging">Charging</string>
+    <string name="charging">充電中</string>
     <string name="minutes_left">%1$d min left</string>
     <!-- Photo -->
     <string name="photo_title">Photo</string>
@@ -98,7 +98,7 @@
     <string name="ql_cal_settings">Calendar</string>
     <string name="ql_source_calendar">Calendar</string>
     <string name="ql_source_calendar_desc">Show upcoming events</string>
-    <string name="ql_source_media">Media</string>
+    <string name="ql_source_media">メディア</string>
     <string name="ql_source_media_desc">Show now playing info</string>
     <string name="ql_source_battery">バッテリー</string>
     <string name="ql_source_battery_desc">Show charging status</string>
