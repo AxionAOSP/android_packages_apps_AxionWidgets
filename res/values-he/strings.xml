@@ -3,7 +3,6 @@
     <plurals name="photos_already_exist">
         <item quantity="one">%d photo already exists and was omitted.</item>
         <item quantity="two">%d photos already exist and were omitted.</item>
-        <item quantity="many">%d photos already exist and were omitted.</item>
         <item quantity="other">%d photos already exist and were omitted.</item>
     </plurals>
     <!-- Manifest -->

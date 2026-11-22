@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="photos_already_exist">
-        <item quantity="other">%d photos already exist and were omitted.</item>
+        <item quantity="other">%d 写真は既に存在し、省略されています。</item>
     </plurals>
     <!-- Manifest -->
-    <string name="app_name">Axion Widgets</string>
-    <string name="label_photo">Photo</string>
-    <string name="label_tile">Tile</string>
-    <string name="label_media_notification_listener">Media Notification Listener</string>
-    <string name="label_screentime">Screen time</string>
-    <string name="label_media_player">Media Player</string>
+    <string name="app_name">Axion ウィジェット</string>
+    <string name="label_photo">写真</string>
+    <string name="label_tile">タイル</string>
+    <string name="label_media_notification_listener">メディアの通知リスナー</string>
+    <string name="label_screentime">スクリーンタイム</string>
+    <string name="label_media_player">メディアプレーヤー</string>
     <!-- Settings -->
-    <string name="welcome_message">Welcome to Axion. Click here to set-up QuickLook.</string>
-    <string name="loading_text">Loading...</string>
-    <string name="toast_calendar_permission_required">Calendar permission is required</string>
-    <string name="allow_notification_access">Allow notification access</string>
-    <string name="allow_calendar_access">Allow calendar access</string>
-    <string name="access_granted">Access granted</string>
-    <string name="needed_for_now_playing">Needed for now playing</string>
-    <string name="needed_for_calendar_events">Needed for calendar events</string>
+    <string name="welcome_message">Axionへようこそ。QuickLookをセットアップするにはここをクリックしてください。</string>
+    <string name="loading_text">読み込み中...</string>
+    <string name="toast_calendar_permission_required">カレンダーのアクセス許可が必要です</string>
+    <string name="allow_notification_access">通知アクセスを許可する</string>
+    <string name="allow_calendar_access">カレンダーのアクセスを許可する</string>
+    <string name="access_granted">アクセス権が付与されました</string>
+    <string name="needed_for_now_playing">Now Playingを使用するために必要です</string>
+    <string name="needed_for_calendar_events">カレンダーの予定に必要です</string>
     <!-- Calendar -->
-    <string name="quick_look_widget_calendar_in_time">in %d min</string>
-    <string name="quick_look_widget_calendar_now">now</string>
-    <string name="quick_look_widget_calendar_tomorrow">Tomorrow</string>
-    <string name="quick_look_widget_calendar_yesterday">Yesterday</string>
-    <string name="quick_look_widget_calendar_no_title">(No title event)</string>
+    <string name="quick_look_widget_calendar_in_time">%d分後</string>
+    <string name="quick_look_widget_calendar_now">現在</string>
+    <string name="quick_look_widget_calendar_tomorrow">明日</string>
+    <string name="quick_look_widget_calendar_yesterday">昨日</string>
+    <string name="quick_look_widget_calendar_no_title">(タイトルイベントなし)</string>
     <!-- Battery -->
     <string name="battery_widget">バッテリー</string>
-    <string name="full_charge">Charged</string>
-    <string name="charging">Charging</string>
-    <string name="minutes_left">%1$d min left</string>
+    <string name="full_charge">充電完了</string>
+    <string name="charging">充電中</string>
+    <string name="minutes_left">%1$d 分後</string>
     <!-- Photo -->
-    <string name="photo_title">Photo</string>
-    <string name="add_photos">Add Photos</string>
-    <string name="add_photos_cd">Add Photos</string>
-    <string name="display_options">Display Options</string>
-    <string name="grayscale_mode">Grayscale Mode</string>
-    <string name="shuffle_interval">Shuffle Interval</string>
-    <string name="select_interval">Select Interval</string>
-    <string name="select_shuffle_interval">Select Shuffle Interval</string>
+    <string name="photo_title">写真</string>
+    <string name="add_photos">写真の追加</string>
+    <string name="add_photos_cd">写真の追加</string>
+    <string name="display_options">表示オプション</string>
+    <string name="grayscale_mode">グレースケールモード</string>
+    <string name="shuffle_interval">シャッフルの間隔</string>
+    <string name="select_interval">間隔の選択</string>
+    <string name="select_shuffle_interval">シャッフル間隔を選択</string>
     <string name="cancel">キャンセル</string>
-    <string name="save_changes">Save Changes</string>
+    <string name="save_changes">変更を保存</string>
     <string name="manage_photos">Manage Photos</string>
     <string name="back">戻る</string>
     <string name="delete_selected">Delete Selected</string>
     <string name="edit">編集</string>
     <string name="no_photos_selected">No photos selected</string>
-    <string name="photo">Photo</string>
+    <string name="photo">写真</string>
     <string name="confirm_delete_title">Confirm Delete</string>
     <string name="confirm_delete_message">Are you sure you want to delete the selected photos?</string>
     <string name="delete">消去</string>
@@ -82,7 +82,7 @@
     <string name="bottle_spinner_tap">tap to spin</string>
     <string name="label_rps">Rock Paper Scissors</string>
     <string name="rps_tap">tap to play</string>
-    <string name="ql_display">Display</string>
+    <string name="ql_display">画面</string>
     <string name="ql_show_date">Show date</string>
     <string name="ql_show_date_desc">Show date on the top line</string>
     <string name="ql_date_format">Date format</string>
@@ -98,7 +98,7 @@
     <string name="ql_cal_settings">Calendar</string>
     <string name="ql_source_calendar">Calendar</string>
     <string name="ql_source_calendar_desc">Show upcoming events</string>
-    <string name="ql_source_media">Media</string>
+    <string name="ql_source_media">メディア</string>
     <string name="ql_source_media_desc">Show now playing info</string>
     <string name="ql_source_battery">バッテリー</string>
     <string name="ql_source_battery_desc">Show charging status</string>
@@ -219,7 +219,7 @@
         <item>need for speed ;)</item>
         <item>a is for axion</item>
     </string-array>
-    <string name="tile_selection_group_title">Tile</string>
+    <string name="tile_selection_group_title">タイル</string>
     <string name="tile_select_title">Select tile</string>
     <string name="tile_select_summary">Choose a quick setting</string>
     <string name="tile_size_group_title">Sizing</string>
