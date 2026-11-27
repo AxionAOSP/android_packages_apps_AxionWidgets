@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <plurals name="photos_already_exist">
-        <item quantity="one">%d фото уже существует и не было загружено.</item>
-        <item quantity="few">%d фото уже существует и не было загружено.</item>
-        <item quantity="many">%d photos already exist and were omitted.</item>
-        <item quantity="other">%d photos already exist and were omitted.</item>
+        <item quantity="one">%d фото уже существует и было пропущено.</item>
+        <item quantity="few">%d фото уже существуют и были пропущены.</item>
+        <item quantity="many">%d фото уже существуют и были пропущены.</item>
+        <item quantity="other">%d фото уже существуют и были пропущены.</item>
     </plurals>
     <!-- Manifest -->
     <string name="app_name">Виджеты Axion</string>
